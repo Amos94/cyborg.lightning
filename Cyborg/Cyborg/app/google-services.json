@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_id": "cyborg-2664f",
+    "project_number": "717853404364",
+    "name": "Cyborg"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717853404364:android:e20d9a19f34aa1e6",
+        "client_id": "android:lightning.cyborg",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "lightning.cyborg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
