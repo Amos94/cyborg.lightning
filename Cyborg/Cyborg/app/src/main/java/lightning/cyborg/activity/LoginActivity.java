@@ -29,12 +29,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.app.AppLocationListener;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.model.User;
 
 
-public class LoginActivity extends AppCompatActivity implements LocationListener {
+public class LoginActivity extends AppCompatActivity {
 
     private String TAG = LoginActivity.class.getSimpleName();
     private EditText _inputEmail, _inputPassword;
@@ -49,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements LocationListener
         super.onCreate(savedInstanceState);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        MyApplication.setAppLocationListener(locationManager);
 
         /**
          * Check for login session. It user is already logged in
@@ -82,8 +83,9 @@ public class LoginActivity extends AppCompatActivity implements LocationListener
      Intent for REGISTER
     */
     public void goToRegisterScreen(View view) {
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        startActivity(intent);
+        MyApplication.getappLocationListner().requestLocationUpdates();
+        //Intent intent = new Intent(this, RegistrationActivity.class);
+        //startActivity(intent);
     }
 
 
@@ -166,24 +168,4 @@ public class LoginActivity extends AppCompatActivity implements LocationListener
     }
 
 
-    @Override
-    public void onLocationChanged(Location location) {
-        stringUpdateGPS = location.getLatitude() + ", " + location.getLongitude();
-        Log.d(TAG, "onLocationChanged: " + stringUpdateGPS);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }
