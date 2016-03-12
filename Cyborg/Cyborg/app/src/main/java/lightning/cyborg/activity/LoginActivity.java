@@ -1,6 +1,10 @@
 package lightning.cyborg.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,16 +34,22 @@ import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.model.User;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LocationListener {
 
     private String TAG = LoginActivity.class.getSimpleName();
     private EditText _inputEmail, _inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutEmail;
     private Button btnEnter;
+    protected LocationManager locationManager;
+    protected LocationListener locationListener;
+    String stringUpdateGPS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         /**
          * Check for login session. It user is already logged in
@@ -156,7 +166,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onLocationChanged(Location location) {
+        stringUpdateGPS = location.getLatitude() + ", " + location.getLongitude();
+        Log.d(TAG, "onLocationChanged: " + stringUpdateGPS);
+    }
 
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
 
+    }
 
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }

@@ -1,12 +1,19 @@
 package lightning.cyborg.activity;
 
+import android.app.ActionBar;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -35,7 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     //Info for register
     EditText emailET;
-    Button btnNext;
+    ImageView btnNext;
     EditText emailConfirmET;
     Button loginPage;
     EditText nameET;
@@ -50,6 +57,7 @@ public class RegistrationActivity extends AppCompatActivity {
     int toAddGender;
     int toAddActivated;
     int age;
+    ClipData.Item test;
 
 
     JSONObject response;
@@ -59,6 +67,16 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_page);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(null);
+        }
+
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.custom_register_main_menu);
 
         //USER INPUT
         emailET = (EditText) findViewById(R.id.txtEmail);
@@ -73,15 +91,14 @@ public class RegistrationActivity extends AppCompatActivity {
         femaleRadioRegister = (RadioButton) findViewById(R.id.rbFemal);
 
         //help for the insertion
-        if(maleRadioRegister.isChecked())
+        if (maleRadioRegister.isChecked())
             isMale = true;
-        if(femaleRadioRegister.isChecked())
+        if (femaleRadioRegister.isChecked())
             isMale = false;
 
-        if(isMale) {
+        if (isMale) {
             toAddGender = 1;
-        }
-        else {
+        } else {
             toAddGender = 0;
         }
 
@@ -90,11 +107,10 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //DB
 
-        if(toAddActivated == 0 ){
+        if (toAddActivated == 0) {
             //intent fo to another screen
             //insert the code send by email
-        }
-        else{
+        } else {
             //insertData();
             //intent to main menu
         }
@@ -102,63 +118,59 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //back to Login Page...
 
-        loginPage = (Button) findViewById(R.id.btnLoginPage);
-        loginPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backToLoginPage(v);
-            }
-        });
-
-
+        //loginPage = (Button) findViewById(R.id.btnLoginPage);
+        //loginPage.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
+                //backToLoginPage(v);
+            //}
+        //});
 
         //vaildating data before.. inserting data into database....
 
-        btnNext = (Button) findViewById(R.id.btnNext);
+//        btnNext = (ImageView) findViewById(R.id.nextPageButton);
+//
+//        btnNext.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                validPassword(passwordET.getText().toString(), ConfirmpasswordET.getText().toString());
+//                validName(nameET.getText().toString());
+//
+//
+//
+//                if(emailET.getText().toString().equals(emailConfirmET.getText().toString())) {
+//                    if( validEmail(emailET.getText().toString()) == false){
+//
+//                        emailET.setError("not valid");
+//
+//                    } else{
+//
+//                        System.out.println("Correct");
+//
+//                    }
+//                } else {
+//
+//                    emailET.setError("not valid");
+//                    emailConfirmET.setError("not valid");
+//
+//                }
+//
+//
+//
+//                //insertData(v);
+//                //sendPassword(v);
+//                try {
+//                    validateDOB(dobET.getText().toString());
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                validPassword(passwordET.getText().toString(), ConfirmpasswordET.getText().toString());
-                validName(nameET.getText().toString());
-
-
-
-                if(emailET.getText().toString().equals(emailConfirmET.getText().toString())) {
-                    if( validEmail(emailET.getText().toString()) == false){
-
-                        emailET.setError("not valid");
-
-                    } else{
-
-                        System.out.println("Correct");
-
-                    }
-                } else {
-
-                    emailET.setError("not valid");
-                    emailConfirmET.setError("not valid");
-
-                }
-
-
-                //goToInterestsPage();
-                insertData(v);
-                backToLoginPage(v);
-                //sendPassword(v);
-                try {
-                    validateDOB(dobET.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
 
     }
-
-
 
     public void insertData(View view){
         final String url = "http://nashdomain.esy.es/users_insert.php";
@@ -368,7 +380,7 @@ public class RegistrationActivity extends AppCompatActivity {
     /*
     Intent for login
      */
-    public void changeToMainScreen(View view){
+    public void changeToMainScreen(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
@@ -441,7 +453,18 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-
-
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.user_info_menu, menu);
+//        return true;
+//    }
+//
+//    public boolean onOptionsItemSelected(MenuItem menuItem) {
+//        switch (menuItem.getItemId()) {
+//        }
+//        return super.onOptionsItemSelected(menuItem);
+//    }
 
 }
