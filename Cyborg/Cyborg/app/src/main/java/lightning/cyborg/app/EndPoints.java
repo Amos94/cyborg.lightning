@@ -24,5 +24,6 @@ public class EndPoints {
     public static final String CHAT_ROOM_MESSAGE = "http://nashdomain.esy.es/sendMessage.php";
     public static final String CHAT_ROOMS = base + "/getNormalChatRooms.php";
     public static final String REQUEST_RESPONSE = base+"/requestHandler.php";
+    public static final String ADD_FREIND = base+"/convertChatRoom.php";
 
 }

@@ -45,6 +45,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     private Context mContext;
     private ArrayList<ChatRoom> chatRoomArrayList;
     private static String today;
+    private String type;
     private boolean buttonPressed=false;
     public static String TAG = "ChatRoomAdapter";
 
@@ -91,10 +92,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     }
 
 
-    public ChatRoomsAdapter(Context mContext, ArrayList<ChatRoom> chatRoomArrayList) {
+    public ChatRoomsAdapter(Context mContext, ArrayList<ChatRoom> chatRoomArrayList, String type) {
         this.mContext = mContext;
         this.chatRoomArrayList = chatRoomArrayList;
-
+        this.type =type;
         Calendar calendar = Calendar.getInstance();
         today = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
     }
@@ -157,7 +158,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                     public void onClick(View v) {
 
                         serverHandler("accept", chatRoom.getId());
-                       ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName());
+                       ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),type );
                         //notifyDataSetChanged();
 
                     }

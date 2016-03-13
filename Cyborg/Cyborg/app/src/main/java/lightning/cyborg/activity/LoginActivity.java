@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
     private void toUserHomePageActivity(){
         Intent intent = new Intent(this,UserHomepage.class);
         Bundle bundle = new Bundle();
-        bundle.putString("FragmentNum","1");
+        bundle.putString("FragmentNum","0");
         intent.replaceExtras(bundle);
         startActivity(intent);
         finish();

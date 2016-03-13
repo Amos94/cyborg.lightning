@@ -58,6 +58,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private EditText inputMessage;
     private Button btnSend;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         Intent intent = getIntent();
         chatRoomId = intent.getStringExtra("chat_room_id");
         String title = intent.getStringExtra("name");
+        type =intent.getStringExtra("type");
+
+
 
         if (chatRoomId == null) {
             Toast.makeText(getApplicationContext(), "Chat room not found!", Toast.LENGTH_SHORT).show();
@@ -118,6 +122,17 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         fetchChatThread();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(type.equals("f")){
+    //           MenuItem addFreind = (MenuItem) findViewById(R.id.action_addfriend);
+      //      addFreind.setVisible(false);
+        //    addFreind.setEnabled(false);
+          //  addFreind.setCheckable(false);
+        }
     }
 
     @Override
@@ -364,7 +379,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         if(menuItem.getItemId()==android.R.id.home){
             toUserHomePageActivity();
             return true;
-
+        }
+        else if(menuItem.getItemId()==R.id.action_addfriend){
+            addFriend("f");
         }
         else {
             switch (menuItem.getItemId()) {
@@ -387,6 +404,63 @@ public class ChatRoomActivity extends AppCompatActivity {
         intent.replaceExtras(bundle);
         startActivity(intent);
         finish();
+    }
+
+    public void addFriend(String type){
+        String endPoint = EndPoints.ADD_FREIND;
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("chat_room_id", chatRoomId);
+        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("type",type);
+
+        Log.e(TAG, "endPoint: " + endPoint);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                endPoint, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
 }
