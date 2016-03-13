@@ -41,7 +41,9 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -159,7 +161,7 @@ public class UserHomepage extends AppCompatActivity {
      * fetching the chat rooms by making http call
      */
     private void fetchChatRooms() {
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.CHAT_ROOMS, new Response.Listener<String>() {
 
             @Override
@@ -177,6 +179,8 @@ public class UserHomepage extends AppCompatActivity {
                             ChatRoom cr = new ChatRoom();
                             cr.setId(chatRoomsObj.getString("chat_room_id"));
                             cr.setName(chatRoomsObj.getString("name"));
+                            cr.setAccess_type(chatRoomsObj.getString("access_type"));
+                            cr.setPermission(chatRoomsObj.getString("permission"));
                             cr.setLastMessage("");
                             cr.setUnreadCount(0);
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
@@ -197,7 +201,7 @@ public class UserHomepage extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
 
                 // subscribing to all chat room topics
-                subscribeToAllTopics();
+               // subscribeToAllTopics();
             }
         }, new Response.ErrorListener() {
 
@@ -207,8 +211,21 @@ public class UserHomepage extends AppCompatActivity {
                 Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
                 Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        });
+        })
+        {
 
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("type", "n");
+                params.put("user_id",  MyApplication.getInstance().getPrefManager().getUser().getId());
+
+                Log.e(TAG, "params: " + params.toString());
+                return params;
+            }
+        };
+
+        subscribeToAllTopics();
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
@@ -237,10 +254,13 @@ public class UserHomepage extends AppCompatActivity {
             Message message = (Message) intent.getSerializableExtra("message");
             Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
         }
-
-
-
-
+        else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
+            Message message = (Message) intent.getSerializableExtra("message");
+            String chatRoomId = intent.getStringExtra("chat_room_id");
+            Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
+            chatRoomArrayList.clear();
+            fetchChatRooms();
+        }
     }
 
     /**

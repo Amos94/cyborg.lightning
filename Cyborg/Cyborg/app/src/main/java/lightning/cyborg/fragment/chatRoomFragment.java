@@ -33,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import lightning.cyborg.R;
 import lightning.cyborg.activity.ChatRoomActivity;
@@ -100,7 +102,18 @@ public class chatRoomFragment extends Fragment{
                 // when chat is clicked, launch full chat thread activity
                 ChatRoom chatRoom = chatRoomArrayList.get(position);
 
-                ((UserHomepage) getActivity()).chatRoomActivityIntent( chatRoom.getId(),chatRoom.getName());
+               //if chatroom is not activiated
+                if(chatRoom.getAccess_type().equals("y"))
+                {
+                    ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName());
+                }
+                else{
+                    if(!chatRoom.isChatRoomExists()){
+                        recyclerView.removeView(view);
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                }
             }
 
             @Override
@@ -112,7 +125,6 @@ public class chatRoomFragment extends Fragment{
         return inflatedview;
 
     }
-
 
 
 

@@ -88,6 +88,27 @@ public class MyGcmPushReceiver extends GcmListenerService {
             processUserMessage(title, isBackground, data);
 
         }
+        else if(flag.equals("PUSH_FLAG_CHAT_REQUEST")){
+            Log.d("aaaaaaaaaaaaaaaaaaaaaaaa","ddddddddddddddddddddddddddAAAAAAAAAA");
+            // verifying whether the app is in background or foreground
+            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+
+                // app is in foreground, broadcast the push message
+                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                pushNotification.putExtra("type", Config.PUSH_TYPE_CHAT_REQUEST);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+
+                // play notification sound
+                NotificationUtils notificationUtils = new NotificationUtils();
+                notificationUtils.playNotificationSound();
+            } else {
+
+                // app is in background. show the message in notification try
+                //Intent resultIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+                //resultIntent.putExtra("chat_room_id", chatRoomId);
+              //  showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
+            }
+        }
     }
 
     /**
@@ -118,9 +139,9 @@ public class MyGcmPushReceiver extends GcmListenerService {
                 }
 
                 User user = new User();
-                user.setId(uObj.getString("user_id"));
+                user.setId(uObj.getString("id"));
                 user.setEmail(uObj.getString("email"));
-                user.setName(uObj.getString("name"));
+                user.setName(uObj.getString("fname"));
                 message.setUser(user);
 
                 // verifying whether the app is in background or foreground

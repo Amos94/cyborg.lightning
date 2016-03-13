@@ -22,6 +22,7 @@ public class EndPoints {
     //public static final String CHAT_ROOMS = "http://projectruncyborg.esy.es/getAllChatRooms.php";
     public static final String CHAT_THREAD = base +"/temp_GetSingleRoom.php";
     public static final String CHAT_ROOM_MESSAGE = "http://nashdomain.esy.es/sendMessage.php";
-    public static final String CHAT_ROOMS = base + "/temp_GetAllChatrooms.php";
+    public static final String CHAT_ROOMS = base + "/getNormalChatRooms.php";
+    public static final String REQUEST_RESPONSE = base+"/requestHandler.php";
 
 }
