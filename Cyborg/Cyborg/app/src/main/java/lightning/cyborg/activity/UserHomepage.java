@@ -94,6 +94,7 @@ public class UserHomepage extends AppCompatActivity {
             getSupportActionBar().setTitle(null);
         }
 
+
         /**
          * Check for login session. If not logged in launch
          * login activity
@@ -152,6 +153,14 @@ public class UserHomepage extends AppCompatActivity {
          * */
         if (checkPlayServices()){
             registerGCM();
+        }
+        try {
+            Bundle b = getIntent().getExtras();
+            String key = b.getString("FragmentNum");
+            viewPager.setCurrentItem(Integer.parseInt(key));
+
+        }catch (Exception e){
+            Log.d(TAG,"no bundle was attached");
         }
 
         fetchChatRooms();

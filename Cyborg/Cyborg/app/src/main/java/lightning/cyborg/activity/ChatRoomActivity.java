@@ -360,17 +360,33 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.action_calluser:
-                break;
-            case R.id.action_viewprofile:
-                break;
-            case R.id.action_addfriend:
-                break;
-            case R.id.action_blockuser:
-                break;
+
+        if(menuItem.getItemId()==android.R.id.home){
+            toUserHomePageActivity();
+            return true;
+
+        }
+        else {
+            switch (menuItem.getItemId()) {
+                case R.id.action_calluser:
+                    break;
+                case R.id.action_viewprofile:
+                    break;
+                case R.id.action_addfriend:
+                    break;
+                case R.id.action_blockuser:
+                    break;
+            }
         }
         return super.onOptionsItemSelected(menuItem);
+    }
+    private void toUserHomePageActivity(){
+        Intent intent = new Intent(this,UserHomepage.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("FragmentNum","3");
+        intent.replaceExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
 }

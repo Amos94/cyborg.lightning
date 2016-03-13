@@ -85,9 +85,7 @@ public class LoginActivity extends AppCompatActivity {
          * redirect him to main activity
          * */
         if (MyApplication.getInstance().getPrefManager().getUser() != null) {
-            // startActivity(new Intent(this, MainActivity.class));
-            startActivity(new Intent(this,UserHomepage.class));
-            finish();
+            toUserHomePageActivity();
         }
 
         setContentView(R.layout.activity_login);
@@ -105,6 +103,15 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
+    }
+
+    private void toUserHomePageActivity(){
+        Intent intent = new Intent(this,UserHomepage.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("FragmentNum","1");
+        intent.replaceExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
     /*
@@ -150,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         // start main activity
                         // startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        startActivity(new Intent(getApplicationContext(),UserHomepage.class));
+                        toUserHomePageActivity();
 
                         finish();
 
