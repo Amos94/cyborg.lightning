@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     private static int request;
     protected LocationManager locationManager;
     protected LocationListener locationListener;
-    String stringUpdateGPS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +110,9 @@ public class LoginActivity extends AppCompatActivity {
      Intent for REGISTER
     */
     public void goToRegisterScreen(View view) {
-        MyApplication.getappLocationListner().requestLocationUpdates();
-        //Intent intent = new Intent(this, RegistrationActivity.class);
-        //startActivity(intent);
+        //MyApplication.getappLocationListner().requestLocationUpdates();
+        Intent intent = new Intent(this, RegistrationActivity.class);
+        startActivity(intent);
     }
 
 

@@ -41,14 +41,15 @@ import lightning.cyborg.app.MyApplication;
 public class RegistrationActivity extends AppCompatActivity {
 
     //Info for register
-    EditText emailET;
+    EditText emailEditText;
     ImageView btnNext;
-    EditText emailConfirmET;
+    EditText emailConfirmEditText;
     Button loginPage;
-    EditText nameET;
-    EditText passwordET;
-    EditText ConfirmpasswordET;
-    EditText dobET;
+    EditText firstNameEditText;
+    EditText lastNameEditText;
+    EditText passwordEditText;
+    EditText confirmPasswordEditText;
+    EditText dobEditText;
     boolean isMale;
     boolean isActivated;
     RadioButton maleRadioRegister;
@@ -79,13 +80,14 @@ public class RegistrationActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.custom_register_main_menu);
 
         //USER INPUT
-        emailET = (EditText) findViewById(R.id.txtEmail);
-        emailConfirmET = (EditText) findViewById(R.id.txtConfirmEmail);
-        nameET = (EditText) findViewById(R.id.txtName);
+        emailEditText = (EditText) findViewById(R.id.txtEmail);
+        emailConfirmEditText = (EditText) findViewById(R.id.txtConfirmEmail);
+        firstNameEditText = (EditText) findViewById(R.id.textFirstName);
+        lastNameEditText = (EditText) findViewById(R.id.textLastName);
 
-        passwordET = (EditText) findViewById(R.id.txtPassword);
-        ConfirmpasswordET = (EditText) findViewById(R.id.txtConfirmPassword);
-        dobET = (EditText) findViewById(R.id.txtdob);
+        passwordEditText = (EditText) findViewById(R.id.txtPassword);
+        confirmPasswordEditText = (EditText) findViewById(R.id.txtConfirmPassword);
+        dobEditText = (EditText) findViewById(R.id.txtdob);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupRegister);
         maleRadioRegister = (RadioButton) findViewById(R.id.rbMale);
         femaleRadioRegister = (RadioButton) findViewById(R.id.rbFemal);
@@ -128,46 +130,44 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //vaildating data before.. inserting data into database....
 
-//        btnNext = (ImageView) findViewById(R.id.nextPageButton);
-//
-//        btnNext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                validPassword(passwordET.getText().toString(), ConfirmpasswordET.getText().toString());
-//                validName(nameET.getText().toString());
-//
-//
-//
-//                if(emailET.getText().toString().equals(emailConfirmET.getText().toString())) {
-//                    if( validEmail(emailET.getText().toString()) == false){
-//
-//                        emailET.setError("not valid");
-//
-//                    } else{
-//
-//                        System.out.println("Correct");
-//
-//                    }
-//                } else {
-//
-//                    emailET.setError("not valid");
-//                    emailConfirmET.setError("not valid");
-//
-//                }
-//
-//
-//
-//                //insertData(v);
-//                //sendPassword(v);
-//                try {
-//                    validateDOB(dobET.getText().toString());
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        });
+        btnNext = (ImageView) findViewById(R.id.nextPageButton);
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               validPassword(passwordEditText.getText().toString(), confirmPasswordEditText.getText().toString());
+               validName(firstNameEditText.getText().toString(), firstNameEditText);
+               validName(lastNameEditText.getText().toString(), lastNameEditText);
+
+                if(emailConfirmEditText.getText().toString().equals(emailConfirmEditText.getText().toString())) {
+                    if( validEmail(emailEditText.getText().toString()) == false){
+
+                        emailEditText.setError("not valid");
+
+                    } else{
+
+                        insertData(v);
+                        System.out.println("Correct");
+
+                    }
+                } else {
+
+                    emailEditText.setError("not valid");
+                    emailConfirmEditText.setError("not valid");
+
+                }
+
+
+
+                try {
+                    validateDOB(dobEditText.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
 
     }
@@ -177,11 +177,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("email", emailET.getText().toString());
-        params.put("validName", nameET.getText().toString());
-        params.put("password", passwordET.getText().toString());
-        params.put("dob", dobET.getText().toString());
+        params.put("email", emailEditText.getText().toString());
+        params.put("fname", firstNameEditText.getText().toString());
+        params.put("lname", lastNameEditText.getText().toString());
+        params.put("password", passwordEditText.getText().toString());
+        params.put("dob", dobEditText.getText().toString());
         params.put("gender", "Test");
+        params.put("avatar", "1");
 
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -226,7 +228,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<>();
-        params.put("email", emailET.getText().toString());
+        params.put("email", emailConfirmEditText.getText().toString());
 
         //request to get the user from the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -268,8 +270,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("emailA", emailET.getText().toString());
-        params.put("emailB", nameET.getText().toString());
+        params.put("emailA", emailConfirmEditText.getText().toString());
+        params.put("emailB", firstNameEditText.getText().toString());
 
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -314,7 +316,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("email", emailET.getText().toString());
+        params.put("email", emailConfirmEditText.getText().toString());
 
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -398,18 +400,19 @@ public class RegistrationActivity extends AppCompatActivity {
         if (password.toString().equals(comfirmPassword.toString()) && (!password.equals("") || !comfirmPassword.equals(""))) {
             return true;
         }
-        passwordET.setError("Please Enter same password");
+        passwordEditText.setError("Please Enter same password");
         return false;
     }
-    public boolean validName(String x){
+    public boolean validName(String x, EditText et){
 
         if(x.equals("")){
-            nameET.setError("Please Enter Name");
+            et.setError("Please enter a name");
             return false;
         }
 
         return true;
     }
+
     public boolean validEmail(String email){
         String emailRegEx;
         Pattern pattern;
@@ -444,7 +447,7 @@ public class RegistrationActivity extends AppCompatActivity {
             return true;
         } else {
 
-            dobET.setError("Please Enter Age Above 18..");
+            dobEditText.setError("Please Enter Age Above 18..");
             System.out.println("Above 18: " + age);
             return false;
 
