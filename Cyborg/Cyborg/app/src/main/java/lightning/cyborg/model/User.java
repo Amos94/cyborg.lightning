@@ -7,8 +7,15 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
     String id, name, email;
-
+    String fname,lname;
     public User() {
+    }
+    public User(String id,String fname,String lname,String email){
+        this.id = id;
+        this.fname =fname;
+        this.lname = lname;
+        this.email = email;
+
     }
 
     public User(String id, String name, String email) {

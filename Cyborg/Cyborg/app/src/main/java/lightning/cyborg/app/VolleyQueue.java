@@ -1,4 +1,4 @@
-package lightning.cyborg.activity;
+package lightning.cyborg.app;
 
 import android.content.Context;
 import android.graphics.Bitmap;

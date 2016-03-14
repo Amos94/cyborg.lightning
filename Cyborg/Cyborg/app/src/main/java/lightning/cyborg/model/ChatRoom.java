@@ -6,7 +6,17 @@ import java.io.Serializable;
  * Created by Lincoln on 07/01/16.
  */
 public class ChatRoom implements Serializable {
-    String id, name, lastMessage, timestamp;
+    String id, name, lastMessage, timestamp, access_type, permission;
+    boolean chatRoomExists = true;
+
+    public boolean isChatRoomExists() {
+        return chatRoomExists;
+    }
+
+    public void setChatRoomExists(boolean chatRoomExists) {
+        this.chatRoomExists = chatRoomExists;
+    }
+
     int unreadCount;
 
     public ChatRoom() {
@@ -18,6 +28,22 @@ public class ChatRoom implements Serializable {
         this.lastMessage = lastMessage;
         this.timestamp = timestamp;
         this.unreadCount = unreadCount;
+    }
+
+    public String getAccess_type() {
+        return access_type;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public void setAccess_type(String access_type) {
+        this.access_type = access_type;
     }
 
     public String getId() {

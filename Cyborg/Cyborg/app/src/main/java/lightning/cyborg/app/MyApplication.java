@@ -5,7 +5,10 @@ package lightning.cyborg.app;
  */
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -28,6 +31,17 @@ public class MyApplication extends Application {
     private RequestQueue mRequestQueue;
 
     private static MyApplication mInstance;
+
+    private static AppLocationListener appLocationListener;
+
+    public static void setAppLocationListener(LocationManager mm){
+        appLocationListener = new AppLocationListener(mm);
+    }
+
+    public static AppLocationListener getappLocationListner(){
+        return appLocationListener;
+    }
+
 
     private MyPreferenceManager pref;
 

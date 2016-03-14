@@ -13,6 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,6 +58,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private EditText inputMessage;
     private Button btnSend;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         Intent intent = getIntent();
         chatRoomId = intent.getStringExtra("chat_room_id");
         String title = intent.getStringExtra("name");
+        type =intent.getStringExtra("type");
+
+
 
         if (chatRoomId == null) {
             Toast.makeText(getApplicationContext(), "Chat room not found!", Toast.LENGTH_SHORT).show();
@@ -116,6 +123,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         fetchChatThread();
     }
+
 
     @Override
     protected void onResume() {
@@ -272,6 +280,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         final Map<String, String> params = new HashMap<>();
         params.put("chat_room_id", chatRoomId);
+        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
 
 
         Log.e(TAG, "endPoint: " + endPoint);
@@ -287,8 +296,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                 try {
                     JSONObject obj = new JSONObject(response);
 
+
                     // check for error
                     if (obj.getBoolean("error") == false) {
+
+                       // JSONArray chatRoomObj = obj.getJSONArray("chat_info");
+                       // JSONObject chatob = (JSONObject) chatRoomObj.get(0);
+                     //   type =chatob.getString("type");
+
                         JSONArray commentsObj = obj.getJSONArray("messages");
 
                         for (int i = 0 ; i <commentsObj.length(); ++i) {
@@ -318,6 +333,110 @@ public class ChatRoomActivity extends AppCompatActivity {
                         }
 
                     } else {
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.chatroom_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+
+        if(menuItem.getItemId()==android.R.id.home){
+            toUserHomePageActivity();
+            return true;
+        }
+        else if(menuItem.getItemId()==R.id.action_addfriend){
+            addFriend("f");
+        }
+        else {
+            switch (menuItem.getItemId()) {
+                case R.id.action_calluser:
+                    break;
+                case R.id.action_viewprofile:
+                    break;
+                case R.id.action_addfriend:
+                    break;
+                case R.id.action_blockuser:
+                    break;
+            }
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+    private void toUserHomePageActivity(){
+        Intent intent = new Intent(this,UserHomepage.class);
+
+        Bundle bundle = new Bundle();
+        if(type.equals("f")) {
+            bundle.putString("FragmentNum", "2");
+        }
+        else if(type.equals("n")){
+            bundle.putString("FragmentNum", "3");
+        }
+
+        intent.replaceExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    public void addFriend(String type){
+        String endPoint = EndPoints.ADD_FREIND;
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("chat_room_id", chatRoomId);
+        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("type",type);
+
+        Log.e(TAG, "endPoint: " + endPoint);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                endPoint, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+
+
+                    }
+                    else {
                         Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
                     }
 
