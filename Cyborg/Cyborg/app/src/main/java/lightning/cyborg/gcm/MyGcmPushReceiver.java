@@ -181,7 +181,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
                 JSONObject datObj = new JSONObject(data);
 
                     String chatRoomId = datObj.getString("chat_room_id");
-
+                    String chatType =datObj.getString("chat_type");
                     JSONObject mObj = datObj.getJSONObject("message");
                     Message message = new Message();
                     message.setMessage(mObj.getString("message"));
@@ -215,6 +215,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
                     pushNotification.putExtra("type", Config.PUSH_TYPE_CHATROOM);
                     pushNotification.putExtra("message", message);
                     pushNotification.putExtra("chat_room_id", chatRoomId);
+                    pushNotification.putExtra("chat_type",chatType);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
                     // play notification sound

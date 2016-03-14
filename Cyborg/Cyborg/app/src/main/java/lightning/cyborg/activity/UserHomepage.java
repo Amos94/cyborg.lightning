@@ -265,10 +265,14 @@ public class UserHomepage extends AppCompatActivity {
         if (type == Config.PUSH_TYPE_CHATROOM) {
             Message message = (Message) intent.getSerializableExtra("message");
             String chatRoomId = intent.getStringExtra("chat_room_id");
+            String chatType =intent.getStringExtra("chat_type");
 
             if (message != null && chatRoomId != null) {
-                updateRow(chatRoomId, message);
-
+                if(chatType.equals("n"))
+                    updateRow(chatRoomId,message, normalChatRoomArrayList,normalChatAdapter);
+                else {
+                    updateRow(chatRoomId, message, freindsChatRoomArrayList, freindChatAdapter);
+                }
             }
         }
         //else if (type == Config.PUSH_TYPE_USER) {
@@ -289,8 +293,8 @@ public class UserHomepage extends AppCompatActivity {
     /**
      * Updates the chat list unread count and the last message
      */
-    private void updateRow(String chatRoomId, Message message) {
-        for (ChatRoom cr : normalChatRoomArrayList) {
+    private void updateRow(String chatRoomId, Message message, ArrayList<ChatRoom> normalChatRoomArrayList, ChatRoomsAdapter normalChatAdapter) {
+        for (ChatRoom cr :normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomId)) {
                 int index = normalChatRoomArrayList.indexOf(cr);
                 cr.setLastMessage(message.getMessage());
@@ -301,7 +305,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         }
         normalChatAdapter.notifyDataSetChanged();
-
 
     }
 
