@@ -286,9 +286,6 @@ public class UserHomepage extends AppCompatActivity {
     }
 
 
-
-
-
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter PageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         PageAdapter.addFragment(new UserProfileFragment(), "Profile");
@@ -361,7 +358,6 @@ public class UserHomepage extends AppCompatActivity {
             startService(intent);
         }
     }
-
 
     @Override
     protected void onResume() {
