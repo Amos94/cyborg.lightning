@@ -247,7 +247,7 @@ public class UserHomepage extends AppCompatActivity {
             }
         };
 
-        subscribeToAllTopics();
+       // subscribeToAllTopics();
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }

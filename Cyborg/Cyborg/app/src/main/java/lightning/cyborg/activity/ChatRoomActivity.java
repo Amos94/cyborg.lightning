@@ -124,16 +124,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         fetchChatThread();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(type.equals("f")){
-    //           MenuItem addFreind = (MenuItem) findViewById(R.id.action_addfriend);
-      //      addFreind.setVisible(false);
-        //    addFreind.setEnabled(false);
-          //  addFreind.setCheckable(false);
-        }
-    }
 
     @Override
     protected void onResume() {

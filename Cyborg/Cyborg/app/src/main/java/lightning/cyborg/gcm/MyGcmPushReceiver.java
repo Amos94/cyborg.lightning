@@ -139,9 +139,9 @@ public class MyGcmPushReceiver extends GcmListenerService {
                 }
 
                 User user = new User();
-                user.setId(uObj.getString("id"));
+                user.setId(uObj.getString("user_id"));
                 user.setEmail(uObj.getString("email"));
-                user.setName(uObj.getString("fname"));
+                user.setName(uObj.getString("name"));
                 message.setUser(user);
 
                 // verifying whether the app is in background or foreground
@@ -167,7 +167,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
 
             } catch (JSONException e) {
                 Log.e(TAG, "json parsing error: " + e.getMessage());
-                Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                  //                Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         } else {
