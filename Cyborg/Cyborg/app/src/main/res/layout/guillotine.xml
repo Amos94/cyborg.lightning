@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/guillotine_background"
+    android:background="#01579b"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         style="@style/Toolbar"
+        android:background="#01579b"
         app:contentInsetStart="0dp">
 
         <ImageView
@@ -55,11 +56,13 @@
                     android:layout_weight="1"
                     android:id="@+id/testlayout">
 
-                    <TextView
+                    <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/settings_gil"
                         android:textColor="@android:color/white"
                         android:gravity="center"
+                        android:background="@android:color/transparent"
                         android:text="\u2022 Edit Profile"/>
 
                 </LinearLayout>

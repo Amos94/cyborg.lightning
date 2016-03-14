@@ -27,9 +27,10 @@
         <item>@drawable/men3</item>
         <item>@drawable/men4</item>
         <item>@drawable/men5</item>
-        <item>@drawable/men5</item>
         <item>@drawable/men7</item>
         <item>@drawable/men8</item>
+        <item>@drawable/men9</item>
+
     </string-array>
 
 

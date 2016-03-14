@@ -23,7 +23,7 @@ import lightning.cyborg.R;
 public class GPSLocation extends AppCompatActivity implements
         ConnectionCallbacks, OnConnectionFailedListener {
 
-    protected static final String TAG = "MainActivity";
+    protected static final String TAG = "setting";
 
     /**
      * Provides the entry point to Google Play services.

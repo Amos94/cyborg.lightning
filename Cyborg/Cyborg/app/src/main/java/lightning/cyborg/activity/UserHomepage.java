@@ -1,5 +1,4 @@
 package lightning.cyborg.activity;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +18,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -57,6 +59,7 @@ import lightning.cyborg.gcm.GcmIntentService;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
+import lightning.cyborg.setting.setting;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -72,6 +75,9 @@ public class UserHomepage extends AppCompatActivity {
     private ChatRoomsAdapter freindChatAdapter;
     private RecyclerView recyclerView;
     private int onChatFragment =0;
+
+    private Button settings;
+
 
     private static final long RIPPLE_DURATION = 500;
 
@@ -167,6 +173,23 @@ public class UserHomepage extends AppCompatActivity {
 
         fetchChatRooms("n");
         fetchChatRooms("f");
+
+
+        settings = (Button) findViewById(R.id.settings_gil);
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(UserHomepage.this, setting.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
 
     }
     /**

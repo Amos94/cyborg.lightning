@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                         MyApplication.getInstance().getPrefManager().storeUser(user);
 
                         // start main activity
-                        // startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        // startActivity(new Intent(getApplicationContext(), setting.class));
                         toUserHomePageActivity();
 
                         finish();

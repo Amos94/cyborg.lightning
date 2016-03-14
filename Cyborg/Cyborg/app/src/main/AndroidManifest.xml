@@ -40,6 +40,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+    
+        <activity android:name=".setting.setting"></activity>
+        <activity android:name=".activity.Avator_Logo"></activity>
+        <activity android:name=".setting.userDetails"></activity>
+        <activity android:name=".setting.aboutUs"></activity>
+        <activity android:name=".setting.Communication"></activity>
         <activity
             android:name=".activity.ChatRoomActivity"
             android:label="@string/title_activity_chat_room_discussion"
@@ -52,11 +61,18 @@
         <activity
             android:name=".activity.UserHomepage"
             android:label="Test"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+
+        </activity>
         <activity
             android:name=".activity.RegistrationActivity"
             android:label="Registeration"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+
+        </activity>
+
+
+
 
         <!-- START Added for GCM -->
 
@@ -89,7 +105,8 @@
         <activity
             android:name=".activity.interestsRegistration"
             android:label="@string/title_activity_interests_registration"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

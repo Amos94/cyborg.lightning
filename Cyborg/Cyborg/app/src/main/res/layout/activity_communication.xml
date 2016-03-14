@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout2"
+        >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="128dp"
+            android:background="#01579b"
+            android:paddingBottom="20dp"
+            android:paddingLeft="104dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentBottom="true"
+                android:text="Communication"
+                android:textColor="#FFF"
+                android:textSize="25dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/layout2"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="32dp"
+            android:layout_weight="0.06">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_centerVertical="true"
+                android:text="Calling Setting" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#1E88E5" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_weight="0.04">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable Calling"
+                android:textSize="12dp"
+                android:id="@+id/tvCalling"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="40dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+
+
+            <com.gc.materialdesign.views.CheckBox
+                android:id="@+id/callingRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#1E88E5"
+                materialdesign:check="false"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/tvCalling"
+                android:layout_toEndOf="@+id/tvCalling" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="32dp"
+            android:layout_weight="0.07">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16dp"
+
+                android:text="Disable Location" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#1E88E5" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="61dp">
+
+            <com.gc.materialdesign.views.ProgressBarIndeterminate
+                android:id="@+id/progressBarIndeterminate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#1E88E5"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable Location"
+
+                android:textSize="12dp"
+                android:id="@+id/tvDisableLocation"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="38dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+
+
+            <com.gc.materialdesign.views.CheckBox
+                android:id="@+id/disableLocationCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#1E88E5"
+                materialdesign:check="false"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tvDisableLocation"
+                android:layout_toEndOf="@+id/tvDisableLocation" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
