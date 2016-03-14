@@ -120,7 +120,7 @@ public class UserHomepage extends AppCompatActivity {
                 if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
-                    subscribeToGlobalTopic();
+                 //   subscribeToGlobalTopic();
 
                 } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
                     // gcm registration id is stored in our server's MySQL
@@ -159,6 +159,7 @@ public class UserHomepage extends AppCompatActivity {
             Bundle b = getIntent().getExtras();
             String key = b.getString("FragmentNum");
             viewPager.setCurrentItem(Integer.parseInt(key));
+
 
         }catch (Exception e){
             Log.d(TAG,"no bundle was attached");
@@ -269,13 +270,13 @@ public class UserHomepage extends AppCompatActivity {
                 updateRow(chatRoomId, message);
 
             }
-
-        } else if (type == Config.PUSH_TYPE_USER) {
-            // push belongs to user alone
-            // just showing the message in a toast
-            Message message = (Message) intent.getSerializableExtra("message");
-            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
         }
+        //else if (type == Config.PUSH_TYPE_USER) {
+//            // push belongs to user alone
+//            // just showing the message in a toast
+//            Message message = (Message) intent.getSerializableExtra("message");
+//            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
+//        }
         else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
             Message message = (Message) intent.getSerializableExtra("message");
             String chatRoomId = intent.getStringExtra("chat_room_id");
@@ -395,26 +396,26 @@ public class UserHomepage extends AppCompatActivity {
         }
     }
 
-    // subscribing to global topic
-    public void subscribeToGlobalTopic() {
-        Intent intent = new Intent(this, GcmIntentService.class);
-        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
-        startService(intent);
-    }
+//    // subscribing to global topic
+//    public void subscribeToGlobalTopic() {
+//        Intent intent = new Intent(this, GcmIntentService.class);
+//        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
+//        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
+//        startService(intent);
+//    }
 
-    // Subscribing to all chat room topics
-    // each topic name starts with `topic_` followed by the ID of the chat room
-    // Ex: topic_1, topic_2
-    public void subscribeToAllTopics() {
-        for (ChatRoom cr : normalChatRoomArrayList) {
-
-            Intent intent = new Intent(this, GcmIntentService.class);
-            intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-            intent.putExtra(GcmIntentService.TOPIC, "topic_" + cr.getId());
-            startService(intent);
-        }
-    }
+//    // Subscribing to all chat room topics
+//    // each topic name starts with `topic_` followed by the ID of the chat room
+//    // Ex: topic_1, topic_2
+//    public void subscribeToAllTopics() {
+//        for (ChatRoom cr : normalChatRoomArrayList) {
+//
+//            Intent intent = new Intent(this, GcmIntentService.class);
+//            intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
+//            intent.putExtra(GcmIntentService.TOPIC, "topic_" + cr.getId());
+//            startService(intent);
+//        }
+//    }
 
 
     @Override

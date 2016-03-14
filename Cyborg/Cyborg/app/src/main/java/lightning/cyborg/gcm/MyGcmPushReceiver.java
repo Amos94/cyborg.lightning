@@ -73,23 +73,13 @@ public class MyGcmPushReceiver extends GcmListenerService {
             return;
         }
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
-
-        if(flag.equals("PUSH_FLAG_CHATROOM")) {
-                Log.d("AAAAAAAAA","inside if euql push chatroom");
-                // push notification belongs to a chat room
-                processChatRoomPush(title, isBackground, data);
-        }
-        else if (flag.equals("PUSH_TYPE_USER")) {
+        if (flag.equals("PUSH_FLAG_USER")) {
+            Log.d(TAG,"fLag is PUSH_FLAG_USER");
             processUserMessage(title, isBackground, data);
 
         }
         else if(flag.equals("PUSH_FLAG_CHAT_REQUEST")){
-            Log.d("aaaaaaaaaaaaaaaaaaaaaaaa","ddddddddddddddddddddddddddAAAAAAAAAA");
+            Log.d(TAG,"fLag is PUSH_FLAG_CHAT_REQUEST");
             // verifying whether the app is in background or foreground
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
 
@@ -111,25 +101,95 @@ public class MyGcmPushReceiver extends GcmListenerService {
         }
     }
 
+//    /**
+//     * Processing chat room push message
+//     * this message will be broadcasts to all the activities registered
+//     * */
+//    private void processChatRoomPush(String title, boolean isBackground, String data) {
+//        if (!isBackground) {
+//
+//            try {
+//                JSONObject datObj = new JSONObject(data);
+//
+//                String chatRoomId = datObj.getString("chat_room_id");
+//
+//                JSONObject mObj = datObj.getJSONObject("message");
+//                Message message = new Message();
+//                message.setMessage(mObj.getString("message"));
+//                message.setId(mObj.getString("message_id"));
+//                message.setCreatedAt(mObj.getString("created_at"));
+//                JSONObject uObj = datObj.getJSONObject("user");
+//
+//                // skip the message if the message belongs to same user as
+//                // the user would be having the same message when he was sending
+//                // but it might differs in your scenario
+//                if (uObj.getString("user_id").equals(MyApplication.getInstance().getPrefManager().getUser().getId())) {
+//                    Log.e(TAG, "Skipping the push message as it belongs to same user");
+//                    return;
+//                }
+//
+//                User user = new User();
+//                user.setId(uObj.getString("user_id"));
+//                user.setEmail(uObj.getString("email"));
+//                user.setName(uObj.getString("name"));
+//                message.setUser(user);
+//
+//
+//                // verifying whether the app is in background or foreground
+//                if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+//
+//                    // app is in foreground, broadcast the push message
+//                    Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+//                    pushNotification.putExtra("type", Config.PUSH_TYPE_CHATROOM);
+//                    pushNotification.putExtra("message", message);
+//                    pushNotification.putExtra("chat_room_id", chatRoomId);
+//                    LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+//
+//                    // play notification sound
+//                    NotificationUtils notificationUtils = new NotificationUtils();
+//                    notificationUtils.playNotificationSound();
+//                } else {
+//
+//                    // app is in background. show the message in notification try
+//                    Intent resultIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+//                    resultIntent.putExtra("chat_room_id", chatRoomId);
+//                    showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
+//                }
+//
+//            } catch (JSONException e) {
+//                Log.e(TAG, "json parsing error: " + e.getMessage());
+//                  //                Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//
+//        } else {
+//            // the push notification is silent, may be other operations needed
+//            // like inserting it in to SQLite
+//        }
+//    }
+
     /**
-     * Processing chat room push message
-     * this message will be broadcasts to all the activities registered
+     * Processing user specific push message
+     * It will be displayed with / without image in push notification tray
      * */
-    private void processChatRoomPush(String title, boolean isBackground, String data) {
+    private void processUserMessage(String title, boolean isBackground, String data) {
+        Log.d("TAG","inside processUserMessage");
         if (!isBackground) {
 
+            Log.d("TAG","inside processUserMessage first if");
             try {
+                Log.d("TAG","inside processUserMessage start of try");
                 JSONObject datObj = new JSONObject(data);
 
-                String chatRoomId = datObj.getString("chat_room_id");
+                    String chatRoomId = datObj.getString("chat_room_id");
 
-                JSONObject mObj = datObj.getJSONObject("message");
-                Message message = new Message();
-                message.setMessage(mObj.getString("message"));
-                message.setId(mObj.getString("message_id"));
-                message.setCreatedAt(mObj.getString("created_at"));
-                JSONObject uObj = datObj.getJSONObject("user");
+                    JSONObject mObj = datObj.getJSONObject("message");
+                    Message message = new Message();
+                    message.setMessage(mObj.getString("message"));
+                    message.setId(mObj.getString("message_id"));
+                    message.setCreatedAt(mObj.getString("created_at"));
+                    JSONObject uObj = datObj.getJSONObject("user");
 
+                Log.d("TAG","before second if");
                 // skip the message if the message belongs to same user as
                 // the user would be having the same message when he was sending
                 // but it might differs in your scenario
@@ -137,6 +197,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
                     Log.e(TAG, "Skipping the push message as it belongs to same user");
                     return;
                 }
+                Log.d("TAG","inside processUserMessage end of second if");
 
                 User user = new User();
                 user.setId(uObj.getString("user_id"));
@@ -144,9 +205,11 @@ public class MyGcmPushReceiver extends GcmListenerService {
                 user.setName(uObj.getString("name"));
                 message.setUser(user);
 
+                Log.d("TAG", "inside processUserMessage begin of third if");
                 // verifying whether the app is in background or foreground
                 if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
 
+                    Log.d(TAG,"application is not in background");
                     // app is in foreground, broadcast the push message
                     Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
                     pushNotification.putExtra("type", Config.PUSH_TYPE_CHATROOM);
@@ -159,73 +222,11 @@ public class MyGcmPushReceiver extends GcmListenerService {
                     notificationUtils.playNotificationSound();
                 } else {
 
+                    Log.d(TAG,"application is in background");
                     // app is in background. show the message in notification try
                     Intent resultIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
                     resultIntent.putExtra("chat_room_id", chatRoomId);
                     showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
-                }
-
-            } catch (JSONException e) {
-                Log.e(TAG, "json parsing error: " + e.getMessage());
-                  //                Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-        } else {
-            // the push notification is silent, may be other operations needed
-            // like inserting it in to SQLite
-        }
-    }
-
-    /**
-     * Processing user specific push message
-     * It will be displayed with / without image in push notification tray
-     * */
-    private void processUserMessage(String title, boolean isBackground, String data) {
-        if (!isBackground) {
-
-            try {
-                JSONObject datObj = new JSONObject(data);
-
-                String imageUrl = datObj.getString("image");
-
-                JSONObject mObj = datObj.getJSONObject("message");
-                Message message = new Message();
-                message.setMessage(mObj.getString("message"));
-                message.setId(mObj.getString("message_id"));
-                message.setCreatedAt(mObj.getString("created_at"));
-
-                JSONObject uObj = datObj.getJSONObject("user");
-                User user = new User();
-                user.setId(uObj.getString("user_id"));
-                user.setEmail(uObj.getString("email"));
-                user.setName(uObj.getString("name"));
-                message.setUser(user);
-
-                // verifying whether the app is in background or foreground
-                if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-
-                    // app is in foreground, broadcast the push message
-                    Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                    pushNotification.putExtra("type", Config.PUSH_TYPE_USER);
-                    pushNotification.putExtra("message", message);
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
-                    // play notification sound
-                    NotificationUtils notificationUtils = new NotificationUtils();
-                    notificationUtils.playNotificationSound();
-                } else {
-
-                    // app is in background. show the message in notification try
-                    Intent resultIntent = new Intent(getApplicationContext(), UserHomepage.class);
-
-                    // check for push notification image attachment
-                    if (TextUtils.isEmpty(imageUrl)) {
-                        showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
-                    } else {
-                        // push notification contains image
-                        // show it with the image
-                        showNotificationMessageWithBigImage(getApplicationContext(), title, message.getMessage(), message.getCreatedAt(), resultIntent, imageUrl);
-                    }
                 }
             } catch (JSONException e) {
                 Log.e(TAG, "json parsing error: " + e.getMessage());
