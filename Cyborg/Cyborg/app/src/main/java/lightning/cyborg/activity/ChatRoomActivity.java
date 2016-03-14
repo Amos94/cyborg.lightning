@@ -280,6 +280,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         final Map<String, String> params = new HashMap<>();
         params.put("chat_room_id", chatRoomId);
+        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
 
 
         Log.e(TAG, "endPoint: " + endPoint);
@@ -295,8 +296,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                 try {
                     JSONObject obj = new JSONObject(response);
 
+
                     // check for error
                     if (obj.getBoolean("error") == false) {
+
+                       // JSONArray chatRoomObj = obj.getJSONArray("chat_info");
+                       // JSONObject chatob = (JSONObject) chatRoomObj.get(0);
+                     //   type =chatob.getString("type");
+
                         JSONArray commentsObj = obj.getJSONArray("messages");
 
                         for (int i = 0 ; i <commentsObj.length(); ++i) {
@@ -389,8 +396,15 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
     private void toUserHomePageActivity(){
         Intent intent = new Intent(this,UserHomepage.class);
+
         Bundle bundle = new Bundle();
-        bundle.putString("FragmentNum","3");
+        if(type.equals("f")) {
+            bundle.putString("FragmentNum", "2");
+        }
+        else if(type.equals("n")){
+            bundle.putString("FragmentNum", "3");
+        }
+
         intent.replaceExtras(bundle);
         startActivity(intent);
         finish();

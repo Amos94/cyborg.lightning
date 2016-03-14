@@ -196,7 +196,7 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setAccess_type(chatRoomsObj.getString("access_type"));
                             cr.setPermission(chatRoomsObj.getString("permission"));
                             cr.setLastMessage("");
-                            cr.setUnreadCount(0);
+                            cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
 
                             if(TYPE.equals("n")) {
@@ -305,7 +305,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         }
         normalChatAdapter.notifyDataSetChanged();
-
     }
 
 
