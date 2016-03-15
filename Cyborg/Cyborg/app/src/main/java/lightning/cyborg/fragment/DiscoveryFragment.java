@@ -2,8 +2,6 @@ package lightning.cyborg.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,11 +30,11 @@ public class DiscoveryFragment extends Fragment {
 
     private View inflatedview;
     private EditText search;
-    private ListView friendlist;
+    private ListView matchedList;
     private ArrayAdapter adapter;
     private Button searchButton;
     private String[] matchedUsers;
-    private String[][] matchedUserInfo;
+    private ArrayList matchedUserInfo;
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -54,11 +53,9 @@ public class DiscoveryFragment extends Fragment {
         // Inflate the layout for this fragment
         this.inflatedview = inflater.inflate(R.layout.discovery_fragment, container, false);
 
-        final String[] lists = {"Ahad","lewis","tom","Nashwan","amos","nishat"};
-
         //int [] image= {R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1};
 
-        friendlist = (ListView) inflatedview.findViewById(R.id.lvFriends);
+        matchedList = (ListView) inflatedview.findViewById(R.id.listMatched);
         search = (EditText) inflatedview.findViewById(R.id.searchMatches);
 
 //        search.addTextChangedListener(new TextWatcher() {
@@ -81,9 +78,6 @@ public class DiscoveryFragment extends Fragment {
 //            }
 //        });
 
-        adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, lists);
-        friendlist.setAdapter(adapter);
-
         searchButton = (Button)inflatedview.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +93,8 @@ public class DiscoveryFragment extends Fragment {
     private void discover(View v){
         final String url = "http://nashdomain.esy.es/interests_get_matched.php";
         final String filtered = search.getText().toString().replaceAll(", ",",").replaceAll(" ,",",").toLowerCase();
+        matchedUserInfo = new ArrayList<JSONObject>();
+        matchedUsers = new String[0];
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
@@ -119,7 +115,7 @@ public class DiscoveryFragment extends Fragment {
                             users = users.substring(1, users.length() - 1);
                             matchedUsers = users.split(",");
 
-                            populateDiscovery(0, 5);
+                            populateDiscovery(5);
 
                             boolean success = jsonResponse.getString("success").equals("1");
                             String message = jsonResponse.getString("message");
@@ -148,17 +144,15 @@ public class DiscoveryFragment extends Fragment {
         MyApplication.getInstance().addToRequestQueue(request);
     }
 
-    private void populateDiscovery(int from, int to){
+    private void populateDiscovery(int inc) throws JSONException {
         final String url = "http://nashdomain.esy.es/users_get.php";
 
-        if (from < 0){
-            return;
-        }
-        if (to > matchedUsers.length){
-            to = matchedUsers.length;
+        if (inc + matchedUserInfo.size() > matchedUsers.length){
+            inc = matchedUsers.length - matchedUserInfo.size();
         }
 
-        for(int i = from; i < to; i++){
+        //TODO  change php to take in array of user ids
+        for(int i = matchedUserInfo.size(); i < inc; i++){
             Log.d("looking for user ", matchedUsers[i]);
 
             //parameters to post to php file
@@ -175,8 +169,16 @@ public class DiscoveryFragment extends Fragment {
                                 JSONObject jsonResponse = new JSONObject(response);
 
                                 JSONObject user = jsonResponse.getJSONObject("user");
+                                matchedUserInfo.add(user);
+                                Log.d("popdis user", user.toString());
+
                                 boolean success = jsonResponse.getString("success").equals("1");
+                                Log.d("popdis suc", ""+success);
+
                                 String message = jsonResponse.getString("message");
+                                Log.d("popdis mes", message);
+
+                                populateList();
                             }
                             catch (JSONException e) {
                                 e.printStackTrace();
@@ -201,6 +203,32 @@ public class DiscoveryFragment extends Fragment {
             //put the request in the static queue
             MyApplication.getInstance().addToRequestQueue(request);
         }
+
+    }
+
+    private void populateList() {
+        String[] users = new String[matchedUserInfo.size()];
+
+        Log.d("matcheduserinfo size", ""+matchedUserInfo.size());
+
+        for(int i = 0; i < matchedUserInfo.size(); i++){
+            try {
+                JSONObject user = (JSONObject) matchedUserInfo.get(i);
+
+                users[i] = user.getString("gender") + " - " + user.getString("fname");
+                //TODO add level of education later add avatar
+
+                Log.d("popList",users[i]);
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("Json error parsing ", users.toString());
+            }
+        }
+
+        adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, users);
+        matchedList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     //@Override

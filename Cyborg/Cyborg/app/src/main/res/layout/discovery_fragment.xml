@@ -54,7 +54,7 @@
                     android:layout_height="match_parent"
                     android:textSize="8dp"
                     android:text="Choose avatar"
-                    android:id="@+id/lvFriends" />
+                    android:id="@+id/listMatched" />
 
             </ScrollView>
 
