@@ -1,1 +1,1 @@
-include ':app', ':guillotine'
+include ':app', ':guillotine', ':junit-4.12', ':hamcrest-core-1.3'
