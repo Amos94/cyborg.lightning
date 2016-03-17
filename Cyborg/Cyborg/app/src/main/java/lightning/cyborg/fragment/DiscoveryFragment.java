@@ -15,7 +15,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.rengwuxian.materialedittext.validation.RegexpValidator;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,8 +35,8 @@ public class DiscoveryFragment extends Fragment {
     private ListView matchedList;
     private ArrayAdapter adapter;
     private Button searchButton;
-    private String[] matchedUsers;
-    private ArrayList matchedUserInfo;
+    private String[] matchedUserIDs;
+    private ArrayList matchedUserJson;
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -93,8 +95,8 @@ public class DiscoveryFragment extends Fragment {
     private void discover(View v){
         final String url = "http://nashdomain.esy.es/interests_get_matched.php";
         final String filtered = search.getText().toString().replaceAll(", ",",").replaceAll(" ,",",").toLowerCase();
-        matchedUserInfo = new ArrayList<JSONObject>();
-        matchedUsers = new String[0];
+        matchedUserJson = new ArrayList<JSONObject>();
+        matchedUserIDs = new String[0];
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
@@ -111,9 +113,9 @@ public class DiscoveryFragment extends Fragment {
                             JSONObject jsonResponse = new JSONObject(response);
 
                             //clips the brackets off of the php array
-                            String users = jsonResponse.getString("users").replaceAll("\"","");
+                            String users = jsonResponse.getString("users").replaceAll("\"", "");
                             users = users.substring(1, users.length() - 1);
-                            matchedUsers = users.split(",");
+                            matchedUserIDs = users.split(",");
 
                             populateDiscovery(5);
 
@@ -145,78 +147,77 @@ public class DiscoveryFragment extends Fragment {
     }
 
     private void populateDiscovery(int inc) throws JSONException {
-        final String url = "http://nashdomain.esy.es/users_get.php";
+        final String url = "http://nashdomain.esy.es/users_get_all.php";
 
-        if (inc + matchedUserInfo.size() > matchedUsers.length){
-            inc = matchedUsers.length - matchedUserInfo.size();
+        if (inc + matchedUserJson.size() > matchedUserIDs.length){
+            inc = matchedUserIDs.length - matchedUserJson.size();
+        }
+
+        String idsToGet = "";
+
+        for(int i = matchedUserJson.size(); i < inc; i++){
+            idsToGet += matchedUserIDs[i] + ",";
         }
 
         //TODO  change php to take in array of user ids
-        for(int i = matchedUserInfo.size(); i < inc; i++){
-            Log.d("looking for user ", matchedUsers[i]);
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("userIDs", idsToGet);
 
-            //parameters to post to php file
-            final Map<String, String> params = new HashMap<String, String>();
-            params.put("userID", matchedUsers[i]);
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
 
-            //request to insert the user into the mysql database using php
-            StringRequest request = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getString("success").equals("1");
+                            String message = jsonResponse.getString("message");
+                            JSONArray temp = jsonResponse.getJSONArray("users");
 
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-
-                                JSONObject user = jsonResponse.getJSONObject("user");
-                                matchedUserInfo.add(user);
-                                Log.d("popdis user", user.toString());
-
-                                boolean success = jsonResponse.getString("success").equals("1");
-                                Log.d("popdis suc", ""+success);
-
-                                String message = jsonResponse.getString("message");
-                                Log.d("popdis mes", message);
-
-                                populateList();
+                            for (int i = 0; i < temp.length(); i++){
+                                matchedUserJson.add(temp.getJSONObject(i));
+                                Log.d("popdis user", temp.getJSONObject(i).toString());
                             }
-                            catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.d("JSON failed to parse: ", response);
-                            }
+
+                            populateList();
                         }
-                    }, new Response.ErrorListener(){
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
 
-                @Override
-                public void onErrorResponse(VolleyError error){
-                    Log.d("VolleyError at url ", url);
-                }
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", url);
             }
-            ){
-                //Parameters inserted
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    return params;
-                }
-            };
-            //put the request in the static queue
-            MyApplication.getInstance().addToRequestQueue(request);
         }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        MyApplication.getInstance().addToRequestQueue(request);
 
     }
 
     private void populateList() {
-        String[] users = new String[matchedUserInfo.size()];
+        String[] users = new String[matchedUserJson.size()];
 
-        Log.d("matcheduserinfo size", ""+matchedUserInfo.size());
-
-        for(int i = 0; i < matchedUserInfo.size(); i++){
+        for(int i = 0; i < matchedUserJson.size(); i++){
             try {
-                JSONObject user = (JSONObject) matchedUserInfo.get(i);
+                JSONObject user = (JSONObject) matchedUserJson.get(i);
 
-                users[i] = user.getString("gender") + " - " + user.getString("fname");
-                //TODO add level of education later add avatar
+                users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
+                        + " - " + user.getString("dob");
+                //TODO add level of education
 
                 Log.d("popList",users[i]);
             }
