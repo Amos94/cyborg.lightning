@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -39,9 +37,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -67,8 +66,10 @@ public class UserHomepage extends AppCompatActivity {
     private String TAG = UserHomepage.class.getSimpleName();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private ArrayList<ChatRoom> chatRoomArrayList;
-    private ChatRoomsAdapter mAdapter;
+    private ArrayList<ChatRoom> normalChatRoomArrayList;
+    private ArrayList<ChatRoom> freindsChatRoomArrayList;
+    private ChatRoomsAdapter normalChatAdapter;
+    private ChatRoomsAdapter freindChatAdapter;
     private RecyclerView recyclerView;
     private int onChatFragment =0;
 
@@ -92,6 +93,7 @@ public class UserHomepage extends AppCompatActivity {
             getSupportActionBar().setTitle(null);
         }
 
+
         /**
          * Check for login session. If not logged in launch
          * login activity
@@ -100,9 +102,11 @@ public class UserHomepage extends AppCompatActivity {
             launchLoginActivity();
         }
 
-        chatRoomArrayList = new ArrayList<>();
-        mAdapter = new ChatRoomsAdapter(this, chatRoomArrayList);
+        normalChatRoomArrayList = new ArrayList<>();
+        freindsChatRoomArrayList= new ArrayList<>();
 
+        normalChatAdapter = new ChatRoomsAdapter(this, normalChatRoomArrayList,"n");
+        freindChatAdapter =new ChatRoomsAdapter(this,freindsChatRoomArrayList,"f");
         /**
          * Broadcast receiver calls in two scenarios
          * 1. gcm registration is completed
@@ -116,7 +120,7 @@ public class UserHomepage extends AppCompatActivity {
                 if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
-                    subscribeToGlobalTopic();
+                    //   subscribeToGlobalTopic();
 
                 } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
                     // gcm registration id is stored in our server's MySQL
@@ -151,15 +155,27 @@ public class UserHomepage extends AppCompatActivity {
         if (checkPlayServices()){
             registerGCM();
         }
+        try {
+            Bundle b = getIntent().getExtras();
+            String key = b.getString("FragmentNum");
+            viewPager.setCurrentItem(Integer.parseInt(key));
 
-        fetchChatRooms();
+
+        }catch (Exception e){
+            Log.d(TAG,"no bundle was attached");
+        }
+
+        fetchChatRooms("n");
+        fetchChatRooms("f");
 
     }
     /**
      * fetching the chat rooms by making http call
      */
-    private void fetchChatRooms() {
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+    private void fetchChatRooms(String type) {
+        final String TYPE =type;
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.CHAT_ROOMS, new Response.Listener<String>() {
 
             @Override
@@ -177,27 +193,38 @@ public class UserHomepage extends AppCompatActivity {
                             ChatRoom cr = new ChatRoom();
                             cr.setId(chatRoomsObj.getString("chat_room_id"));
                             cr.setName(chatRoomsObj.getString("name"));
+                            cr.setAccess_type(chatRoomsObj.getString("access_type"));
+                            cr.setPermission(chatRoomsObj.getString("permission"));
                             cr.setLastMessage("");
-                            cr.setUnreadCount(0);
+                            cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
 
-                            chatRoomArrayList.add(cr);
+                            if(TYPE.equals("n")) {
+                                normalChatRoomArrayList.add(cr);
+                            }
+                            else if (TYPE.equals("f")){
+                                freindsChatRoomArrayList.add(cr);
+                            }
                         }
 
                     } else {
                         // error in fetching chat rooms
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
-                mAdapter.notifyDataSetChanged();
-
+                if(TYPE.equals("n")) {
+                    normalChatAdapter.notifyDataSetChanged();
+                }
+                else if(TYPE.equals("f")){
+                    freindChatAdapter.notifyDataSetChanged();
+                }
                 // subscribing to all chat room topics
-                subscribeToAllTopics();
+                // subscribeToAllTopics();
             }
         }, new Response.ErrorListener() {
 
@@ -207,8 +234,21 @@ public class UserHomepage extends AppCompatActivity {
                 Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
                 Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        });
+        })
+        {
 
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("type", TYPE);
+                params.put("user_id",  MyApplication.getInstance().getPrefManager().getUser().getId());
+
+                Log.e(TAG, "params: " + params.toString());
+                return params;
+            }
+        };
+
+        // subscribeToAllTopics();
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
@@ -225,41 +265,44 @@ public class UserHomepage extends AppCompatActivity {
         if (type == Config.PUSH_TYPE_CHATROOM) {
             Message message = (Message) intent.getSerializableExtra("message");
             String chatRoomId = intent.getStringExtra("chat_room_id");
+            String chatType =intent.getStringExtra("chat_type");
 
             if (message != null && chatRoomId != null) {
-                updateRow(chatRoomId, message);
-
+                if(chatType.equals("n"))
+                    updateRow(chatRoomId,message, normalChatRoomArrayList,normalChatAdapter);
+                else {
+                    updateRow(chatRoomId, message, freindsChatRoomArrayList, freindChatAdapter);
+                }
             }
-
-        } else if (type == Config.PUSH_TYPE_USER) {
-            // push belongs to user alone
-            // just showing the message in a toast
-            Message message = (Message) intent.getSerializableExtra("message");
-            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
         }
-
-
-
-
+        //else if (type == Config.PUSH_TYPE_USER) {
+//            // push belongs to user alone
+//            // just showing the message in a toast
+//            Message message = (Message) intent.getSerializableExtra("message");
+//            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+        else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
+            Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
+            normalChatRoomArrayList.clear();
+            fetchChatRooms("n");
+        }
     }
 
     /**
      * Updates the chat list unread count and the last message
      */
-    private void updateRow(String chatRoomId, Message message) {
-        for (ChatRoom cr : chatRoomArrayList) {
+    private void updateRow(String chatRoomId, Message message, ArrayList<ChatRoom> normalChatRoomArrayList, ChatRoomsAdapter normalChatAdapter) {
+        for (ChatRoom cr :normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomId)) {
-                int index = chatRoomArrayList.indexOf(cr);
+                int index = normalChatRoomArrayList.indexOf(cr);
                 cr.setLastMessage(message.getMessage());
                 cr.setUnreadCount(cr.getUnreadCount() + 1);
-                chatRoomArrayList.remove(index);
-                chatRoomArrayList.add(index, cr);
+                normalChatRoomArrayList.remove(index);
+                normalChatRoomArrayList.add(index, cr);
                 break;
             }
         }
-        mAdapter.notifyDataSetChanged();
-
-
+        normalChatAdapter.notifyDataSetChanged();
     }
 
 
@@ -270,24 +313,22 @@ public class UserHomepage extends AppCompatActivity {
         finish();
     }
 
-    public void chatRoomActivityIntent(String chatRoomid,String chatRoomName) {
+    public void chatRoomActivityIntent(String chatRoomid,String chatRoomName, String type) {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);
         intent.putExtra("name", chatRoomName);
-        for (ChatRoom cr : chatRoomArrayList) {
+        intent.putExtra("type",type);
+        for (ChatRoom cr : normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomid)) {
                 cr.setUnreadCount(0);
                 break;
             }
         }
-        mAdapter.notifyDataSetChanged();
+        normalChatAdapter.notifyDataSetChanged();
 
 
         startActivity(intent);
     }
-
-
-
 
 
     private void setupViewPager(ViewPager viewPager) {
@@ -313,16 +354,26 @@ public class UserHomepage extends AppCompatActivity {
                 onChatFragment=1;
                 Fragment f = FragmentList.get(position);
                 Bundle b = new Bundle();
-                b.putSerializable("data",chatRoomArrayList);
-                b.putParcelable("adapter",  mAdapter);
-                Log.d("dta", chatRoomArrayList.toArray().toString());
+                b.putSerializable("data", normalChatRoomArrayList);
+                b.putParcelable("adapter", normalChatAdapter);
+                Log.d("dta", normalChatRoomArrayList.toArray().toString());
+                f.setArguments(b);
+                return f;
+            }
+            if(position==2){
+                onChatFragment=5;
+                Fragment f = FragmentList.get(position);
+                Bundle b = new Bundle();
+                b.putSerializable("data", freindsChatRoomArrayList);
+                b.putParcelable("adapter", freindChatAdapter);
+                Log.d("dta", freindsChatRoomArrayList.toArray().toString());
                 f.setArguments(b);
                 return f;
             }
             else{
                 onChatFragment=0;
             }
-            Log.d("onChatFragment" ,onChatFragment+"");
+            Log.d("onChatFragment", onChatFragment + "");
             return FragmentList.get(position);
         }
 
@@ -342,27 +393,26 @@ public class UserHomepage extends AppCompatActivity {
         }
     }
 
-    // subscribing to global topic
-    public void subscribeToGlobalTopic() {
-        Intent intent = new Intent(this, GcmIntentService.class);
-        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
-        startService(intent);
-    }
+//    // subscribing to global topic
+//    public void subscribeToGlobalTopic() {
+//        Intent intent = new Intent(this, GcmIntentService.class);
+//        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
+//        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
+//        startService(intent);
+//    }
 
-    // Subscribing to all chat room topics
-    // each topic name starts with `topic_` followed by the ID of the chat room
-    // Ex: topic_1, topic_2
-    public void subscribeToAllTopics() {
-        for (ChatRoom cr : chatRoomArrayList) {
-
-            Intent intent = new Intent(this, GcmIntentService.class);
-            intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-            intent.putExtra(GcmIntentService.TOPIC, "topic_" + cr.getId());
-            startService(intent);
-        }
-    }
-
+//    // Subscribing to all chat room topics
+//    // each topic name starts with `topic_` followed by the ID of the chat room
+//    // Ex: topic_1, topic_2
+//    public void subscribeToAllTopics() {
+//        for (ChatRoom cr : normalChatRoomArrayList) {
+//
+//            Intent intent = new Intent(this, GcmIntentService.class);
+//            intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
+//            intent.putExtra(GcmIntentService.TOPIC, "topic_" + cr.getId());
+//            startService(intent);
+//        }
+//    }
 
     @Override
     protected void onResume() {

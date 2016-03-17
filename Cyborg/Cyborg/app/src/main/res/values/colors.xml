@@ -10,6 +10,11 @@
     <color name="guillotine_background_dark">#383547</color>
     <color name="selected_item_color">#30d1d5</color>
 
+    <color name="blue">#00abea</color>
+    <color name="white">#fff</color>
+    <color name="selectable_pressed">#1e000000</color>
+    <color name="selectable_ripple">#27000000</color>
+
     <!-- google's material design colours from
     http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <!--reds-->

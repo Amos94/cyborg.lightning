@@ -19,4 +19,17 @@
     </string>
     <string name="title_activity_view_profile">ViewProfile</string>
     <string name="title_activity_matched_chats">MatchedChats</string>
+
+    <string-array name="image_ids">
+        <item>@drawable/men1</item>
+        <item>@drawable/men2</item>
+        <item>@drawable/men3</item>
+        <item>@drawable/men4</item>
+        <item>@drawable/men5</item>
+        <item>@drawable/men5</item>
+        <item>@drawable/men7</item>
+        <item>@drawable/men8</item>
+    </string-array>
+    <string name="title_activity_set_sip_user_info">SetSipUserInfo</string>
+
 </resources>

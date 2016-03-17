@@ -19,9 +19,15 @@ public class EndPoints {
     //public static final String BASE_URL = "http://projectruncyborg.esy.es";
     public static final String LOGIN = base + "/temp_User_Login.php";
     public static final String USERr = base +"/updateGcmID.php";
+    public static final String CREATE_CHATROOM = base+ "/createChatRoom.php";
     //public static final String CHAT_ROOMS = "http://projectruncyborg.esy.es/getAllChatRooms.php";
     public static final String CHAT_THREAD = base +"/temp_GetSingleRoom.php";
-    public static final String CHAT_ROOM_MESSAGE = "http://nashdomain.esy.es/sendMessage.php";
-    public static final String CHAT_ROOMS = base + "/temp_GetAllChatrooms.php";
+    public static final String CHAT_ROOM_MESSAGE = base+"/temp_send.php";
+    public static final String CHAT_ROOMS = base + "/getNormalChatRooms.php";
+    public static final String REQUEST_RESPONSE = base+"/requestHandler.php";
+    public static final String ADD_FREIND = base+"/convertChatRoom.php";
+    public static final String UPDATE_SIP = base+"/updateSip.php";
+    public static final String FETCH_SIP = base+"/call.php";
+
 
 }

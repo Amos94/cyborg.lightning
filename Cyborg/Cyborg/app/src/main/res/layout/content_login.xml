@@ -30,10 +30,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -41,8 +37,6 @@
                         android:textColor="@android:color/white"
                         android:gravity="center"
                         android:text="Companion.4me"/>
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -73,33 +67,21 @@
                     android:orientation="vertical"
                     android:layout_weight="1">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:textSize="25dp"
                             android:textStyle="bold"
                             android:gravity="center"
+                            android:layout_weight="1"
                             android:text="Welcome"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="--------------------"
-                            android:gravity="center"/>
-
-                    </LinearLayout>
+                            android:gravity="center"
+                            android:layout_weight="2"/>
 
                 </LinearLayout>
 
@@ -109,33 +91,21 @@
                     android:orientation="vertical"
                     android:layout_weight="1">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2">
-
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:textSize="15dp"
                             android:textStyle="bold"
+                            android:layout_weight="2"
                             android:text="Email address:"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
 
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="textPersonName"
                             android:id="@+id/txtEmailLogin"
-                            android:hint="Example@email.co.uk" />
-
-                    </LinearLayout>
+                            android:layout_weight="1"
+                            android:hint="Example@email.co.uk"/>
 
                 </LinearLayout>
 
@@ -144,34 +114,41 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:textSize="15dp"
                             android:textStyle="bold"
-                            android:text="Password"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+                            android:text="Password"
+                            android:layout_weight="2"/>
 
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="textPassword"
                             android:id="@+id/txtPasswordLogin"
-                            android:hint="Enter password" />
+                            android:layout_weight="1"
+                            android:hint="Enter password"/>
 
-                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/btnLogin"
+                        android:text="Login"
+                        android:onClick="checkLogin"/>
 
                 </LinearLayout>
 
@@ -179,64 +156,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingRight="50dp"
+                    android:paddingLeft="50dp">
 
-                    <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:gravity="center"
+                        android:text="Don't have an account?"/>
+
+                    <Button
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingTop="15dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="15dp"
-                        android:paddingLeft="15dp">
-
-                        <Button
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/btnLogin"
-                            android:text="Login"
-                            android:onClick="checkLogin"
-                            />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:textSize="15dp"
-                            android:gravity="center"
-                            android:text="Don't have an account?"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:paddingRight="50dp"
-                        android:paddingLeft="50dp">
-
-                        <Button
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/btnRegistor"
-                            android:onClick="goToRegisterScreen"
-                            android:textSize="10dp"
-                            android:text="Register"/>
-
-                    </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnRegistor"
+                        android:onClick="goToRegisterScreen"
+                        android:textSize="10dp"
+                        android:text="Register"/>
 
                 </LinearLayout>
 

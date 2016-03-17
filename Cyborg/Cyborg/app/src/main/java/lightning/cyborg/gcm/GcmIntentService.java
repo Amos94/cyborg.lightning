@@ -40,28 +40,17 @@ public class GcmIntentService extends IntentService {
     }
 
     public static final String KEY = "key";
-    public static final String TOPIC = "topic";
-    public static final String SUBSCRIBE = "subscribe";
-    public static final String UNSUBSCRIBE = "unsubscribe";
+//    public static final String TOPIC = "topic";
+//    public static final String SUBSCRIBE = "subscribe";
+//    public static final String UNSUBSCRIBE = "unsubscribe";
 
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String key = intent.getStringExtra(KEY);
-        switch (key) {
-            case SUBSCRIBE:
-                // subscribe to a topic
-                String topic = intent.getStringExtra(TOPIC);
-                subscribeToTopic(topic);
-                break;
-            case UNSUBSCRIBE:
-                break;
-            default:
-                // if key is specified, register with GCM
-                registerGCM();
-        }
+        // String key = intent.getStringExtra(KEY);
+        registerGCM();
 
-    }
+    };
 
     /**
      * Registering with GCM and obtaining the gcm registration id
@@ -100,7 +89,7 @@ public class GcmIntentService extends IntentService {
             return;
         }
 
-      //  String endPoint = EndPoints.USER.replace("_ID_", user.getId());
+        //  String endPoint = EndPoints.USER.replace("_ID_", user.getId());
 
         String endPoint = EndPoints.USERr;
 

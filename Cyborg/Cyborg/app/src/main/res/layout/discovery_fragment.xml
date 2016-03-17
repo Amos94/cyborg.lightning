@@ -3,8 +3,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/lightcolor">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,12 +31,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="--------------------------------------------------"/>
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,7 +53,7 @@
                     android:layout_height="match_parent"
                     android:textSize="8dp"
                     android:text="Choose avatar"
-                    android:id="@+id/lvFriends" />
+                    android:id="@+id/listMatched" />
 
             </ScrollView>
 

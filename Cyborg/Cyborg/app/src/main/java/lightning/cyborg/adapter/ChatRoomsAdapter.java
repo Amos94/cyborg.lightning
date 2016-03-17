@@ -4,12 +4,25 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -17,8 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.UserHomepage;
+import lightning.cyborg.app.EndPoints;
+import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.model.ChatRoom;
 
 
@@ -27,6 +45,9 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     private Context mContext;
     private ArrayList<ChatRoom> chatRoomArrayList;
     private static String today;
+    private String type;
+    private boolean buttonPressed=false;
+    public static String TAG = "ChatRoomAdapter";
 
     protected ChatRoomsAdapter(Parcel in) {
     }
@@ -52,8 +73,11 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public void writeToParcel(Parcel dest, int flags) {
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
+        public Button accept, decline;
 
         public ViewHolder(View view) {
             super(view);
@@ -61,14 +85,17 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             message = (TextView) view.findViewById(R.id.message);
             timestamp = (TextView) view.findViewById(R.id.timestamp);
             count = (TextView) view.findViewById(R.id.count);
+
+            accept = (Button) view.findViewById(R.id.acceptbutton);
+            decline = (Button) view.findViewById(R.id.rejectbutton);
         }
     }
 
 
-    public ChatRoomsAdapter(Context mContext, ArrayList<ChatRoom> chatRoomArrayList) {
+    public ChatRoomsAdapter(Context mContext, ArrayList<ChatRoom> chatRoomArrayList, String type) {
         this.mContext = mContext;
         this.chatRoomArrayList = chatRoomArrayList;
-
+        this.type =type;
         Calendar calendar = Calendar.getInstance();
         today = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
     }
@@ -82,16 +109,76 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ChatRoom chatRoom = chatRoomArrayList.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+
+        final ChatRoom chatRoom = chatRoomArrayList.get(position);
         holder.name.setText(chatRoom.getName());
-        holder.message.setText(chatRoom.getLastMessage());
-        if (chatRoom.getUnreadCount() > 0) {
-            holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
-            holder.count.setVisibility(View.VISIBLE);
-        } else {
+
+
+        if(chatRoom.getAccess_type().equals("y")){
+
+            holder.message.setText(chatRoom.getLastMessage());
+            //Buttons are removed
+            holder.accept.setVisibility(View.GONE);
+            holder.accept.setOnClickListener(null);
+            holder.decline.setVisibility(View.GONE);
+            holder.decline.setOnClickListener(null);
+
+
+            if (chatRoom.getUnreadCount() > 0) {
+                holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
+                holder.count.setVisibility(View.VISIBLE);
+
+            }
+            else {
+                holder.count.setVisibility(View.GONE);
+
+            }
+        }
+
+        else{
+            if(chatRoom.getPermission().equals("s")){
+
+                holder.message.setText("pending request");
+
+
+                //Buttons are removed
+                holder.accept.setVisibility(View.GONE);
+                holder.accept.setOnClickListener(null);
+                holder.decline.setVisibility(View.GONE);
+                holder.decline.setOnClickListener(null);
+
+            }
+            else if(chatRoom.getPermission().equals("r")){
+
+                //buttons are shown
+                holder.accept.setVisibility(View.VISIBLE);
+                holder.accept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        serverHandler("accept", chatRoom.getId());
+                        ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),type );
+                        //notifyDataSetChanged();
+
+                    }
+                });
+
+                holder.decline.setVisibility(View.VISIBLE);
+                holder.decline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        serverHandler("decline", chatRoom.getId());
+                        chatRoom.setChatRoomExists(false);
+                        chatRoomArrayList.remove(chatRoom);
+                        notifyDataSetChanged();
+                    }
+                });
+            }
             holder.count.setVisibility(View.GONE);
         }
+
+        Log.d("after", chatRoom.getId() + "per::" + chatRoom.getPermission());
 
         holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
     }
@@ -169,4 +256,65 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
         }
     }
+
+    public void serverHandler(String reply,String chatRoomId){
+        final String choice = reply;
+        final String cR_Id =chatRoomId;
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                EndPoints.REQUEST_RESPONSE, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                String resp = response.substring(1,response.length());
+                try {
+                    JSONObject obj = new JSONObject(resp);
+
+                    // check for error flag
+                    if (obj.getBoolean("error") == false) {
+
+                        if(choice.equals("accept")){
+                            notifyDataSetChanged();
+                        }
+                    } else {
+
+                        // error in fetching chat rooms
+                        Toast.makeText(mContext, "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(mContext, "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+                // subscribing to all chat room topics
+                // subscribeToAllTopics();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(mContext, "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("choice", choice);
+                params.put("chat_room_id",  cR_Id);
+
+                Log.e(TAG, "params: " + params.toString());
+                return params;
+            }
+        };
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
 }

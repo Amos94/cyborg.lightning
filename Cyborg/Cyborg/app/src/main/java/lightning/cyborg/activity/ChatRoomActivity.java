@@ -42,6 +42,7 @@ import lightning.cyborg.adapter.ChatRoomThreadAdapter;
 import lightning.cyborg.app.Config;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
+import lightning.cyborg.app.VolleyQueue;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.model.User;
@@ -52,12 +53,20 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String TAG = ChatRoomActivity.class.getSimpleName();
 
     private String chatRoomId;
+    //private static String chatRoomId;
     private RecyclerView recyclerView;
     private ChatRoomThreadAdapter mAdapter;
     private ArrayList<Message> messageArrayList;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private EditText inputMessage;
     private Button btnSend;
+    private String type;
+
+    private String sipUsername;
+    private String sipPassword;
+    private String sipCaleeUsername;
+
+    private MenuItem callButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +81,15 @@ public class ChatRoomActivity extends AppCompatActivity {
         Intent intent = getIntent();
         chatRoomId = intent.getStringExtra("chat_room_id");
         String title = intent.getStringExtra("name");
+        type =intent.getStringExtra("type");
 
-        if (chatRoomId == null) {
-            Toast.makeText(getApplicationContext(), "Chat room not found!", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+//        try{
+//            chatRoomID =chatRoomID+"";
+//            chatRoomId = chatRoomID;
+//            Log.d(TAG,"inside tryStatement");
+//        }catch (Exception e){
+//            Log.d(TAG,"inside catchstatment");
+//        }
 
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,7 +114,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push message is received
                     handlePushNotification(intent);
-                    Log.d("MMMMMMMMMMMMMMMMMMMMM", "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+                    Log.d("MMMMMMMMMMMMMMMMMMMMM", "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");//cool
 
                 }
                 else{
@@ -119,6 +132,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         fetchChatThread();
     }
+
 
     @Override
     protected void onResume() {
@@ -162,7 +176,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void sendMessage() {
 
         //Message to be sent
-        final String message = this.inputMessage.getText().toString().trim();
+        final String message = this.inputMessage.getText().toString().trim()+" ";
+
 
         //if message is empty
         if (TextUtils.isEmpty(message)) {
@@ -275,6 +290,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         final Map<String, String> params = new HashMap<>();
         params.put("chat_room_id", chatRoomId);
+        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
 
 
         Log.e(TAG, "endPoint: " + endPoint);
@@ -290,8 +306,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                 try {
                     JSONObject obj = new JSONObject(response);
 
+
                     // check for error
                     if (obj.getBoolean("error") == false) {
+
+                        // JSONArray chatRoomObj = obj.getJSONArray("chat_info");
+                        // JSONObject chatob = (JSONObject) chatRoomObj.get(0);
+                        //   type =chatob.getString("type");
+
                         JSONArray commentsObj = obj.getJSONArray("messages");
 
                         for (int i = 0 ; i <commentsObj.length(); ++i) {
@@ -351,24 +373,177 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
+    public void fetchSip(){
+
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("chat_room_id", chatRoomId.toString());
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.FETCH_SIP,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+
+                            // check for error flag
+                            if (obj.getBoolean("error") == false) {
+                                Log.d(TAG, "no error");
+
+                                //CALLER USERNAME
+                                sipUsername = obj.getString("user_sip_username");
+                                sipPassword = obj.getString("user_sip_password");
+
+                                //CALLEE USERNAME
+                                sipCaleeUsername = obj.getString("calling_sip_username");
+
+                                if(sipUsername != null && sipPassword != null && sipCaleeUsername != null){
+                                    callButton.setVisible(true);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", EndPoints.FETCH_SIP);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        VolleyQueue.getInstance(this).addToRequestQueue(request);
+    }
+
+    private void toUserHomePageActivity(){
+        Intent intent = new Intent(this,UserHomepage.class);
+
+        Bundle bundle = new Bundle();
+        if(type.equals("f")) {
+            bundle.putString("FragmentNum", "2");
+        }
+        else if(type.equals("n")){
+            bundle.putString("FragmentNum", "3");
+        }
+
+        intent.replaceExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    public void addFriend(String type){
+        String endPoint = EndPoints.ADD_FREIND;
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("chat_room_id", chatRoomId);
+        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("type",type);
+
+        Log.e(TAG, "endPoint: " + endPoint);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                endPoint, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
+    public void startCall() {
+
+        Intent intent = new Intent(this, CallActivity.class);
+
+        intent.putExtra("callerUsername", sipUsername);
+        intent.putExtra("callerPassword", sipPassword);
+        intent.putExtra("calleeUsername", sipCaleeUsername);
+
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.chatroom_menu, menu);
+        callButton = menu.findItem(R.id.action_calluser);
+        callButton.setVisible(false);
+        fetchSip();
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.action_calluser:
-                break;
-            case R.id.action_viewprofile:
-                break;
-            case R.id.action_addfriend:
-                break;
-            case R.id.action_blockuser:
-                break;
+
+        if(menuItem.getItemId()==android.R.id.home){
+            toUserHomePageActivity();
+            return true;
+        }
+        else if(menuItem.getItemId()==R.id.action_addfriend){
+            addFriend("f");
+        }
+        else {
+            switch (menuItem.getItemId()) {
+                case R.id.action_calluser:
+                    startCall();
+                    break;
+                case R.id.action_viewprofile:
+                    break;
+                case R.id.action_addfriend:
+                    break;
+                case R.id.action_blockuser:
+                    break;
+            }
         }
         return super.onOptionsItemSelected(menuItem);
     }
