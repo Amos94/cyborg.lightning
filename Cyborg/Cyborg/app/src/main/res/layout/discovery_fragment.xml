@@ -13,8 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -30,6 +29,25 @@
                 android:text="Search Now"
                 android:id="@+id/searchButton"/>
 
+            <SeekBar
+                android:layout_width="237dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekDist"
+                android:layout_gravity="right" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search near me"
+                android:id="@+id/checkBoxLoc"
+                android:layout_gravity="right" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Load more people"
+                android:id="@+id/loadButton" />
+
         </LinearLayout>
 
         <EditText
@@ -37,7 +55,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:id="@+id/searchMatches"
-            android:hint="Search for Matches" />
+            android:hint="Interests" />
 
         <LinearLayout
             android:layout_width="match_parent"

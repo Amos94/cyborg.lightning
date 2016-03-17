@@ -8,14 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SeekBar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.rengwuxian.materialedittext.validation.RegexpValidator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,11 +33,14 @@ public class DiscoveryFragment extends Fragment {
 
     private View inflatedview;
     private EditText search;
+    private CheckBox checkBoxLoc;
     private ListView matchedList;
     private ArrayAdapter adapter;
     private Button searchButton;
+    private Button loadButton;
     private String[] matchedUserIDs;
     private ArrayList matchedUserJson;
+    private SeekBar seekDist;
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -58,33 +62,28 @@ public class DiscoveryFragment extends Fragment {
         //int [] image= {R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1};
 
         matchedList = (ListView) inflatedview.findViewById(R.id.listMatched);
+        seekDist = (SeekBar) inflatedview.findViewById(R.id.seekDist);
+        checkBoxLoc = (CheckBox)inflatedview.findViewById(R.id.checkBoxLoc);
         search = (EditText) inflatedview.findViewById(R.id.searchMatches);
-
-//        search.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                adapter.getFilter().filter(s);
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                adapter.getFilter().filter(s);
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                adapter.getFilter().filter(s);
-//
-//            }
-//        });
-
+        search.setText("");
         searchButton = (Button)inflatedview.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 discover(v);
+                loadButton.setEnabled(true);
+            }
+        });
+        loadButton = (Button)inflatedview.findViewById(R.id.loadButton);
+        loadButton.setEnabled(false);
+        loadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    populateDiscovery(5);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -93,15 +92,28 @@ public class DiscoveryFragment extends Fragment {
     }
 
     private void discover(View v){
-        final String url = "http://nashdomain.esy.es/interests_get_matched.php";
         final String filtered = search.getText().toString().replaceAll(", ",",").replaceAll(" ,",",").toLowerCase();
+        String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
+        int radius = seekDist.getProgress();
         matchedUserJson = new ArrayList<JSONObject>();
-        matchedUserIDs = new String[0];
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
+        params.put("userID", ownID);
         params.put("interests", filtered);
-        params.put("userID", "69");
+        params.put("radius", Integer.toString(radius));
+
+        String tempURL;
+        if(checkBoxLoc.isChecked() && !filtered.equals("")){
+            tempURL = "http://nashdomain.esy.es/users_get_interest_and_loc.php";
+        }
+        else if(checkBoxLoc.isChecked()){
+            tempURL = "http://nashdomain.esy.es/users_get_location.php";
+        }
+        else{
+            tempURL = "http://nashdomain.esy.es/interests_get_matched.php";
+        }
+        final String url = tempURL;
 
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -111,16 +123,22 @@ public class DiscoveryFragment extends Fragment {
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-
-                            //clips the brackets off of the php array
-                            String users = jsonResponse.getString("users").replaceAll("\"", "");
-                            users = users.substring(1, users.length() - 1);
-                            matchedUserIDs = users.split(",");
-
-                            populateDiscovery(5);
-
                             boolean success = jsonResponse.getString("success").equals("1");
                             String message = jsonResponse.getString("message");
+                            JSONArray jsonIDs = jsonResponse.getJSONArray("users");
+                            Log.d("jsonIDs", jsonIDs.toString());
+
+                            matchedUserIDs = new String[jsonIDs.length()];
+                            for(int i=0; i<jsonIDs.length(); i++){
+                                matchedUserIDs[i] = jsonIDs.getString(i);
+                            }
+
+                            if(matchedUserIDs.length > 0){
+                                populateDiscovery(5);
+                            }
+                            else {
+                                populateList();
+                            }
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -149,17 +167,23 @@ public class DiscoveryFragment extends Fragment {
     private void populateDiscovery(int inc) throws JSONException {
         final String url = "http://nashdomain.esy.es/users_get_all.php";
 
+        if (matchedUserJson.size() == matchedUserIDs.length){
+            loadButton.setEnabled(false);
+            Log.d("popDis","No more users to load");
+            //TODO make a popup letting the user know there are no more users to load
+            return;
+        }
+
         if (inc + matchedUserJson.size() > matchedUserIDs.length){
             inc = matchedUserIDs.length - matchedUserJson.size();
         }
 
         String idsToGet = "";
 
-        for(int i = matchedUserJson.size(); i < inc; i++){
+        for(int i = matchedUserJson.size(); i < inc + matchedUserJson.size(); i++){
             idsToGet += matchedUserIDs[i] + ",";
         }
 
-        //TODO  change php to take in array of user ids
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userIDs", idsToGet);
@@ -178,7 +202,7 @@ public class DiscoveryFragment extends Fragment {
 
                             for (int i = 0; i < temp.length(); i++){
                                 matchedUserJson.add(temp.getJSONObject(i));
-                                Log.d("popdis user", temp.getJSONObject(i).toString());
+                                Log.d("popDis loading", temp.getJSONObject(i).toString());
                             }
 
                             populateList();
@@ -218,8 +242,6 @@ public class DiscoveryFragment extends Fragment {
                 users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + user.getString("dob");
                 //TODO add level of education
-
-                Log.d("popList",users[i]);
             }
             catch (JSONException e) {
                 e.printStackTrace();
