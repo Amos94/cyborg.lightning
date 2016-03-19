@@ -425,9 +425,14 @@ public class RegistrationActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else{
-            goToInterestsPage();
+            goToSetSipUserInfo();
         }
 
+    }
+
+    public void goToSetSipUserInfo(){
+        Intent intent = new Intent(this, SetSipUserInfo.class);
+        startActivity(intent);
     }
 
     /*
