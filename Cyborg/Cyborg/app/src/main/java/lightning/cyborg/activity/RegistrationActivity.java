@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -56,6 +57,9 @@ public class RegistrationActivity extends AppCompatActivity {
     int toAddActivated;
     int age;
     ClipData.Item test;
+
+    int numPassChar;
+    char[] passChar;
 
 
     JSONObject response;
@@ -104,6 +108,9 @@ public class RegistrationActivity extends AppCompatActivity {
         isActivated = false;
         toAddActivated = 0;
 
+        numPassChar = 0;
+
+
         //DB
 
         if (toAddActivated == 0) {
@@ -132,6 +139,7 @@ public class RegistrationActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                validPassword(passwordEditText.getText().toString(), confirmPasswordEditText.getText().toString());
                validName(firstNameEditText.getText().toString(), firstNameEditText);
@@ -394,8 +402,18 @@ public class RegistrationActivity extends AppCompatActivity {
 
     //vaildaing users details
     public boolean validPassword(String password, String comfirmPassword) {
-        if (password.toString().equals(comfirmPassword.toString()) && (!password.equals("") || !comfirmPassword.equals(""))) {
+
+        numPassChar = 0;
+        passChar = password.toCharArray();
+
+        numPassChar = passChar.length+1;
+
+        if (password.toString().equals(comfirmPassword.toString()) && (!password.equals("") || !comfirmPassword.equals("")) && numPassChar >=6) {
             return true;
+        }
+        if(numPassChar <6) {
+            Toast.makeText(RegistrationActivity.this, "Password must have more than 6 characters.", Toast.LENGTH_SHORT).show();
+            passwordEditText.setError("Password must have more than 6 characters.");
         }
         passwordEditText.setError("Please Enter same password");
         return false;
