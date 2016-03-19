@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import lightning.cyborg.R;
 import lightning.cyborg.app.MyApplication;
+import lightning.cyborg.testassistants.SQLiStringChecker;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -383,7 +384,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
     //vaildaing users details
     public boolean validPassword(String password, String comfirmPassword) {
-        if (password.toString().equals(comfirmPassword.toString()) && (!password.equals("") || !comfirmPassword.equals(""))) {
+        boolean valid_pass1=true;
+        boolean valid_pass2=true;
+        SQLiStringChecker checker = new SQLiStringChecker();
+
+        if(checker.checkerFoo(password)==false) valid_pass1=false;
+        if(checker.checkerFoo(comfirmPassword)== false) valid_pass2=false;
+
+        if ((password.toString().equals(comfirmPassword.toString())&&valid_pass1==true) && ((!password.equals("") || !comfirmPassword.equals("")))&&valid_pass2==true) {
             return true;
         }
         passwordET.setError("Please Enter same password");
@@ -413,7 +421,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-
     public boolean validateDOB(String date) throws ParseException {
 
         DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
@@ -440,6 +447,8 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
     }
+
+
 
 
 

@@ -1,4 +1,4 @@
-package lightning.cyborg;
+package lightning.cyborg.testassistants;
 
 import junit.framework.Test;
 

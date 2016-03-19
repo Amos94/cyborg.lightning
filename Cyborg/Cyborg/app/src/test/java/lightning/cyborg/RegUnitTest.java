@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.text.ParseException;
 
+import lightning.cyborg.testassistants.TestAssistent;
+
 import static org.junit.Assert.*;
 
 public class RegUnitTest {
@@ -45,6 +47,7 @@ public class RegUnitTest {
     public void testMethod5() throws ParseException{// true returns 66yo
         assertTrue(test.Method("14/11/1950"));
     }
+    */
     @Test
     public void testMethod6() throws ParseException{ //True returns 42
         assertTrue(test.Method("17/01/1974"));
@@ -341,7 +344,7 @@ public class RegUnitTest {
     public void testMethodNullNameFalse(){
         assertFalse(test.Method3(""));
     }
-*/
+
     // END OF NAME NOT NULL TESTING
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -464,8 +467,7 @@ public class RegUnitTest {
 
 
 
-
-
+*/
 
 
 
