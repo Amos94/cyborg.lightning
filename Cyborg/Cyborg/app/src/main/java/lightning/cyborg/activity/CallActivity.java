@@ -4,6 +4,7 @@ package lightning.cyborg.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -14,7 +15,9 @@ import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,6 +29,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.DialerFilter;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import lightning.cyborg.R;
@@ -72,6 +78,8 @@ public class CallActivity extends AppCompatActivity {
     private final String POSTFIX_CALLEE = "@sip.antisip.com";
 
     private String message;
+
+    private AlertDialog alertDialog;
 
     public CallActivity(String callerUn, String callerPw, String calleeUn){
 
@@ -134,27 +142,43 @@ public class CallActivity extends AppCompatActivity {
 
         initializeManager();
         initializeLocalProfile();
-      if(message.equals("makeCall")){
-          Log.d("CallActivity", "inside make call if statment");
-          initiateCall();
-      }
-        else if(message.equals("waitCall")){
-          Log.d("CallActivity", "inside make call else statment");
-      }
-       // Log.d("AAAAAAA", "Entering the call...");
-        //initiateCall();
-      //  Log.d("AAAAAA", "In call...");
+
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Connecting to call...");
+        alertDialog.setMessage("00:05");
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+
+        new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                alertDialog.setMessage("seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            @Override
+            public void onFinish() {
+                alertDialog.dismiss();
+                if(message.equals("makeCall")){
+                    Log.d("CallActivity", "inside make call if statment");
+                    initiateCall();
+                }
+                else if(message.equals("waitCall")){
+                    Log.d("CallActivity", "inside make call else statment");
+                }
+            }
+        }.start();
+
     }
 
     public CallActivity() {
         //
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        initiateCall();
-    }
+    //@Override
+    //public void onWindowFocusChanged(boolean hasFocus) {
+       // super.onWindowFocusChanged(hasFocus);
+        //initiateCall();
+    //}
 
     @Override
     public void onStart() {

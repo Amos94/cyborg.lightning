@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.AvatarActivity;
 import lightning.cyborg.activity.Avator_Logo;
 
 
@@ -78,7 +79,7 @@ public class UserProfileFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Intent intent = new Intent(getActivity(), Avator_Logo.class);
+                        Intent intent = new Intent(getActivity(), AvatarActivity.class);
                         startActivity(intent);
 
 

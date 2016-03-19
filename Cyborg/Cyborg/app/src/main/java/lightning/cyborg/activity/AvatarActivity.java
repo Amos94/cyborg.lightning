@@ -1,8 +1,5 @@
 package lightning.cyborg.activity;
 
-/**
- * Created by Ahadxo on 3/12/16.
- */
 import android.app.Activity;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -10,18 +7,19 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import lightning.cyborg.R;
 import lightning.cyborg.adapter.GridViewAdapter;
 import lightning.cyborg.fragment.UserProfileFragment;
 
-public class Avator_Logo extends Activity {
+/**
+ * Created by Lewis on 19/03/2016.
+ */
+public class AvatarActivity extends Activity {
+
     private GridView gridView;
     private GridViewAdapter gridAdapter;
 
@@ -35,7 +33,7 @@ public class Avator_Logo extends Activity {
         gridAdapter = new GridViewAdapter(this, R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
 
-        gridView.setOnItemClickListener(new OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageItem item = (ImageItem) parent.getItemAtPosition(position);
                 Bitmap x = item.getImage();
@@ -57,4 +55,5 @@ public class Avator_Logo extends Activity {
         }
         return imageItems;
     }
+
 }
