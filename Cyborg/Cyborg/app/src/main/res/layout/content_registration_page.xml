@@ -276,6 +276,37 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="113dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Would you like to register for VoIP calling?"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="0.89" />
+
+                <CheckBox
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:inputType="date"
+                    android:id="@+id/sipRegBox" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/infoBtn"
+
+                    android:src="@drawable/ic_action_action_help"
+                    android:onClick="showVoipInfo" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

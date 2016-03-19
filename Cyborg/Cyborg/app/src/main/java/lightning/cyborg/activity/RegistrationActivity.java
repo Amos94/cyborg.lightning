@@ -1,6 +1,8 @@
 package lightning.cyborg.activity;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -33,6 +36,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lightning.cyborg.R;
+import lightning.cyborg.VOIP.SipAccountRegistration;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;
 
@@ -57,6 +61,8 @@ public class RegistrationActivity extends AppCompatActivity {
     int toAddActivated;
     int age;
     ClipData.Item test;
+
+    CheckBox sipAccountCB;
 
     int numPassChar;
     char[] passChar;
@@ -132,6 +138,8 @@ public class RegistrationActivity extends AppCompatActivity {
             //}
         //});
 
+        sipAccountCB = (CheckBox) findViewById(R.id.sipRegBox);
+
         //vaildating data before.. inserting data into database....
 
         btnNext = (ImageView) findViewById(R.id.nextPageButton);
@@ -171,9 +179,35 @@ public class RegistrationActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                goToMakeSipAccount();
+
             }
         });
 
+
+    }
+
+    public void showVoipInfo(View view){
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        alertDialog.setTitle("VoIP info");
+
+        alertDialog.setMessage("In order to make and receive inApp calls, you have to create an ANTISIP account." +
+                "\nIf you want this feature, please make sure you tick the checkbox." +
+                "\nIf not, you can skip this for now." +
+                "\nHowever, if you change your mind later, you can make an ANTISIP account inApp using the settings.");
+
+        alertDialog.setIcon(R.drawable.info);
+
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog closed
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
 
     }
 
@@ -382,6 +416,18 @@ public class RegistrationActivity extends AppCompatActivity {
     public void goToInterestsPage() {
         Intent intent = new Intent(this, interestsRegistration.class);
         startActivity(intent);
+    }
+
+    public void goToMakeSipAccount(){
+
+        if(sipAccountCB.isChecked()){
+            Intent intent = new Intent(this, SipAccountRegistration.class);
+            startActivity(intent);
+        }
+        else{
+            goToInterestsPage();
+        }
+
     }
 
     /*

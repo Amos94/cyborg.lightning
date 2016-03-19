@@ -131,10 +131,17 @@
         </service>
         <!-- END Added for GCM -->
 
+            <activity
+                android:name=".activity.SetSipUserInfo"
+                android:label="@string/title_activity_set_sip_user_info"
+                android:theme="@style/AppTheme"></activity>
+
         <activity
-            android:name=".activity.SetSipUserInfo"
+            android:name=".VOIP.SipAccountRegistration"
             android:label="@string/title_activity_set_sip_user_info"
             android:theme="@style/AppTheme"></activity>
-    </application>
+        </application>
+
+
 
 </manifest>

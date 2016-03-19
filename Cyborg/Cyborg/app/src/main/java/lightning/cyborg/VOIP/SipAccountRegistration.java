@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.SetSipUserInfo;
 import lightning.cyborg.activity.UserHomepage;
 
 
@@ -27,12 +29,15 @@ public class SipAccountRegistration extends Activity{
         wv = (WebView) findViewById(R.id.webView);
         doneBtn = (Button) findViewById(R.id.doneBtn);
 
+        WebSettings webSettings = wv.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
         wv.loadUrl("https://www.antisip.com/sip-antisip-com-register");
     }
 
     public void doneRegistration(View view){
 
-        Intent i = new Intent(this, UserHomepage.class);
+        Intent i = new Intent(this, SetSipUserInfo.class);
         startActivity(i);
     }
 
