@@ -71,7 +71,6 @@ public class DiscoveryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 discover(v);
-                loadButton.setEnabled(true);
             }
         });
         loadButton = (Button)inflatedview.findViewById(R.id.loadButton);
@@ -135,6 +134,10 @@ public class DiscoveryFragment extends Fragment {
 
                             if(matchedUserIDs.length > 0){
                                 populateDiscovery(5);
+
+                                if(matchedUserIDs.length > 5){
+                                    loadButton.setEnabled(true);
+                                }
                             }
                             else {
                                 populateList();
