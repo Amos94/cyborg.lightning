@@ -25,5 +25,7 @@ public class EndPoints {
     public static final String CHAT_ROOMS = base + "/getNormalChatRooms.php";
     public static final String REQUEST_RESPONSE = base+"/requestHandler.php";
     public static final String ADD_FREIND = base+"/convertChatRoom.php";
+    public static final String ADD_INTERESTS = base+"/interests_insert.php";
+    public static final String GET_INTERESTS = base+"/interests_get_user.php";
 
 }

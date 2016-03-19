@@ -1,23 +1,22 @@
 package lightning.cyborg.fragment;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import lightning.cyborg.R;
 import lightning.cyborg.activity.Avator_Logo;
+import lightning.cyborg.app.EndPoints;
+import lightning.cyborg.app.MyApplication;
 
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +25,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Lewis on 21/02/2016.
@@ -39,7 +49,7 @@ public class UserProfileFragment extends Fragment {
     private ArrayAdapter adapter;
     private ListView listview;
     private EditText etInterest;
-    private Button addInterest;
+    private Button addInterestButt;
 
 
 
@@ -105,21 +115,6 @@ public class UserProfileFragment extends Fragment {
          * Add item into arraylist
          */
         items = new ArrayList<String>();
-        items.add("Manish " + "Srivastava");
-        items.add("Sachin " + "Tendulker");
-        items.add("Ricky" + "Pointing");
-        items.add("Manish " + "Srivastava");
-        items.add("Sachin " + "Tendulker");
-        items.add("Ricky " + "Pointing");
-        items.add("Manish " + "Srivastava");
-        items.add("Sachin " + "Tendulker");
-        items.add("Ricky " + "Pointing");
-        items.add("Manish " + "Srivastava");
-        items.add("Sachin " + "Tendulker");
-        items.add("Ricky " + "Pointing");
-        items.add("Manish " + "Srivastava");
-        items.add("Sachin " + "Tendulker");
-        items.add("Ricky " + "Pointing");
 
         adapter = new ArrayAdapter(this.getActivity().getApplicationContext(),R.layout.list_black , R.id.list_content, items);
 
@@ -131,29 +126,135 @@ public class UserProfileFragment extends Fragment {
         //creating function to add more items into the interest
 
         etInterest = (EditText) viewroot.findViewById(R.id.etAddText);
-        addInterest = (Button) viewroot.findViewById(R.id.button);
-
+        addInterestButt = (Button) viewroot.findViewById(R.id.addInterestButt);
 
         //insert values into database... for interest of users
-        addInterest.setOnClickListener(new View.OnClickListener() {
+        addInterestButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String temp = etInterest.getText().toString();
-                items.add(temp.toString());
-                adapter.notifyDataSetChanged();
-                Toast.makeText(getActivity(), temp.toString() + " has been added to Interest", Toast.LENGTH_LONG).show();
 
+                if(temp.length() > 0){
+                    try {
+                        addInterest(temp);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity(), "Interest cannot be blank", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
-
-
-
-
-
+        try {
+            loadInterests();
+        } catch (JSONException e) {
+            Toast.makeText(getActivity(), "Error loading interests", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
 
         return viewroot;
+    }
 
+    private void addInterest(final String interests) throws JSONException {
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("interests", interests);
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.ADD_INTERESTS,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getString("success").equals("1");
+                            String message = jsonResponse.getString("message");
+
+                            if(success){
+                                for(String s : interests.split(",")){
+                                    items.add(s);
+                                }
+                            }
+
+                            adapter.notifyDataSetChanged();
+                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        MyApplication.getInstance().addToRequestQueue(request);
+
+    }
+
+    private void loadInterests() throws JSONException {
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.GET_INTERESTS,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getString("success").equals("1");
+                            String message = jsonResponse.getString("message");
+                            JSONArray interests = jsonResponse.getJSONArray("interests");
+
+                            if(success){
+                                for (int i = 0; i < interests.length(); i++){
+                                    items.add(interests.getString(i));
+                                }
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", EndPoints.GET_INTERESTS);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        MyApplication.getInstance().addToRequestQueue(request);
 
     }
 
