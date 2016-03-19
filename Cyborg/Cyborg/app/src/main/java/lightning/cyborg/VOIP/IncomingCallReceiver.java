@@ -39,9 +39,10 @@ public class IncomingCallReceiver extends BroadcastReceiver {
             CallActivity wtActivity = (CallActivity) context;
             incomingCall = wtActivity.manager.takeAudioCall(intent, listener);
             incomingCall.setListener(listener, true);
-            showIncomingCallGui(intent, context);
+            //showIncomingCallGui(intent, context);
             wtActivity.call = incomingCall;
 
+            answerIncomingCall();
             //delete this rows.
 
             //incomingCall.answerCall(30);
@@ -54,7 +55,7 @@ public class IncomingCallReceiver extends BroadcastReceiver {
             }
             wtActivity.call = incomingCall;
             */
-            wtActivity.updateStatus(incomingCall);
+           // wtActivity.updateStatus(incomingCall);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -71,6 +71,8 @@ public class CallActivity extends AppCompatActivity {
     private final String PREFIX_CALLEE = "sip:";
     private final String POSTFIX_CALLEE = "@sip.antisip.com";
 
+    private String message;
+
     public CallActivity(String callerUn, String callerPw, String calleeUn){
 
         caller = new UserInformation(callerUn, callerPw, SIP_SERVER);
@@ -94,6 +96,7 @@ public class CallActivity extends AppCompatActivity {
         intentCallerUsername = intent.getStringExtra("callerUsername");
         intentCallerPassword = intent.getStringExtra("callerPassword");
         intentCalleeUsername = intent.getStringExtra("calleeUsername");
+        message = intent.getStringExtra("type");
 
         //this.caller = caller;
         caller = new UserInformation(intentCallerUsername, intentCallerPassword, SIP_SERVER);
@@ -131,15 +134,27 @@ public class CallActivity extends AppCompatActivity {
 
         initializeManager();
         initializeLocalProfile();
-        Log.d("AAAAAAA", "Entering the call...");
-        initiateCall();
-        Log.d("AAAAAA", "In call...");
+      if(message.equals("makeCall")){
+          Log.d("CallActivity", "inside make call if statment");
+          initiateCall();
+      }
+        else if(message.equals("waitCall")){
+          Log.d("CallActivity", "inside make call else statment");
+      }
+       // Log.d("AAAAAAA", "Entering the call...");
+        //initiateCall();
+      //  Log.d("AAAAAA", "In call...");
     }
 
     public CallActivity() {
         //
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        initiateCall();
+    }
 
     @Override
     public void onStart() {
@@ -259,7 +274,6 @@ public class CallActivity extends AppCompatActivity {
     public void initiateCall() {
 
         updateStatus(sipAddress);
-
 
         try {
             SipAudioCall.Listener listener = new SipAudioCall.Listener() {

@@ -1,7 +1,9 @@
 package lightning.cyborg.activity;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.VOIP.IncomingGui;
 import lightning.cyborg.adapter.ChatRoomThreadAdapter;
 import lightning.cyborg.app.Config;
 import lightning.cyborg.app.EndPoints;
@@ -83,13 +86,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         String title = intent.getStringExtra("name");
         type =intent.getStringExtra("type");
 
-//        try{
-//            chatRoomID =chatRoomID+"";
-//            chatRoomId = chatRoomID;
-//            Log.d(TAG,"inside tryStatement");
-//        }catch (Exception e){
-//            Log.d(TAG,"inside catchstatment");
-//        }
+
 
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -131,6 +128,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         fetchChatThread();
+        fetchSip();
     }
 
 
@@ -156,15 +154,78 @@ public class ChatRoomActivity extends AppCompatActivity {
      * recycler view and scroll it to bottom
      * */
     private void handlePushNotification(Intent intent) {
-        Message message = (Message) intent.getSerializableExtra("message");
-        String chatRoomId = intent.getStringExtra("chat_room_id");
-
-        if (message != null && chatRoomId != null) {
-            messageArrayList.add(message);
-            mAdapter.notifyDataSetChanged();
-            if (mAdapter.getItemCount() > 1) {
-                recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
+        int type = intent.getIntExtra("type", -1);
+        if(type == Config.PUSH_TYPE_CALL_USER) {
+            String message = intent.getStringExtra("message");
+            if(message.equals("callRequest")) {
+                dialogCallReceiver(this,false);
             }
+            else if(message.equals("callAccepted")){
+                Intent intent1 = new Intent(this,CallActivity.class);
+                intent1.putExtra("type","makeCall");
+                 intent1.putExtra("callerUsername",sipUsername);
+                 intent1.putExtra("callerPassword",sipPassword);
+                 intent1.putExtra("calleeUsername", sipCaleeUsername);
+                startActivity(intent1);
+                finish();
+            }
+        }
+
+        else {
+
+            Message message = (Message) intent.getSerializableExtra("message");
+            String chatRoomId = intent.getStringExtra("chat_room_id");
+            if (message != null && chatRoomId != null) {
+                messageArrayList.add(message);
+                mAdapter.notifyDataSetChanged();
+                if (mAdapter.getItemCount() > 1) {
+                    recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
+                }
+            }
+        }
+    }
+
+    public void dialogCallReceiver(final Context context, final boolean typeOfgcm){
+        if (typeOfgcm) {
+            new AlertDialog.Builder(context)
+                    .setTitle("Waiting For Response")
+                    .setIcon(android.R.drawable.sym_call_incoming)
+                    .setMessage("User [username] calls you")
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //dismiss the call
+                            //TODO more php
+                        }
+                    })
+                    .show();
+        }
+        else {
+            new AlertDialog.Builder(context)
+                    .setTitle("Incoming call")
+                    .setIcon(android.R.drawable.sym_call_incoming)
+                    .setMessage("User [username] calls you")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Intent intent1 = new Intent(context,CallActivity.class);
+                            intent1.putExtra("type","waitCall");
+                            intent1.putExtra("callerUsername",sipUsername);
+                            intent1.putExtra("callerPassword",sipPassword);
+                            intent1.putExtra("calleeUsername",sipCaleeUsername);
+
+                            IncomingCall(context,"callAccepted");
+
+                            startActivity(intent1);
+                            finish();
+                        }
+                    })
+
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //dismiss the call
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -280,7 +341,51 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
+    public void IncomingCall(final Context context,String message){
 
+        final Context context1 =context;
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("chat_room_id", chatRoomId.toString());
+        params.put("message",message);
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.INCOMING_CALL,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+
+                            // check for error flag
+                            if (obj.getBoolean("error") == false) {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", EndPoints.FETCH_SIP);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        VolleyQueue.getInstance(this).addToRequestQueue(request);
+    }
     /**
      * Fetching all the messages of a single chat room
      * */
@@ -531,6 +636,13 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
         else if(menuItem.getItemId()==R.id.action_addfriend){
             addFriend("f");
+        }
+        else if(menuItem.getItemId()==R.id.action_calluser){
+
+
+            dialogCallReceiver(this,true);
+            IncomingCall(this,"callRequest");
+            return true;
         }
         else {
             switch (menuItem.getItemId()) {

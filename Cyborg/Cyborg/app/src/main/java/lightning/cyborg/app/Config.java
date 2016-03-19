@@ -20,11 +20,11 @@ public class Config {
     //key used for post filters
 
 
-
     // type of push messages
     public static final int PUSH_TYPE_CHATROOM = 1;
     //public static final int PUSH_TYPE_USER = 2;
     public static final int PUSH_TYPE_CHAT_REQUEST =3;
+    public static final int PUSH_TYPE_CALL_USER =4;
 
     // id to handle the notification in the notification try
     public static final int NOTIFICATION_ID = 100;
