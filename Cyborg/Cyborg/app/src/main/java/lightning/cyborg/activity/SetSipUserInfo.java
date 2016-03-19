@@ -1,5 +1,6 @@
 package lightning.cyborg.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,15 +23,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.VOIP.SipAccountRegistration;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;
+import lightning.cyborg.enums.InterestTypes;
 
 public class SetSipUserInfo extends AppCompatActivity {
 
     private TextView userTV;
     private TextView passwordTV;
     private Button  doneBtn;
+    private Button registerBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class SetSipUserInfo extends AppCompatActivity {
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
         doneBtn = (Button) findViewById(R.id.doneBtn);
+        registerBtn = (Button) findViewById(R.id.registerBtn);
+
     }
 
 
@@ -86,6 +92,16 @@ public class SetSipUserInfo extends AppCompatActivity {
         };
         //put the request in the static queue
         VolleyQueue.getInstance(this).addToRequestQueue(request);
+    }
+
+    public void goToInterests(View view){
+        Intent intent = new Intent(this, interestsRegistration.class);
+        startActivity(intent);
+    }
+
+    public void goToRegisterSipAccount(View view){
+        Intent intent = new Intent(this, SipAccountRegistration.class);
+        startActivity(intent);
     }
 
 }
