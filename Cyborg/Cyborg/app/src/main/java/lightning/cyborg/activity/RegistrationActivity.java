@@ -148,6 +148,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                boolean correctInfo = true;
 
                validPassword(passwordEditText.getText().toString(), confirmPasswordEditText.getText().toString());
                validName(firstNameEditText.getText().toString(), firstNameEditText);
@@ -157,6 +158,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     if( validEmail(emailEditText.getText().toString()) == false){
 
                         emailEditText.setError("not valid");
+                        correctInfo = false;
 
                     } else{
 
@@ -168,6 +170,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     emailEditText.setError("not valid");
                     emailConfirmEditText.setError("not valid");
+                    correctInfo = false;
 
                 }
 
@@ -179,7 +182,10 @@ public class RegistrationActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                goToMakeSipAccount();
+                if(correctInfo = true){
+                    goToMakeSipAccount();
+                }
+
 
             }
         });
