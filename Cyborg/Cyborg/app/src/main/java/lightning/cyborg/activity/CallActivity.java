@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import lightning.cyborg.R;
@@ -325,6 +326,7 @@ public class CallActivity extends AppCompatActivity {
 
         }
         catch (Exception e) {
+            Toast.makeText(CallActivity.this, "Couldn't make the call.", Toast.LENGTH_SHORT).show();
             Log.i("InitiateCall", "Error when trying to close manager.", e);
             if (me != null) {
                 try {
