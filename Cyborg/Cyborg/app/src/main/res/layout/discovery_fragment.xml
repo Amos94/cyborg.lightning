@@ -54,6 +54,17 @@
                 android:id="@+id/genderSpin"
                 android:spinnerMode="dropdown"/>
 
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/highAgeSpin"
+                android:spinnerMode="dropdown"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lowAgeSpin"
+                android:spinnerMode="dropdown"/>
         </LinearLayout>
 
         <EditText

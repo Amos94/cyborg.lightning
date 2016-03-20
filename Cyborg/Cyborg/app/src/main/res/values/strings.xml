@@ -30,14 +30,26 @@
         <item>@drawable/men5</item>
         <item>@drawable/men7</item>
         <item>@drawable/men8</item>
+        <item>@drawable/men9</item>
+
+        <item>@drawable/woman1</item>
+        <item>@drawable/woman2</item>
+        <item>@drawable/woman3</item>
+        <item>@drawable/woman4</item>
+        <item>@drawable/woman5</item>
+        <item>@drawable/woman5</item>
+        <item>@drawable/woman7</item>
+        <item>@drawable/woman8</item>
+        <item>@drawable/woman9</item>
     </string-array>
+
+
 
     <string-array name="gender_array">
         <item>Any</item>
         <item>M</item>
         <item>F</item>
-        <item>T</item>
-        <item>H</item>
+
     </string-array>
 
 

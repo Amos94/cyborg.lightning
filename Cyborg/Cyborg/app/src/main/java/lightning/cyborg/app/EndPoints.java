@@ -17,7 +17,7 @@ public class EndPoints {
 
     public static final String base = "http://nashdomain.esy.es";
     //public static final String BASE_URL = "http://projectruncyborg.esy.es";
-    public static final String LOGIN = base + "/temp_User_Login.php";
+    public static final String LOGIN = base + "/users_login.php";
     public static final String USERr = base +"/updateGcmID.php";
     //public static final String CHAT_ROOMS = "http://projectruncyborg.esy.es/getAllChatRooms.php";
     public static final String CHAT_THREAD = base +"/temp_GetSingleRoom.php";

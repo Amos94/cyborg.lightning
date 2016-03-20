@@ -85,7 +85,7 @@ public class UserProfileFragment extends Fragment {
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
-                alertDialogBuilder.setPositiveButton("Change Avator", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setPositiveButton("Change Avatar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -96,7 +96,7 @@ public class UserProfileFragment extends Fragment {
                     }
                 });
 
-                alertDialogBuilder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 

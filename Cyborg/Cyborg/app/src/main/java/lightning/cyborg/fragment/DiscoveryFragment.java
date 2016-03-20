@@ -48,6 +48,8 @@ public class DiscoveryFragment extends Fragment {
     private ArrayList matchedUserJson;
     private SeekBar seekDist;
     private Spinner genderSpin;
+    private Spinner lowAge, highAge;
+
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -98,6 +100,18 @@ public class DiscoveryFragment extends Fragment {
         genderSpin = (Spinner) inflatedview.findViewById(R.id.genderSpin);
         genderSpin.setAdapter(genderAdapter);
 
+
+        Integer[] age = new Integer[82];
+        for(int i = 0;i<age.length;i++){
+            int temp = i+18;
+            age[i]=temp;
+        }
+        ArrayAdapter <Integer> ageAdapter = new ArrayAdapter<Integer>( getContext(),android.R.layout.simple_spinner_item, age );
+        ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        lowAge = (Spinner) inflatedview.findViewById(R.id.lowAgeSpin);
+        highAge = (Spinner) inflatedview.findViewById(R.id.highAgeSpin);
+        lowAge.setAdapter(ageAdapter);
+        highAge.setAdapter(ageAdapter);
 
         return inflatedview;
     }
