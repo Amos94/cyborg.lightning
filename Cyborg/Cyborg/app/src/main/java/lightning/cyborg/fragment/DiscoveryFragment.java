@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -30,6 +31,7 @@ import lightning.cyborg.R;
 import lightning.cyborg.app.MyApplication;
 
 public class DiscoveryFragment extends Fragment {
+    //TODO Add more filters for ages, gender, and education
 
     private View inflatedview;
     private EditText search;
@@ -142,6 +144,8 @@ public class DiscoveryFragment extends Fragment {
                             else {
                                 populateList();
                             }
+                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                            Log.d("disMes", "message");
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -172,8 +176,8 @@ public class DiscoveryFragment extends Fragment {
 
         if (matchedUserJson.size() == matchedUserIDs.length){
             loadButton.setEnabled(false);
-            Log.d("popDis","No more users to load");
-            //TODO make a popup letting the user know there are no more users to load
+            Log.d("popDis", "No more users to load");
+            Toast.makeText(getActivity(), "No more users to load", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -245,6 +249,7 @@ public class DiscoveryFragment extends Fragment {
                 users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + user.getString("dob");
                 //TODO add level of education
+                //TODO add profile avatar at front
             }
             catch (JSONException e) {
                 e.printStackTrace();

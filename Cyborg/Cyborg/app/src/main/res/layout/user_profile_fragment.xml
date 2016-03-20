@@ -86,8 +86,7 @@
         android:text="Add Interest"
         android:id="@+id/addInterestB"
         android:layout_below="@+id/etAddText"
-        android:layout_weight="1"
-        android:layout_align="true" />
+        android:layout_weight="1" />
 
     <Button
         android:layout_width="150dp"
