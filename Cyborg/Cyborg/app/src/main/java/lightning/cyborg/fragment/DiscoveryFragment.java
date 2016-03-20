@@ -15,7 +15,7 @@ import android.widget.ListView;
 import lightning.cyborg.R;
 
 /**
- * Created by Lewis on 21/02/2016.
+ * test
  */
 
 public class DiscoveryFragment extends Fragment {
