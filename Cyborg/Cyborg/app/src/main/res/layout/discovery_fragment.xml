@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="321dp"
             android:orientation="vertical">
 
             <TextView
@@ -22,19 +22,6 @@
                 android:layout_marginBottom="5dp"
                 android:text="Below you can select the interests you wish to search for:"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Search Now"
-                android:id="@+id/searchButton"/>
-
-            <SeekBar
-                android:layout_width="237dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/seekDist"
-                android:layout_gravity="right" />
-
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,11 +29,30 @@
                 android:id="@+id/checkBoxLoc"
                 android:layout_gravity="right" />
 
+            <SeekBar
+                android:layout_width="237dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekDist"
+                android:layout_gravity="right" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Search Now"
+                android:id="@+id/searchButton"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Load more people"
                 android:id="@+id/loadButton" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/genderSpin"
+                android:spinnerMode="dropdown"/>
 
         </LinearLayout>
 

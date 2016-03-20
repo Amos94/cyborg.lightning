@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,10 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 
 public class DiscoveryFragment extends Fragment {
-    //TODO Add more filters for ages, gender, and education
+    //TODO Add more filters for ages, and education
+    //TODO Make UI pretty
 
     private View inflatedview;
     private EditText search;
@@ -43,6 +47,7 @@ public class DiscoveryFragment extends Fragment {
     private String[] matchedUserIDs;
     private ArrayList matchedUserJson;
     private SeekBar seekDist;
+    private Spinner genderSpin;
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -62,6 +67,7 @@ public class DiscoveryFragment extends Fragment {
         this.inflatedview = inflater.inflate(R.layout.discovery_fragment, container, false);
 
         //int [] image= {R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1};
+
 
         matchedList = (ListView) inflatedview.findViewById(R.id.listMatched);
         seekDist = (SeekBar) inflatedview.findViewById(R.id.seekDist);
@@ -87,9 +93,13 @@ public class DiscoveryFragment extends Fragment {
                 }
             }
         });
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpin = (Spinner) inflatedview.findViewById(R.id.genderSpin);
+        genderSpin.setAdapter(genderAdapter);
+
 
         return inflatedview;
-
     }
 
     private void discover(View v){
@@ -101,23 +111,21 @@ public class DiscoveryFragment extends Fragment {
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", ownID);
-        params.put("interests", filtered);
-        params.put("radius", Integer.toString(radius));
 
-        String tempURL;
-        if(checkBoxLoc.isChecked() && !filtered.equals("")){
-            tempURL = "http://nashdomain.esy.es/users_get_interest_and_loc.php";
+        if (!filtered.equals("")){
+            params.put("interests", filtered);
         }
-        else if(checkBoxLoc.isChecked()){
-            tempURL = "http://nashdomain.esy.es/users_get_location.php";
+        if (checkBoxLoc.isChecked()){
+            params.put("radius", Integer.toString(radius));
         }
-        else{
-            tempURL = "http://nashdomain.esy.es/interests_get_matched.php";
+        if(!genderSpin.getSelectedItem().equals("Any")){
+            params.put("gender", genderSpin.getSelectedItem().toString());
         }
-        final String url = tempURL;
+        //TODO add minDate/maxDate
+
 
         //request to insert the user into the mysql database using php
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.DISCOVER_USERS,
                 new Response.Listener<String>() {
 
                     @Override
@@ -145,7 +153,7 @@ public class DiscoveryFragment extends Fragment {
                                 populateList();
                             }
                             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                            Log.d("disMes", "message");
+                            Log.d("disMes", message);
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -156,7 +164,7 @@ public class DiscoveryFragment extends Fragment {
 
             @Override
             public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", url);
+                Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
             }
         }
         ){
@@ -248,6 +256,7 @@ public class DiscoveryFragment extends Fragment {
 
                 users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + user.getString("dob");
+                //TODO format date from yyyymmdd
                 //TODO add level of education
                 //TODO add profile avatar at front
             }
