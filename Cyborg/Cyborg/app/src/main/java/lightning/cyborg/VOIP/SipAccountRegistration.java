@@ -42,7 +42,7 @@ public class SipAccountRegistration extends Activity{
     }
 
     public void skipSIPRegistration(View view){
-        Intent intent = new Intent(this, UserHomepage.class);
+        Intent intent = new Intent(this, SetSipUserInfo.class);
         startActivity(intent);
     }
 

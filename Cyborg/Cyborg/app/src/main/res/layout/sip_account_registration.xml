@@ -34,7 +34,8 @@
             android:id="@+id/Skip"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/doneBtn"
-            android:layout_toEndOf="@+id/doneBtn" />
+            android:layout_toEndOf="@+id/doneBtn"
+            android:onClick="skipSIPRegistration" />
     </RelativeLayout>
 
 </LinearLayout>

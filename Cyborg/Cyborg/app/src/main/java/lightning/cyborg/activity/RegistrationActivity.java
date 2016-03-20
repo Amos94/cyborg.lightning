@@ -182,7 +182,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                if(correctInfo = true){
+                if(correctInfo = true && validPassword(passwordEditText.getText().toString(), confirmPasswordEditText.getText().toString())){
                     goToMakeSipAccount();
                 }
 
