@@ -100,18 +100,16 @@ public class UserProfileFragment extends Fragment {
                         Intent intent =  new Intent(getActivity(), Avator_Logo.class);
                         startActivityForResult(intent, 1);
 
-
                     }
                 });
 
-                alertDialogBuilder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 });
                 alertDialogBuilder.show();
-
             }
         });
 
@@ -183,6 +181,13 @@ public class UserProfileFragment extends Fragment {
         });
 
         try {
+            loadProfile();
+        } catch (JSONException e) {
+            Toast.makeText(getActivity(), "Error loading profile", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+        try {
             loadInterests();
         } catch (JSONException e) {
             Toast.makeText(getActivity(), "Error loading interests", Toast.LENGTH_LONG).show();
@@ -190,6 +195,57 @@ public class UserProfileFragment extends Fragment {
         }
 
         return viewroot;
+    }
+
+    private void loadProfile() throws JSONException {
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.USERS_GET,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getString("success").equals("1");
+                            String message = jsonResponse.getString("message");
+
+                            if(success){
+                                JSONObject user = jsonResponse.getJSONObject("user");
+                                tvFirstandLast.setText(user.getString("fname") + " " + user.getString("lname"));
+                                tvlocation.setText("Lat:" + user.getString("lat") + " Lon:" + user.getString("lon"));
+                            }
+                            else{
+                                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", EndPoints.USERS_GET);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        MyApplication.getInstance().addToRequestQueue(request);
     }
 
     private void addInterest(final String interests) throws JSONException {
