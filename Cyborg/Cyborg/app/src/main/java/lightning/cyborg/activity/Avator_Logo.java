@@ -16,7 +16,7 @@ import android.widget.GridView;
 import java.util.ArrayList;
 
 import lightning.cyborg.R;
-import lightning.cyborg.adapter.GridViewAdapter;
+import lightning.cyborg.avator.GridViewAdapter;
 import lightning.cyborg.fragment.UserProfileFragment;
 
 public class Avator_Logo extends Activity {
@@ -35,8 +35,8 @@ public class Avator_Logo extends Activity {
 
         gridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                ImageItem item = (ImageItem) parent.getItemAtPosition(position);
-                Bitmap x = item.getImage();
+                Bitmap item = (Bitmap) parent.getItemAtPosition(position);
+                Bitmap x = item;
                 UserProfileFragment.imageview.setImageBitmap(x);
                 finish();
             }
@@ -46,12 +46,12 @@ public class Avator_Logo extends Activity {
     /**
      * Prepare some dummy data for gridview
      */
-    private ArrayList<ImageItem> getData() {
-        final ArrayList<ImageItem> imageItems = new ArrayList<>();
+    private ArrayList<Bitmap> getData() {
+        final ArrayList<Bitmap> imageItems = new ArrayList<>();
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         for (int i = 0; i < imgs.length(); i++) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap));
+            imageItems.add(bitmap);
         }
         return imageItems;
     }

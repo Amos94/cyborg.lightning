@@ -38,8 +38,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
-import lightning.cyborg.activity.Avator_Logo;
-import lightning.cyborg.activity.ImageItem;
 import lightning.cyborg.adapter.CustomListAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
