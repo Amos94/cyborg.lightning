@@ -38,8 +38,6 @@ import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 
 public class DiscoveryFragment extends Fragment {
-    //TODO Add more filter for education
-
     private View inflatedview;
     private EditText search;
     private CheckBox checkBoxLoc;
@@ -51,8 +49,9 @@ public class DiscoveryFragment extends Fragment {
     private ArrayList matchedUserJson;
     private SeekBar seekDist;
     private Spinner genderSpin;
+    private Spinner eduSpin;
     private Spinner lowAge, highAge;
-    private String[] educationArr = getResources().getStringArray(R.array.education_array);
+    private String[] educationArr;
 
 
     public DiscoveryFragment() {
@@ -74,6 +73,7 @@ public class DiscoveryFragment extends Fragment {
 
         //int [] image= {R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1};
 
+        educationArr = getResources().getStringArray(R.array.education_array);
 
         matchedList = (ListView) inflatedview.findViewById(R.id.listMatched);
         seekDist = (SeekBar) inflatedview.findViewById(R.id.seekDist);
@@ -104,6 +104,11 @@ public class DiscoveryFragment extends Fragment {
         genderSpin = (Spinner) inflatedview.findViewById(R.id.genderSpin);
         genderSpin.setAdapter(genderAdapter);
 
+        ArrayAdapter<CharSequence> eduAdapter = ArrayAdapter.createFromResource(getContext(), R.array.education_array, android.R.layout.simple_spinner_item);
+        eduAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eduSpin = (Spinner) inflatedview.findViewById(R.id.eduSpin);
+        eduSpin.setAdapter(eduAdapter);
+        eduSpin.setSelection(9);
 
         Integer[] age = new Integer[82];
         for(int i = 0;i<age.length;i++){
@@ -147,6 +152,9 @@ public class DiscoveryFragment extends Fragment {
         }
         if(!genderSpin.getSelectedItem().equals("Any")){
             params.put("gender", genderSpin.getSelectedItem().toString());
+        }
+        if(!eduSpin.getSelectedItem().equals("Any")){
+            params.put("edu_level", Integer.toString(eduSpin.getSelectedItemPosition()));
         }
 
 
@@ -279,11 +287,10 @@ public class DiscoveryFragment extends Fragment {
         for(int i = 0; i < matchedUserJson.size(); i++){
             try {
                 JSONObject user = (JSONObject) matchedUserJson.get(i);
-                int age = (Integer.parseInt(user.getString("dob"))/10000) - (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000);
+                int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000) - (Integer.parseInt(user.getString("dob"))/10000);
 
                 users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
-                //TODO add level of education
                 //TODO add profile avatar at front
             }
             catch (JSONException e) {
