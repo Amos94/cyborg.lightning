@@ -147,29 +147,19 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="90dp" >
-
-            <EditText
-                android:id="@+id/etCurrentPassword"
-                android:layout_width="match_parent"
-                android:textColor="#01579b"
-
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:hint="Enter Current Password"
-               />
+            android:layout_height="52dp" >
 
 
             <EditText
                 android:id="@+id/etNewPassword"
-                android:layout_below="@+id/etCurrentPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#01579b"
 
                 android:textSize="12dp"
-                android:layout_centerInParent="true"
-                android:hint="Enter New Password" />
+                android:hint="Enter New Password"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true" />
 
         </RelativeLayout>
 
