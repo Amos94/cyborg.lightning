@@ -360,4 +360,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
+
+    public void setChatRoomArrayList(ArrayList<ChatRoom> newArraylist){
+        chatRoomArrayList = newArraylist;
+        notifyDataSetChanged();
+    }
+
 }

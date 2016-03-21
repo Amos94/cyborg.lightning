@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -69,6 +71,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private MenuItem addFreind;
     private MenuItem callButton;
+    protected Vibrator vibrate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,13 +194,18 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     public void dialogCallReceiver(final Context context, final boolean typeOfgcm){
+        final MediaPlayer mp = MediaPlayer.create(context, R.raw.ringtone);
+        mp.start();
+        mp.setLooping(true);
         if (typeOfgcm) {
             new AlertDialog.Builder(context)
                     .setTitle("Waiting For Response")
                     .setIcon(android.R.drawable.sym_call_incoming)
-                    .setMessage("User [username] calls you")
+                    .setMessage(sipCaleeUsername+" is calling you")
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+
+                            mp.stop();
                             //dismiss the call
                             //TODO more php
                         }
@@ -205,6 +213,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .show();
         }
         else {
+            vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+            if (vibrate == null) {
+                Log.w(TAG, "No vibration service exists.");
+            }
+            else{
+                
+            }
             new AlertDialog.Builder(context)
                     .setTitle("Incoming call")
                     .setIcon(android.R.drawable.sym_call_incoming)
@@ -218,8 +234,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                             intent1.putExtra("callerPassword",sipPassword);
                             intent1.putExtra("calleeUsername",sipCaleeUsername);
 
-                            IncomingCall(context,"callAccepted");
+                            IncomingCall(context, "callAccepted");
 
+                            mp.stop();
                             startActivity(intent1);
                             finish();
                         }
@@ -228,6 +245,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             //dismiss the call
+                            mp.stop();
                         }
                     })
                     .show();
@@ -762,7 +780,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 toUserHomePageActivity();
                 break;
             case R.id.action_calluser:
-                //   dialogCallReceiver(this,true);
+                 dialogCallReceiver(this,true);
                 // IncomingCall(this,"callRequest");
                 break;
             case R.id.action_viewprofile:
