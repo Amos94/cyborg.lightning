@@ -102,8 +102,8 @@ public class chatRoomFragment extends Fragment{
                 // when chat is clicked, launch full chat thread activity
                 ChatRoom chatRoom = chatRoomArrayList.get(position);
 
-               //if chatroom is not activiated
-                if(chatRoom.getAccess_type().equals("y"))
+                //if chatroom is not activiated
+                if(chatRoom.getPermission().equals("y"))
                 {
                     ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),"n");
                 }

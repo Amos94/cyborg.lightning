@@ -3,9 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/action_addfriend"
+        android:icon="@drawable/ic_action_action_delete"
+        android:title="Call User"
+        app:showAsAction="ifRoom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <item
         android:id="@+id/action_calluser"
         android:icon="@drawable/ic_call_white_24dp"
-        android:title="Call User"
+        android:title="Add Friend"
         app:showAsAction="ifRoom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -17,9 +25,9 @@
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_addfriend"
+        android:id="@+id/action_hideChat"
         android:orderInCategory="2"
-        android:title="Add Friend"
+        android:title="Hide Chat"
         app:showAsAction="never"/>
 
     <item

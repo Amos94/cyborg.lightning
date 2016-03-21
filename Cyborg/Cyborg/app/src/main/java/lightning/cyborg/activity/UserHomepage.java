@@ -176,11 +176,13 @@ public class UserHomepage extends AppCompatActivity {
 
     }
     /**
-     * fetching the chat rooms by making http call
+     * Get ChatRooms of a specific type
+     * @param type if chatRooms are normal or friends
      */
     private void fetchChatRooms(String type) {
         final String TYPE =type;
 
+        //request to be sent
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.CHAT_ROOMS, new Response.Listener<String>() {
 
@@ -194,17 +196,30 @@ public class UserHomepage extends AppCompatActivity {
                     // check for error flag
                     if (obj.getBoolean("error") == false) {
                         JSONArray chatRoomsArray = obj.getJSONArray("chat_rooms");
+
+                        //add chat room to the appropriate arrayList
                         for (int i = 0; i < chatRoomsArray.length(); i++) {
                             JSONObject chatRoomsObj = (JSONObject) chatRoomsArray.get(i);
+
+                            //new chatroom object created.
                             ChatRoom cr = new ChatRoom();
                             cr.setId(chatRoomsObj.getString("chat_room_id"));
                             cr.setName(chatRoomsObj.getString("name"));
-                            cr.setAccess_type(chatRoomsObj.getString("access_type"));
                             cr.setPermission(chatRoomsObj.getString("permission"));
                             cr.setLastMessage("");
                             cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
 
+                            //if chatRoom doesn't have any messages
+                            if(chatRoomsObj.getString("last_message").equals("null")){
+                                cr.setLastMessage("");
+                            }
+                            else{
+                                //set message to LatMessage;
+                                cr.setLastMessage(chatRoomsObj.getString("last_message"));
+                            }
+
+                            //add to appropriate ArrayList
                             if(TYPE.equals("n")) {
                                 normalChatRoomArrayList.add(cr);
                             }
@@ -215,22 +230,22 @@ public class UserHomepage extends AppCompatActivity {
 
                     } else {
                         // error in fetching chat rooms
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
+                //update the GUI
                 if(TYPE.equals("n")) {
                     normalChatAdapter.notifyDataSetChanged();
                 }
                 else if(TYPE.equals("f")){
                     freindChatAdapter.notifyDataSetChanged();
                 }
-                // subscribing to all chat room topics
-               // subscribeToAllTopics();
+
             }
         }, new Response.ErrorListener() {
 
@@ -245,6 +260,7 @@ public class UserHomepage extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
+                //params to be sent
                 Map<String, String> params = new HashMap<>();
                 params.put("type", TYPE);
                 params.put("user_id",  MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -254,7 +270,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         };
 
-       // subscribeToAllTopics();
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
@@ -267,12 +282,12 @@ public class UserHomepage extends AppCompatActivity {
         int type = intent.getIntExtra("type", -1);
 
         // if the push is of chat room message
-        // simply update the UI unread messages count
         if (type == Config.PUSH_TYPE_CHATROOM) {
             Message message = (Message) intent.getSerializableExtra("message");
             String chatRoomId = intent.getStringExtra("chat_room_id");
             String chatType =intent.getStringExtra("chat_type");
 
+            //update chatRoom GUI
             if (message != null && chatRoomId != null) {
                 if(chatType.equals("n"))
                     updateRow(chatRoomId,message, normalChatRoomArrayList,normalChatAdapter);
@@ -281,15 +296,7 @@ public class UserHomepage extends AppCompatActivity {
                 }
             }
         }
-        //else if (type == Config.PUSH_TYPE_USER) {
-//            // push belongs to user alone
-//            // just showing the message in a toast
-//            Message message = (Message) intent.getSerializableExtra("message");
-//            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
-//        }
         else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
-            Message message = (Message) intent.getSerializableExtra("message");
-            String chatRoomId = intent.getStringExtra("chat_room_id");
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
             normalChatRoomArrayList.clear();
             fetchChatRooms("n");
@@ -314,6 +321,9 @@ public class UserHomepage extends AppCompatActivity {
     }
 
 
+    /**
+     * Go to LoginActivity
+     */
     private void launchLoginActivity() {
         Intent intent = new Intent(UserHomepage.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -321,6 +331,12 @@ public class UserHomepage extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Go to the chat room
+     * @param chatRoomid  the id of the chat room
+     * @param chatRoomName the name of the chat room
+     * @param type  the type of chatroom e.g freinds or normal
+     */
     public void chatRoomActivityIntent(String chatRoomid,String chatRoomName, String type) {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);
@@ -334,11 +350,14 @@ public class UserHomepage extends AppCompatActivity {
         }
         normalChatAdapter.notifyDataSetChanged();
 
-
         startActivity(intent);
     }
 
 
+    /**
+     * Fragments are setup
+     * @param viewPager the pageViewer the fragments are added to
+     */
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter PageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         PageAdapter.addFragment(new UserProfileFragment(), "Profile");
@@ -347,6 +366,7 @@ public class UserHomepage extends AppCompatActivity {
         PageAdapter.addFragment(new chatRoomFragment(), "ChatRoom");
         viewPager.setAdapter(PageAdapter);
     }
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> FragmentList = new ArrayList<>();
@@ -401,27 +421,6 @@ public class UserHomepage extends AppCompatActivity {
         }
     }
 
-//    // subscribing to global topic
-//    public void subscribeToGlobalTopic() {
-//        Intent intent = new Intent(this, GcmIntentService.class);
-//        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-//        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
-//        startService(intent);
-//    }
-
-//    // Subscribing to all chat room topics
-//    // each topic name starts with `topic_` followed by the ID of the chat room
-//    // Ex: topic_1, topic_2
-//    public void subscribeToAllTopics() {
-//        for (ChatRoom cr : normalChatRoomArrayList) {
-//
-//            Intent intent = new Intent(this, GcmIntentService.class);
-//            intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-//            intent.putExtra(GcmIntentService.TOPIC, "topic_" + cr.getId());
-//            startService(intent);
-//        }
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -469,6 +468,11 @@ public class UserHomepage extends AppCompatActivity {
         return true;
     }
 
+    public void changeToBlockedUsers(){
+        Intent intent = new Intent(this, ViewBlockedUsers.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -481,6 +485,9 @@ public class UserHomepage extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.action_logout:
                 MyApplication.getInstance().logout();
+                break;
+            case R.id.action_viewBlockedList:
+                changeToBlockedUsers();
                 break;
         }
         return super.onOptionsItemSelected(menuItem);

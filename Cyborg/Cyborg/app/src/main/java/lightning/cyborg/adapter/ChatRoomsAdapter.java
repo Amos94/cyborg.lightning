@@ -1,5 +1,6 @@
 package lightning.cyborg.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -46,8 +47,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     private ArrayList<ChatRoom> chatRoomArrayList;
     private static String today;
     private String type;
-    private boolean buttonPressed=false;
-    public static String TAG = "ChatRoomAdapter";
+    public static String TAG = ChatRoomsAdapter.class.getSimpleName();
 
     protected ChatRoomsAdapter(Parcel in) {
     }
@@ -74,7 +74,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     }
 
 
-
+    //
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
         public Button accept, decline;
@@ -115,7 +115,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         holder.name.setText(chatRoom.getName());
 
 
-        if(chatRoom.getAccess_type().equals("y")){
+        //if user has full permission
+        if(chatRoom.getPermission().equals("y")){
 
             holder.message.setText(chatRoom.getLastMessage());
             //Buttons are removed
@@ -124,19 +125,20 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             holder.decline.setVisibility(View.GONE);
             holder.decline.setOnClickListener(null);
 
-
+            //if there are notifications
             if (chatRoom.getUnreadCount() > 0) {
-            holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
-            holder.count.setVisibility(View.VISIBLE);
+                holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
+                holder.count.setVisibility(View.VISIBLE);
 
             }
             else {
-            holder.count.setVisibility(View.GONE);
+                holder.count.setVisibility(View.GONE);
 
             }
         }
 
         else{
+            //if user sent the request
             if(chatRoom.getPermission().equals("s")){
 
                 holder.message.setText("pending request");
@@ -149,22 +151,26 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 holder.decline.setOnClickListener(null);
 
             }
+            //if user has received a new request
             else if(chatRoom.getPermission().equals("r")){
 
                 //buttons are shown
                 holder.accept.setVisibility(View.VISIBLE);
+                holder.decline.setVisibility(View.VISIBLE);
+
                 holder.accept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
+                        //if users accepts
                         serverHandler("accept", chatRoom.getId());
-                       ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),type );
+                        ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type);
                         //notifyDataSetChanged();
 
                     }
                 });
 
-                holder.decline.setVisibility(View.VISIBLE);
+                //if user declines
                 holder.decline.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -175,10 +181,40 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                     }
                 });
             }
+            //if user hid chat and new message arrived
+            else if(chatRoom.getPermission().equals("rmsg")){
+
+                //buttons are shown
+                holder.accept.setVisibility(View.VISIBLE);
+                holder.decline.setVisibility(View.VISIBLE);
+
+                //if user accepts
+                holder.accept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        serverHandler("accept", chatRoom.getId());
+                        ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type);
+
+
+                    }
+                });
+
+                //if user declines
+                holder.decline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        serverHandler("declineMessage", chatRoom.getId());
+                        chatRoom.setChatRoomExists(false);
+                        chatRoomArrayList.remove(chatRoom);
+                        notifyDataSetChanged();
+                    }
+                });
+            }
             holder.count.setVisibility(View.GONE);
         }
 
-        Log.d("after", chatRoom.getId() + "per::" + chatRoom.getPermission());
+        Log.d("TAG", chatRoom.getId() + "permission::" + chatRoom.getPermission());
 
         holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
     }
@@ -188,6 +224,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         return chatRoomArrayList.size();
     }
 
+    //
     public static String getTimeStamp(String dateStr) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String timestamp = "";
@@ -211,7 +248,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public interface ClickListener {
         void onClick(View view, int position);
 
+
+
         void onLongClick(View view, int position);
+
     }
 
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
@@ -257,6 +297,11 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         }
     }
 
+    /**
+     * Handlers response to chatRequests
+     * @param reply  the response chosen
+     * @param chatRoomId the id of the chat room
+     */
     public void serverHandler(String reply,String chatRoomId){
         final String choice = reply;
         final String cR_Id =chatRoomId;
@@ -267,9 +312,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             public void onResponse(String response) {
                 Log.e(TAG, "response: " + response);
 
-                String resp = response.substring(1,response.length());
                 try {
-                    JSONObject obj = new JSONObject(resp);
+                    JSONObject obj = new JSONObject(response);
 
                     // check for error flag
                     if (obj.getBoolean("error") == false) {
@@ -280,7 +324,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                     } else {
 
                         // error in fetching chat rooms
-                        Toast.makeText(mContext, "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(mContext, "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
@@ -288,8 +332,6 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                     Toast.makeText(mContext, "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
-                // subscribing to all chat room topics
-                // subscribeToAllTopics();
             }
         }, new Response.ErrorListener() {
 
@@ -307,6 +349,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 Map<String, String> params = new HashMap<>();
                 params.put("choice", choice);
                 params.put("chat_room_id",  cR_Id);
+                params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
 
                 Log.e(TAG, "params: " + params.toString());
                 return params;
