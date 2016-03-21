@@ -15,6 +15,7 @@ import com.gc.materialdesign.widgets.ColorSelector.OnColorSelectedListener;
 import com.nineoldandroids.view.ViewHelper;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.UserHomepage;
 
 
 public class Setting extends Activity implements OnColorSelectedListener {
@@ -106,7 +107,7 @@ public class Setting extends Activity implements OnColorSelectedListener {
 
 	public void backToSetting(View view){
 
-		Intent intent = new Intent(Setting.this, Setting.class);
+		Intent intent = new Intent(Setting.this, UserHomepage.class);
 		startActivity(intent);
 
 
