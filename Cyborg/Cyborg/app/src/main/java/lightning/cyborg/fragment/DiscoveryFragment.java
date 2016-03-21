@@ -25,7 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,19 +115,28 @@ public class DiscoveryFragment extends Fragment {
         highAge = (Spinner) inflatedview.findViewById(R.id.highAgeSpin);
         lowAge.setAdapter(ageAdapter);
         highAge.setAdapter(ageAdapter);
+        highAge.setSelection(age.length - 1);
 
         return inflatedview;
     }
 
     private void discover(View v){
-        final String filtered = search.getText().toString().replaceAll(", ",",").replaceAll(" ,",",").toLowerCase();
+        final String filtered = search.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").toLowerCase();
         String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
         int radius = seekDist.getProgress();
         matchedUserJson = new ArrayList<JSONObject>();
+        //String year = Calendar.getInstance().get(Calendar.YEAR) + "" + Calendar.getInstance().get(Calendar.MONTH) + "" Calendar.getInstance().get(Calendar.DA);
+        String strDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+
+        int curDate = Integer.parseInt(strDate);
+        int minDate = curDate - ((Integer) lowAge.getSelectedItem() * 10000);
+        int maxDate = curDate - ((Integer) highAge.getSelectedItem() * 10000);
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", ownID);
+        params.put("minDate", Integer.toString(minDate));
+        params.put("maxDate", Integer.toString(maxDate));
 
         if (!filtered.equals("")){
             params.put("interests", filtered);
@@ -135,7 +147,10 @@ public class DiscoveryFragment extends Fragment {
         if(!genderSpin.getSelectedItem().equals("Any")){
             params.put("gender", genderSpin.getSelectedItem().toString());
         }
-        //TODO add minDate/maxDate
+
+
+
+        //TODO add edu levels
 
 
         //request to insert the user into the mysql database using php
@@ -267,9 +282,13 @@ public class DiscoveryFragment extends Fragment {
         for(int i = 0; i < matchedUserJson.size(); i++){
             try {
                 JSONObject user = (JSONObject) matchedUserJson.get(i);
+                int birthdate = Integer.parseInt(user.getString("dob"));
+                int curDate = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()));
+                int age = (curDate/10000) - (birthdate/10000);
+
 
                 users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
-                        + " - " + user.getString("dob");
+                        + " - " + age;
                 //TODO format date from yyyymmdd
                 //TODO add level of education
                 //TODO add profile avatar at front
