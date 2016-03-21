@@ -180,6 +180,17 @@
                 android:layout_below="@+id/highAgeSpin"
                 android:layout_toRightOf="@+id/eduTV" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5km"
+                android:id="@+id/sliderTV"
+                android:layout_toRightOf="@+id/seekDist"
+                android:layout_alignTop="@+id/seekDist"
+                android:layout_above="@+id/loadButton"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
         </RelativeLayout>
 
         <EditText
