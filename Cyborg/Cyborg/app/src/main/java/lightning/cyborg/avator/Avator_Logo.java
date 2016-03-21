@@ -44,11 +44,13 @@ public class Avator_Logo extends ActionBarActivity {
                 android.graphics.Bitmap x = item;
                 //UserProfileFragment.imageview.setImageBitmap(x);
                 // RegistrationActivity.avatorIcon.setImageBitmap(x);
-
                 Intent intent = new Intent();
                 ByteArrayOutputStream bs  = new ByteArrayOutputStream();
                 x.compress(android.graphics.Bitmap.CompressFormat.PNG,50,bs );
+
                 intent.putExtra("Bitmap", bs.toByteArray());
+                intent.putExtra("imageID",position);
+
                 setResult(Activity.RESULT_OK, intent);
                 finish();
 

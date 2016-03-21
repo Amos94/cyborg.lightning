@@ -1,7 +1,10 @@
 package lightning.cyborg.activity;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,14 +37,19 @@ import java.util.regex.Pattern;
 import lightning.cyborg.R;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;
+import lightning.cyborg.avator.Avator_Logo;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     //Info for register
     EditText emailET;
     ImageView btnNext;
+    ImageView avatorIcon;
+    int avator_id;
+
     EditText emailConfirmET;
     Button loginPage;
+    Button chooseAvator;
     EditText nameET;
     EditText passwordET;
     EditText ConfirmpasswordET;
@@ -85,6 +93,8 @@ public class RegistrationActivity extends AppCompatActivity {
         dobET = (EditText) findViewById(R.id.txtdob);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupRegister);
         maleRadioRegister = (RadioButton) findViewById(R.id.rbMale);
+        avatorIcon = (ImageView) findViewById(R.id.avatorIcon);
+
         femaleRadioRegister = (RadioButton) findViewById(R.id.rbFemal);
 
         //help for the insertion
@@ -360,5 +370,50 @@ public class RegistrationActivity extends AppCompatActivity {
 //        }
 //        return super.onOptionsItemSelected(menuItem);
 //    }
+
+
+    //creating avator background when user registers....
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == 1){
+            if(resultCode == Activity.RESULT_OK){
+                Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
+                avator_id = data.getExtras().getInt("imageID");
+                System.out.println(avator_id);
+                avatorIcon.setImageBitmap(b);
+
+            }
+
+        }
+
+
+
+
+    }
+
+
+
+    public void chooseAvator(View view){
+
+        chooseAvator = (Button) findViewById(R.id.btnSelectAvator);
+
+        chooseAvator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent =  new Intent(RegistrationActivity.this, Avator_Logo.class);
+                startActivityForResult(intent,1);
+
+
+            }
+
+        });
+
+    }
+
+
 
 }

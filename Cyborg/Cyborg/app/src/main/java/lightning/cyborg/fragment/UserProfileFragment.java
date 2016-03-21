@@ -53,10 +53,11 @@ public class UserProfileFragment extends Fragment {
     private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter adapter;
     private ListView listview;
+    private int avator_id;
     private TextView tvFirstandLast;
     private TextView tvlocation;
     private TextView tvbio;
-
+    private int image_id;
     private EditText etInterest;
     private Button addInterestButt;
     private Button delInterestButt;
@@ -367,6 +368,8 @@ public class UserProfileFragment extends Fragment {
         if(requestCode == 1){
             if(resultCode == Activity.RESULT_OK){
                 Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
+                avator_id = data.getExtras().getInt("imageID");
+                System.out.println(avator_id );
                 imageview.setImageBitmap(b);
             }
 
