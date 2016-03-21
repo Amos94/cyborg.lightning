@@ -35,7 +35,6 @@ public class UserDetails extends Activity {
 
     EditText etchangeName;
     EditText etLastName;
-    EditText etcurrentPassword;
     EditText etLocation;
     EditText etBio;
     Spinner spEducation;
@@ -61,7 +60,6 @@ public class UserDetails extends Activity {
         //creating variable names;
         etchangeName = (EditText) findViewById(R.id.etchangeName);
         etLastName = (EditText) findViewById(R.id.etLastname);
-        etcurrentPassword = (EditText) findViewById(R.id.etCurrentPassword);
         etnewPasword = (EditText) findViewById(R.id.etNewPassword);
         maleRadioButton = (RadioButton) findViewById(R.id.maleRadioButton);
         femaleRadioButton = (RadioButton) findViewById(R.id.femaleRadioButton);
