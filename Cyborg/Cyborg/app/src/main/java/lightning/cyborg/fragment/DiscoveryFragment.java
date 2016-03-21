@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,9 +38,6 @@ import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 
 public class DiscoveryFragment extends Fragment {
-    //TODO Add more filters for ages, and education
-    //TODO Make UI pretty
-
     private View inflatedview;
     private EditText search;
     private CheckBox checkBoxLoc;
@@ -51,7 +49,9 @@ public class DiscoveryFragment extends Fragment {
     private ArrayList matchedUserJson;
     private SeekBar seekDist;
     private Spinner genderSpin;
+    private Spinner eduSpin;
     private Spinner lowAge, highAge;
+    private String[] educationArr;
 
 
     public DiscoveryFragment() {
@@ -73,6 +73,7 @@ public class DiscoveryFragment extends Fragment {
 
         //int [] image= {R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1};
 
+        educationArr = getResources().getStringArray(R.array.education_array);
 
         matchedList = (ListView) inflatedview.findViewById(R.id.listMatched);
         seekDist = (SeekBar) inflatedview.findViewById(R.id.seekDist);
@@ -103,6 +104,11 @@ public class DiscoveryFragment extends Fragment {
         genderSpin = (Spinner) inflatedview.findViewById(R.id.genderSpin);
         genderSpin.setAdapter(genderAdapter);
 
+        ArrayAdapter<CharSequence> eduAdapter = ArrayAdapter.createFromResource(getContext(), R.array.education_array, android.R.layout.simple_spinner_item);
+        eduAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eduSpin = (Spinner) inflatedview.findViewById(R.id.eduSpin);
+        eduSpin.setAdapter(eduAdapter);
+        eduSpin.setSelection(9);
 
         Integer[] age = new Integer[82];
         for(int i = 0;i<age.length;i++){
@@ -147,10 +153,9 @@ public class DiscoveryFragment extends Fragment {
         if(!genderSpin.getSelectedItem().equals("Any")){
             params.put("gender", genderSpin.getSelectedItem().toString());
         }
-
-
-
-        //TODO add edu levels
+        if(!eduSpin.getSelectedItem().equals("Any")){
+            params.put("edu_level", Integer.toString(eduSpin.getSelectedItemPosition()));
+        }
 
 
         //request to insert the user into the mysql database using php
@@ -282,15 +287,10 @@ public class DiscoveryFragment extends Fragment {
         for(int i = 0; i < matchedUserJson.size(); i++){
             try {
                 JSONObject user = (JSONObject) matchedUserJson.get(i);
-                int birthdate = Integer.parseInt(user.getString("dob"));
-                int curDate = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()));
-                int age = (curDate/10000) - (birthdate/10000);
-
+                int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000) - (Integer.parseInt(user.getString("dob"))/10000);
 
                 users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
-                        + " - " + age;
-                //TODO format date from yyyymmdd
-                //TODO add level of education
+                        + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
                 //TODO add profile avatar at front
             }
             catch (JSONException e) {
