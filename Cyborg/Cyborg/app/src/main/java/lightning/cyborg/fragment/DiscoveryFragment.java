@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,8 +38,7 @@ import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 
 public class DiscoveryFragment extends Fragment {
-    //TODO Add more filters for ages, and education
-    //TODO Make UI pretty
+    //TODO Add more filter for education
 
     private View inflatedview;
     private EditText search;
@@ -52,6 +52,7 @@ public class DiscoveryFragment extends Fragment {
     private SeekBar seekDist;
     private Spinner genderSpin;
     private Spinner lowAge, highAge;
+    private String[] educationArr = getResources().getStringArray(R.array.education_array);
 
 
     public DiscoveryFragment() {
@@ -147,10 +148,6 @@ public class DiscoveryFragment extends Fragment {
         if(!genderSpin.getSelectedItem().equals("Any")){
             params.put("gender", genderSpin.getSelectedItem().toString());
         }
-
-
-
-        //TODO add edu levels
 
 
         //request to insert the user into the mysql database using php
@@ -282,14 +279,10 @@ public class DiscoveryFragment extends Fragment {
         for(int i = 0; i < matchedUserJson.size(); i++){
             try {
                 JSONObject user = (JSONObject) matchedUserJson.get(i);
-                int birthdate = Integer.parseInt(user.getString("dob"));
-                int curDate = Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()));
-                int age = (curDate/10000) - (birthdate/10000);
-
+                int age = (Integer.parseInt(user.getString("dob"))/10000) - (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000);
 
                 users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
-                        + " - " + age;
-                //TODO format date from yyyymmdd
+                        + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
                 //TODO add level of education
                 //TODO add profile avatar at front
             }
