@@ -13,8 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -23,6 +22,19 @@
                 android:layout_marginBottom="5dp"
                 android:text="Below you can select the interests you wish to search for:"/>
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search near me"
+                android:id="@+id/checkBoxLoc"
+                android:layout_gravity="right" />
+
+            <SeekBar
+                android:layout_width="237dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekDist"
+                android:layout_gravity="right" />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,20 +42,37 @@
                 android:text="Search Now"
                 android:id="@+id/searchButton"/>
 
-        </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Load more people"
+                android:id="@+id/loadButton" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="--------------------------------------------------"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/genderSpin"
+                android:spinnerMode="dropdown"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/highAgeSpin"
+                android:spinnerMode="dropdown"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lowAgeSpin"
+                android:spinnerMode="dropdown"/>
+        </LinearLayout>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:id="@+id/searchMatches"
-            android:hint="Search for Matches" />
+            android:hint="Interests" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +89,7 @@
                     android:layout_height="match_parent"
                     android:textSize="8dp"
                     android:text="Choose avatar"
-                    android:id="@+id/lvFriends" />
+                    android:id="@+id/listMatched" />
 
             </ScrollView>
 

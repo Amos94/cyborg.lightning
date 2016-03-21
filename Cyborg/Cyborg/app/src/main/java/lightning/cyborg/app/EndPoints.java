@@ -17,7 +17,7 @@ public class EndPoints {
 
     public static final String base = "http://nashdomain.esy.es";
     //public static final String BASE_URL = "http://projectruncyborg.esy.es";
-    public static final String LOGIN = base + "/temp_User_Login.php";
+    public static final String LOGIN = base + "/users_login.php";
     public static final String USERr = base +"/updateGcmID.php";
     //public static final String CHAT_ROOMS = "http://projectruncyborg.esy.es/getAllChatRooms.php";
     public static final String CHAT_THREAD = base +"/temp_GetSingleRoom.php";
@@ -25,5 +25,9 @@ public class EndPoints {
     public static final String CHAT_ROOMS = base + "/getNormalChatRooms.php";
     public static final String REQUEST_RESPONSE = base+"/requestHandler.php";
     public static final String ADD_FREIND = base+"/convertChatRoom.php";
+    public static final String ADD_INTERESTS = base+"/interests_insert.php";
+    public static final String GET_INTERESTS = base+"/interests_get_user.php";
+    public static final String DEL_INTERESTS = base+"/interests_delete.php";
+    public static final String DISCOVER_USERS = base+"/discoverUsers.php";
 
 }

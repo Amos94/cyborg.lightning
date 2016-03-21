@@ -144,11 +144,15 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject obj = new JSONObject(response);
 
                     // check for error flag
-                    if (obj.getBoolean("error") == false) {
+                    if (obj.getString("success").equals("1")) {
                         // user successfully logged in
                         //id, name, email, created_at
+
                         JSONObject userObj = obj.getJSONObject("user");
+                        Log.d(userObj.toString(),"userJson");
                         User user = new User(userObj.getString("id"),
+
+
                                 userObj.getString("fname"),
                                 userObj.getString("email"));
 

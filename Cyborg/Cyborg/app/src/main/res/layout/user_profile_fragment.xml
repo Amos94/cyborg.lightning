@@ -60,7 +60,7 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:id="@+id/listInterest"
 
         android:layout_below="@+id/textinterest"
@@ -81,13 +81,21 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Add Interest"
-        android:id="@+id/button"
+        android:id="@+id/addInterestB"
         android:layout_below="@+id/etAddText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_weight="1" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Delete Interest"
+        android:id="@+id/delInterestB"
+        android:layout_below="@+id/etAddText"
+        android:layout_weight="1"
+        android:layout_toRightOf="@+id/addInterestB"/>
 
 
 </RelativeLayout>
