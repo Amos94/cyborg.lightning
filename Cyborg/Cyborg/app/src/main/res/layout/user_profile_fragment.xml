@@ -84,7 +84,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
                     android:ems="10"
                     android:id="@+id/bioUser"
                     android:editable="true"
@@ -93,10 +92,9 @@
                     android:minLines="6"
                     android:maxLines="6"
                     android:isScrollContainer="true"
-                    android:hint="Type your Bio here"
+                    android:hint="Bio Status"
                     android:background="#fafafa"
                     android:textIsSelectable="true"
-                    android:focusable="true"
                     android:gravity="top"
                     style="@style/Base.TextAppearance.AppCompat.Small"
                     />
