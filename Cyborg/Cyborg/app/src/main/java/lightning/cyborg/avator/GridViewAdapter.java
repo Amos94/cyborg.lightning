@@ -2,6 +2,7 @@ package lightning.cyborg.avator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,13 @@ import java.util.ArrayList;
 
 import lightning.cyborg.R;
 
-public class GridViewAdapter extends ArrayAdapter<ImageItem> {
+public class GridViewAdapter extends ArrayAdapter<Bitmap> {
 
     private Context context;
     private int layoutResourceId;
-    private ArrayList<ImageItem> data = new ArrayList<ImageItem>();
+    private ArrayList<Bitmap> data = new ArrayList<Bitmap>();
 
-    public GridViewAdapter(Context context, int layoutResourceId, ArrayList<ImageItem> data) {
+    public GridViewAdapter(Context context, int layoutResourceId, ArrayList<Bitmap> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -43,9 +44,8 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem> {
         }
 
 
-        ImageItem item = data.get(position);
-        holder.imageTitle.setText(item.getTitle());
-        holder.image.setImageBitmap(item.getImage());
+        Bitmap item = data.get(position);
+        holder.image.setImageBitmap(item);
         return row;
     }
 

@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 import lightning.cyborg.R;
 
-public class Avator_Logo extends AppCompatActivity {
+public class Avator_Logo extends ActionBarActivity {
     private GridView gridView;
     private GridViewAdapter gridAdapter;
 
@@ -41,14 +40,14 @@ public class Avator_Logo extends AppCompatActivity {
 
         gridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                ImageItem item = (ImageItem) parent.getItemAtPosition(position);
-                Bitmap x = item.getImage();
+                Bitmap item = (Bitmap) parent.getItemAtPosition(position);
+                android.graphics.Bitmap x = item;
                 //UserProfileFragment.imageview.setImageBitmap(x);
-               // RegistrationActivity.avatorIcon.setImageBitmap(x);
+                // RegistrationActivity.avatorIcon.setImageBitmap(x);
 
                 Intent intent = new Intent();
                 ByteArrayOutputStream bs  = new ByteArrayOutputStream();
-                x.compress(Bitmap.CompressFormat.PNG,50,bs );
+                x.compress(android.graphics.Bitmap.CompressFormat.PNG,50,bs );
                 intent.putExtra("Bitmap", bs.toByteArray());
                 setResult(Activity.RESULT_OK, intent);
                 finish();
@@ -65,12 +64,12 @@ public class Avator_Logo extends AppCompatActivity {
 
 
 
-    private ArrayList<ImageItem> getData() {
-        final ArrayList<ImageItem> imageItems = new ArrayList<>();
+    private ArrayList<Bitmap> getData() {
+        final ArrayList<Bitmap> imageItems = new ArrayList<>();
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         for (int i = 0; i < imgs.length()-1; i++) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap, "Avatar " + i));
+            imageItems.add(bitmap);
         }
         return imageItems;
     }
