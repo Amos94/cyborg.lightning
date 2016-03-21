@@ -1,5 +1,8 @@
 package lightning.cyborg.fragment;
 
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,12 +38,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.Avator_Logo;
+import lightning.cyborg.activity.ImageItem;
+import lightning.cyborg.adapter.CustomListAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 
 public class DiscoveryFragment extends Fragment {
     private View inflatedview;
     private EditText search;
+    private TextView slideTV;
     private CheckBox checkBoxLoc;
     private ListView matchedList;
     private ArrayAdapter adapter;
@@ -73,8 +81,8 @@ public class DiscoveryFragment extends Fragment {
 
         //int [] image= {R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1};
 
+        slideTV = (TextView) inflatedview.findViewById(R.id.sliderTV);
         educationArr = getResources().getStringArray(R.array.education_array);
-
         matchedList = (ListView) inflatedview.findViewById(R.id.listMatched);
         seekDist = (SeekBar) inflatedview.findViewById(R.id.seekDist);
         checkBoxLoc = (CheckBox)inflatedview.findViewById(R.id.checkBoxLoc);
@@ -123,13 +131,27 @@ public class DiscoveryFragment extends Fragment {
         highAge.setAdapter(ageAdapter);
         highAge.setSelection(age.length - 1);
 
+        seekDist.setMax(95);
+        seekDist.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                slideTV.setText(String.valueOf(progress + 5) + "km");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
         return inflatedview;
     }
 
     private void discover(View v){
         final String filtered = search.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").toLowerCase();
         String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
-        int radius = seekDist.getProgress();
+        int radius = seekDist.getProgress() + 5;
         matchedUserJson = new ArrayList<JSONObject>();
         //String year = Calendar.getInstance().get(Calendar.YEAR) + "" + Calendar.getInstance().get(Calendar.MONTH) + "" Calendar.getInstance().get(Calendar.DA);
         String strDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
@@ -283,15 +305,16 @@ public class DiscoveryFragment extends Fragment {
 
     private void populateList() {
         String[] users = new String[matchedUserJson.size()];
+        Integer[] avatars = new Integer[matchedUserJson.size()];
 
         for(int i = 0; i < matchedUserJson.size(); i++){
             try {
                 JSONObject user = (JSONObject) matchedUserJson.get(i);
                 int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000) - (Integer.parseInt(user.getString("dob"))/10000);
 
-                users[i] = user.getString("avatar") + " - " + user.getString("fname") + " - " + user.getString("gender")
+                users[i] = " - " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
-                //TODO add profile avatar at front
+                avatars[i] = Integer.valueOf(user.getString("avatar"));
             }
             catch (JSONException e) {
                 e.printStackTrace();
@@ -299,9 +322,15 @@ public class DiscoveryFragment extends Fragment {
             }
         }
 
-        adapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, users);
-        matchedList.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
+        Bitmap[] images = new Bitmap[imgs.length()];
+        for(int i = 0; i < imgs.length(); i++){
+            images[i] = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
+        }
+
+        CustomListAdapter customList = new CustomListAdapter(getActivity(), users, images, avatars);
+        matchedList.setAdapter(customList);
+        customList.notifyDataSetChanged();
     }
 
     //@Override

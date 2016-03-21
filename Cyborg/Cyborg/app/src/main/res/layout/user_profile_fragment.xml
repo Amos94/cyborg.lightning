@@ -1,121 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/men2"
+        android:layout_alignParentLeft="true"
+        />
 
-    </ScrollView>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:id="@+id/details"
-        android:orientation="horizontal"
-        android:layout_weight="1"
-
-        android:layout_height="wrap_content">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_weight="2"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_height="wrap_content">
-
-
-            <ImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:src="@drawable/men2"
-                android:layout_alignParentLeft="true"
-                />
-
-
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_weight="3">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14dp"
-                    android:id="@+id/tvfirstandLast"
-                    android:text="First Name and Last"
-                    android:textColor="#01579b"
-                    android:gravity="center"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content"
-                android:layout_weight="2">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:textColor="#01579b"
-
-                    android:layout_height="wrap_content"
-                    android:textSize="14dp"
-                    android:text="Current Location:"
-                    android:id="@+id/tvLocation" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/bioUser"
-                    android:editable="true"
-                    android:textColor="#01579b"
-                    android:enabled="true"
-                    android:minLines="6"
-                    android:maxLines="6"
-                    android:isScrollContainer="true"
-                    android:hint="Bio Status"
-                    android:background="#fafafa"
-                    android:textIsSelectable="true"
-                    android:gravity="top"
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    />
-
-
-
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="96dp"
         android:layout_height="wrap_content"
+        android:text="Welcomer"
+        android:id="@+id/textView2"
+        android:layout_marginBottom="38dp"
+        android:layout_alignBottom="@+id/profile_image"
+        android:layout_centerHorizontal="true" />
 
-        android:layout_below="@+id/details"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+
+        android:layout_below="@+id/profile_image"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="38dp"
@@ -123,92 +36,64 @@
 
         <ImageView
             android:layout_width="50dp"
-            android:id="@+id/iconInterest"
             android:layout_height="50dp"
             android:src="@drawable/interesticon"
-            />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#01579b"
-            android:text="Interest"
-            android:paddingRight="20dp"
-            android:id="@+id/textinterest"
-             />
+            />
 
 
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Interest"
+        android:id="@+id/textinterest"
+        android:layout_toRightOf="@+id/linearLayout"
+        android:layout_marginBottom="40dp"
+        android:layout_alignTop="@+id/linearLayout"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignBottom="@+id/linearLayout" />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:id="@+id/l2"
-    android:layout_below="@+id/linearLayout"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-
-    >
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:id="@+id/listInterest"
-        android:textColor="#01579b"
 
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/textinterest"
+
         >
 
+
+
     </ListView>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Add Interest.."
+        android:text=""
         android:id="@+id/etAddText"
         android:layout_below="@+id/listInterest"
-        android:textColor="#01579b"
-
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-
-</LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_below="@+id/l2"
+        android:text="Add Interest"
+        android:id="@+id/addInterestB"
+        android:layout_below="@+id/etAddText"
+        android:layout_weight="1" />
 
-        >
-
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Add Interest"
-            android:textColor="#01579b"
-
-            android:layout_gravity="center"
-            android:id="@+id/addInterestB"
-            android:layout_below="@+id/etAddText"
-            android:layout_weight="1" />
-
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Delete Interest"
-            android:id="@+id/delInterestB"
-            android:textColor="#01579b"
-
-            android:layout_below="@+id/etAddText"
-            android:layout_weight="1"
-            android:layout_toRightOf="@+id/addInterestB"/>
-
-
-
-
-    </LinearLayout>
-
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Delete Interest"
+        android:id="@+id/delInterestB"
+        android:layout_below="@+id/etAddText"
+        android:layout_weight="1"
+        android:layout_toRightOf="@+id/addInterestB"/>
 
 
 </RelativeLayout>
