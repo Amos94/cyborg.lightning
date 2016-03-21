@@ -73,14 +73,14 @@ public class FriendsListFragment extends Fragment {
                 ChatRoom chatRoom = chatRoomArrayList.get(position);
 
                 //if chatroom is not activiated
-                if(chatRoom.getAccess_type().equals("y"))
+                if(chatRoom.getPermission().equals("y"))
                 {
                     ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),"f");
                 }
                 else{
                     if(!chatRoom.isChatRoomExists()){
                         recyclerView.removeView(view);
-                       mAdapter.notifyDataSetChanged();
+                        mAdapter.notifyDataSetChanged();
                     }
 
                 }

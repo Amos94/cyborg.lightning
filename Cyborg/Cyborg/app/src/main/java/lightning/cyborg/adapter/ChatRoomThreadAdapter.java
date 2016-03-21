@@ -20,14 +20,15 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private static String TAG = ChatRoomThreadAdapter.class.getSimpleName();
 
-    private String userId;
+    private String userId;                  //current user id
     private int SELF = 100;
-    private static String today;
+    private static String today;             //date of today
 
     private Context mContext;
-    private ArrayList<Message> messageArrayList;
+    private ArrayList<Message> messageArrayList;   //message ArrayList
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView message, timestamp;
 
         public ViewHolder(View view) {
@@ -96,6 +97,11 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return messageArrayList.size();
     }
 
+    /**
+     * convert String into a TimeStamp;
+     * @param dateStr  the date being referenced
+     * @return  timeStamp
+     */
     public static String getTimeStamp(String dateStr) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String timestamp = "";
@@ -116,4 +122,3 @@ public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return timestamp;
     }
 }
-

@@ -6,19 +6,21 @@
     <string name="hint_email">Email</string>
     <string name="err_msg_name">Enter full name</string>
     <string name="err_msg_email">Enter valid email address</string>
-    <string name="title_activity_chat_room_discussion">ChatRoomDiscussionActivity</string>
     <string name="action_logout">Logout</string>
 
+    <string name="title_activity_chat_room_discussion">ChatRoomDiscussionActivity</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_choose_interests">ChooseInterests</string>
     <string name="title_activity_main_menu">MainMenu</string>
     <string name="title_activity_chat_room">ChatRoom</string>
     <string name="title_activity_user_homepage">UserHomepage</string>
     <string name="title_activity_interests_registration">interestsRegistration</string>
-    <string name="title_activity_code_verification_registration">codeVerificationRegistration
-    </string>
+    <string name="title_activity_code_verification_registration">codeVerificationRegistration </string>
     <string name="title_activity_view_profile">ViewProfile</string>
     <string name="title_activity_matched_chats">MatchedChats</string>
+    <string name="title_activity_view_blocked_list">viewBlockedList</string>
+    <string name="title_activity_set_sip_user_info">SetSipUserInfo</string>
+
 
 
     <string-array name="image_ids">

@@ -18,7 +18,8 @@ public class Config {
     public static final String PUSH_NOTIFICATION = "pushNotification";
 
     //key used for post filters
-
+   public static final String USER_ID = "user_id";
+    public static final String TYPE ="type";
 
 
     // type of push messages
