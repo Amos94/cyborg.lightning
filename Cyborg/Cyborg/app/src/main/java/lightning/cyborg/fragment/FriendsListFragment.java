@@ -79,8 +79,12 @@ public class FriendsListFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new ChatRoomsAdapter.RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new ChatRoomsAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                ChatRoom chatRoom =null;
                 // when chat is clicked, launch full chat thread activity
-                ChatRoom chatRoom = searchArrayList.get(position);
+                try{ chatRoom = searchArrayList.get(position);}
+                catch (Exception e){
+                    chatRoom = chatRoomArrayList.get(position);
+                }
 
                 //if chatroom is not activiated
                 if (chatRoom.getPermission().equals("y")) {
