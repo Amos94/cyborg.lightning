@@ -20,6 +20,8 @@ public class Config {
     //key used for post filters
    public static final String USER_ID = "user_id";
     public static final String TYPE ="type";
+    public static final String CHAT_ROOM_ID ="chat_room_id";
+
 
 
     // type of push messages

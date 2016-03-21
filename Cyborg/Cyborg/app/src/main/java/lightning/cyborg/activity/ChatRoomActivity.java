@@ -42,6 +42,7 @@ import lightning.cyborg.adapter.ChatRoomThreadAdapter;
 import lightning.cyborg.app.Config;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
+import lightning.cyborg.app.VolleyQueue;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.model.User;
@@ -363,37 +364,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.chatroom_menu, menu);
-        return true;
-    }
 
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-
-        if(menuItem.getItemId()==android.R.id.home){
-            toUserHomePageActivity();
-            return true;
-        }
-        else if(menuItem.getItemId()==R.id.action_addfriend){
-            addFriend("f");
-        }
-        else {
-            switch (menuItem.getItemId()) {
-                case R.id.action_calluser:
-                    break;
-                case R.id.action_viewprofile:
-                    break;
-                case R.id.action_addfriend:
-                    break;
-                case R.id.action_blockuser:
-                    break;
-            }
-        }
-        return super.onOptionsItemSelected(menuItem);
-    }
     private void toUserHomePageActivity(){
         Intent intent = new Intent(this,UserHomepage.class);
 
@@ -410,7 +381,11 @@ public class ChatRoomActivity extends AppCompatActivity {
         finish();
     }
 
-    public void addFriend(String type){
+     /**
+     * Change the change room from freinds to normal or vise versa
+     * @param type new type of the chatroom
+     */
+      public void changeChatRoomType(String type){
         String endPoint = EndPoints.ADD_FREIND;
 
         final Map<String, String> params = new HashMap<>();
@@ -465,6 +440,159 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
+    /**
+     * prevents the chat from being displayed
+     */
+    public void hideChat(){
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("chat_room_id", chatRoomId);
+        params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                EndPoints.HIDE_CHAT, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+
+                        toUserHomePageActivity();
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
+    public void blockUser(final Context context){
+
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("cur_user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("chat_room_id", chatRoomId.toString());
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.BLOCK_USER,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+
+                            // check for error flag
+                            if (obj.getBoolean("error") == false) {
+                                Log.d(TAG, "no error");
+                                toUserHomePageActivity();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", EndPoints.FETCH_SIP);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        VolleyQueue.getInstance(this).addToRequestQueue(request);
+    }
+
+    private MenuItem addFreind;
+    private MenuItem callButton;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.chatroom_menu, menu);
+        addFreind = menu.findItem(R.id.action_addfriend);
+        if(type.equals("f")){
+            addFreind.setIcon(R.drawable.ic_action_content_mail);
+            //addFreind.setVisible(false);
+        }
+        else{
+            //addFreind.set;;
+        }
+        callButton = menu.findItem(R.id.action_calluser);
+        callButton.setVisible(false);
+        //fetchSip;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                toUserHomePageActivity();
+                break;
+            case R.id.action_calluser:
+                //   dialogCallReceiver(this,true);
+                // IncomingCall(this,"callRequest");
+                break;
+            case R.id.action_viewprofile:
+                //hideChat();
+                break;
+            case R.id.action_addfriend:
+                if(type.equals("f")){ changeChatRoomType("n");}
+                else { changeChatRoomType("f");}
+                break;
+            case R.id.action_hideChat:
+                hideChat();
+                break;
+            case R.id.action_blockuser:
+                blockUser(this);
+                break;
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
 }

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_addfriend"
-        android:icon="@drawable/ic_action_call"
+        android:icon="@drawable/ic_person_add_white_24dp"
         android:title="Call User"
         app:showAsAction="ifRoom"
         android:layout_width="match_parent"
@@ -22,6 +22,12 @@
         android:id="@+id/action_viewprofile"
         android:orderInCategory="1"
         android:title="View Profile"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_hideChat"
+        android:orderInCategory="2"
+        android:title="Hide Chat"
         app:showAsAction="never"/>
 
     <item
