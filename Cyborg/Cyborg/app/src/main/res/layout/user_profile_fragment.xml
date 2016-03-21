@@ -109,6 +109,23 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/details"
+        android:layout_height="wrap_content">
+
+        <com.gc.materialdesign.views.ProgressBarIndeterminate
+            android:id="@+id/progressBarIndeterminate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#1E88E5"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -159,14 +176,13 @@
         >
 
     </ListView>
-    <EditText
+    a<EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Add Interest.."
         android:id="@+id/etAddText"
         android:layout_below="@+id/listInterest"
         android:textColor="#01579b"
-
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
