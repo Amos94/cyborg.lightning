@@ -1,5 +1,6 @@
 package lightning.cyborg.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -7,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -25,9 +28,11 @@ import java.util.Map;
 
 import lightning.cyborg.R;
 import lightning.cyborg.adapter.BlockedListAdapter;
+import lightning.cyborg.adapter.ChatRoomsAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.helper.SimpleDividerItemDecoration;
+import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.User;
 
 public class ViewBlockedUsers extends AppCompatActivity {
@@ -54,10 +59,21 @@ public class ViewBlockedUsers extends AppCompatActivity {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(blockedListAdapter);
+        recyclerView.addOnItemTouchListener(new BlockedListAdapter.RecyclerTouchListener(this, recyclerView, new BlockedListAdapter.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+            }
 
+            @Override
+            public void onLongClick(View view, int position) {
 
-        getBlockedList();
-    }
+                Dialog dialog = new Dialog(ViewBlockedUsers.this);
+                dialog.setContentView(R.layout.dialog_view_profile);
+                dialog.show();
+            }
+        }));
+            getBlockedList();
+        }
 
     public void getBlockedList(){
 

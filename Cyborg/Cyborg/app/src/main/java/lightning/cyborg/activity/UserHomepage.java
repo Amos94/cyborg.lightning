@@ -454,6 +454,11 @@ public class UserHomepage extends AppCompatActivity {
         return true;
     }
 
+    public void changeToBlockedUsers(){
+        Intent intent = new Intent(this, ViewBlockedUsers.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -466,6 +471,9 @@ public class UserHomepage extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.action_logout:
                 MyApplication.getInstance().logout();
+                break;
+            case R.id.action_viewBlockedList:
+                changeToBlockedUsers();
                 break;
         }
         return super.onOptionsItemSelected(menuItem);

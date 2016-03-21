@@ -1,5 +1,6 @@
 package lightning.cyborg.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -247,7 +248,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public interface ClickListener {
         void onClick(View view, int position);
 
+
+
         void onLongClick(View view, int position);
+
     }
 
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
