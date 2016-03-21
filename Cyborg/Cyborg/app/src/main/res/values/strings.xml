@@ -22,6 +22,7 @@
 
 
     <string-array name="image_ids">
+        <item>@drawable/men1</item>
         <item>@drawable/men2</item>
         <item>@drawable/men3</item>
         <item>@drawable/men4</item>
@@ -30,7 +31,7 @@
         <item>@drawable/men7</item>
         <item>@drawable/men8</item>
         <item>@drawable/men9</item>
-
+        <item>@drawable/woman1</item>
         <item>@drawable/woman2</item>
         <item>@drawable/woman3</item>
         <item>@drawable/woman4</item>
