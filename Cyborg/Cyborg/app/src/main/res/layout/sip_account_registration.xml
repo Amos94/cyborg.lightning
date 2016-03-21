@@ -25,7 +25,18 @@
             android:layout_gravity="center_horizontal"
             android:onClick="doneRegistration"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:nestedScrollingEnabled="false" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Skip"
+            android:id="@+id/Skip"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/doneBtn"
+            android:layout_toEndOf="@+id/doneBtn"
+            android:onClick="skipSIPRegistration" />
     </RelativeLayout>
 
 </LinearLayout>

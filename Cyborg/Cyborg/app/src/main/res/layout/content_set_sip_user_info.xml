@@ -31,9 +31,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Skip"
-        android:id="@+id/backBtn"
+        android:text="Register?"
+        android:id="@+id/registerBtn"
         android:layout_gravity="center_horizontal"
-        android:onClick="goToInterests" />
+        android:onClick="goToRegisterSipAccount" />
+
 
 </LinearLayout>
