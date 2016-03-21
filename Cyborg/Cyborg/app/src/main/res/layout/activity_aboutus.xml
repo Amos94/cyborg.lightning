@@ -4,28 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="24dp" >
-
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#01579b"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="128dp"
-            android:background="#01579b"
-            android:paddingBottom="20dp"
-            android:paddingLeft="104dp" >
+        >
 
-            <TextView
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="left"
+            android:layout_height="wrap_content">
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="About Us"
-                android:textColor="#FFF"
-                android:textSize="25dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
+                android:onClick="backToSetting"
+                android:background="@drawable/ic_action_back"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content">
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="About US"
+            android:textColor="#FFF"
+            android:textSize="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>

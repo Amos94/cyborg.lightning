@@ -73,8 +73,6 @@ public class UserProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
     }
 
     @Override
@@ -114,8 +112,6 @@ public class UserProfileFragment extends Fragment {
                 });
                 alertDialogBuilder.show();
 
-
-
             }
         });
 
@@ -141,10 +137,6 @@ public class UserProfileFragment extends Fragment {
 
         tvlocation = (TextView) viewroot.findViewById(R.id.tvLocation);
         tvbio = (TextView) viewroot.findViewById(R.id.bioUser);
-
-
-
-
 
 
         //creating function to add more items into the interest
