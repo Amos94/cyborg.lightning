@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14dp"
                     android:id="@+id/tvfirstandLast"
-                    android:text="First Name and Last"
+                    android:text="Name: "
                     android:textColor="#01579b"
                     android:gravity="center"/>
             </LinearLayout>
@@ -58,7 +58,7 @@
                     android:textColor="#01579b"
                     android:layout_height="wrap_content"
                     android:textSize="14dp"
-                    android:text="Current Location:"
+                    android:text="Current Location: "
                     android:id="@+id/tvLocation" />
                 <TextView
                     android:layout_width="match_parent"
