@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -57,6 +58,7 @@ import lightning.cyborg.gcm.GcmIntentService;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
+import lightning.cyborg.setting.Setting;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -72,6 +74,10 @@ public class UserHomepage extends AppCompatActivity {
     private ChatRoomsAdapter freindChatAdapter;
     private RecyclerView recyclerView;
     private int onChatFragment =0;
+
+    private Button settingsButton;
+
+
 
     private static final long RIPPLE_DURATION = 500;
 
@@ -479,5 +485,19 @@ public class UserHomepage extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(menuItem);
     }
+
+
+    //navigating to settings...
+    public void clickSetting(View view){
+
+        Intent intent = new Intent(UserHomepage.this, Setting.class);
+        startActivity(intent);
+
+
+    }
+
+
+
+
 
 }

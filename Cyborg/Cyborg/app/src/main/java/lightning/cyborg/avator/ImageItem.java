@@ -1,17 +1,18 @@
-package lightning.cyborg.activity;
+package lightning.cyborg.avator;
 
-/**
- * Created by Ahadxo on 3/12/16.
- */
 import android.graphics.Bitmap;
 
 public class ImageItem {
     private Bitmap image;
     private String title;
 
-    public ImageItem(Bitmap image) {
+
+    //Creating a Class to Hold both the Avator Image and the Name of the Avator
+
+    public ImageItem(Bitmap image, String title) {
         super();
         this.image = image;
+        this.title = title;
     }
 
     public Bitmap getImage() {

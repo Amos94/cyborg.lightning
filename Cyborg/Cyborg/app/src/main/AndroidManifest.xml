@@ -58,6 +58,22 @@
             android:label="Registeration"
             android:theme="@style/AppTheme"></activity>
 
+
+
+
+
+        <!-- Setting Activitiys: Ahad -->
+
+        <activity android:name=".setting.AboutUs"></activity>
+        <activity android:name=".setting.Communication"></activity>
+        <activity android:name=".setting.Setting"></activity>
+        <activity android:name=".setting.UserDetails"></activity>
+
+
+        <!-- Avator Activities: Ahad -->
+
+        <activity android:name=".avator.Avator_Logo"></activity>
+
         <!-- START Added for GCM -->
 
         <receiver

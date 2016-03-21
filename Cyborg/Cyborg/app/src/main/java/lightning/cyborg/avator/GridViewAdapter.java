@@ -1,8 +1,5 @@
-package lightning.cyborg.adapter;
+package lightning.cyborg.avator;
 
-/**
- * Created by Ahadxo on 3/12/16.
- */
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,7 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import lightning.cyborg.R;
-import lightning.cyborg.activity.ImageItem;
 
 public class GridViewAdapter extends ArrayAdapter<ImageItem> {
 

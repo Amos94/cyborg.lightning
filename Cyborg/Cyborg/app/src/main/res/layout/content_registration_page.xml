@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/lightcolor"
+    android:background="#01579b"
     android:orientation="vertical">
 
     <LinearLayout
@@ -42,6 +42,7 @@
 
                     <ImageView
                         android:layout_width="match_parent"
+                        android:id="@+id/avatorIcon"
                         android:layout_height="match_parent"
                         android:background="@drawable/background_with_shadow"/>
 
@@ -77,6 +78,7 @@
                             android:layout_height="match_parent"
                             android:textSize="8dp"
                             android:text="Choose avatar"
+                            android:onClick="chooseAvator"
                             android:id="@+id/btnSelectAvator" />
 
                     </LinearLayout>
@@ -114,7 +116,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="textPersonName"
+                        android:textColor="@android:color/white"                        android:inputType="textPersonName"
                         android:hint="Enter name"
                         android:id="@+id/txtName" />
 
@@ -150,6 +152,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textColor="@android:color/white"
                         android:inputType="textPersonName"
                         android:id="@+id/txtEmail"
                         android:hint="Example@email.co.uk" />
@@ -231,10 +234,10 @@
             </LinearLayout>
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -1,59 +1,75 @@
-package lightning.cyborg.activity;
+package lightning.cyborg.avator;
 
-/**
- * Created by Ahadxo on 3/12/16.
- */
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import lightning.cyborg.R;
-import lightning.cyborg.adapter.GridViewAdapter;
-import lightning.cyborg.fragment.UserProfileFragment;
 
-public class Avator_Logo extends Activity {
+public class Avator_Logo extends ActionBarActivity {
     private GridView gridView;
     private GridViewAdapter gridAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.avator_background);
+        setContentView(R.layout.activity_avator);
+
+
+        //inserting the Avator and Name into a custom GridLayout I made in a seperate Class..
 
         gridView = (GridView) findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(this, R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
 
+
+
+        // When you click the Imageview, this will find the position and then compress into Bitmap and than return the Avator
+        // back to a its appropirate activitiy.. for example: registration or Homepage...
+
         gridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageItem item = (ImageItem) parent.getItemAtPosition(position);
                 Bitmap x = item.getImage();
-                UserProfileFragment.imageview.setImageBitmap(x);
+                //UserProfileFragment.imageview.setImageBitmap(x);
+               // RegistrationActivity.avatorIcon.setImageBitmap(x);
+
+                Intent intent = new Intent();
+                ByteArrayOutputStream bs  = new ByteArrayOutputStream();
+                x.compress(Bitmap.CompressFormat.PNG,50,bs );
+                intent.putExtra("Bitmap", bs.toByteArray());
+                setResult(Activity.RESULT_OK, intent);
                 finish();
+
             }
         });
     }
 
     /**
-     * Prepare some dummy data for gridview
+     * Prepare Avator Image for gridview..
+     * Images are stored in an arraylist inside the String xml to add more avator or images.. in the future...
      */
+
+
+
+
     private ArrayList<ImageItem> getData() {
         final ArrayList<ImageItem> imageItems = new ArrayList<>();
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         for (int i = 0; i < imgs.length(); i++) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap));
+            imageItems.add(new ImageItem(bitmap, "Avator " + i));
         }
         return imageItems;
     }

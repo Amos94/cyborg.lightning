@@ -1,5 +1,8 @@
 package lightning.cyborg.fragment;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import lightning.cyborg.R;
-import lightning.cyborg.activity.Avator_Logo;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
+import lightning.cyborg.avator.Avator_Logo;
 
 
 import android.app.AlertDialog;
@@ -85,18 +88,19 @@ public class UserProfileFragment extends Fragment {
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
-                alertDialogBuilder.setPositiveButton("Change Avatar", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setPositiveButton("Change Avator", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Intent intent = new Intent(getActivity(), Avator_Logo.class);
-                        startActivity(intent);
+
+                        Intent intent =  new Intent(getActivity(), Avator_Logo.class);
+                        startActivityForResult(intent, 1);
 
 
                     }
                 });
 
-                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -335,8 +339,17 @@ public class UserProfileFragment extends Fragment {
 
     }
 
+    //creating avator background when user registers....
+
     @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == 1){
+            if(resultCode == Activity.RESULT_OK){
+                Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
+                imageview.setImageBitmap(b);
+            }
+
+        }
     }
 }

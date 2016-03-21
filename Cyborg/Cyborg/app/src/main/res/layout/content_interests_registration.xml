@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bluebackground"
+    android:background="#01579b"
     android:orientation="vertical">
 
     <LinearLayout
@@ -87,6 +87,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#01579b"
+
                 android:background="@drawable/input_text_box"
                 android:hint="A-Levels? Degree? Currently studying?"/>
 
@@ -106,11 +108,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                        <ListView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/newInterestsListView">
-                        </ListView>
+                    <ListView
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:id="@+id/newInterestsListView">
+                    </ListView>
 
                 </LinearLayout>
 
