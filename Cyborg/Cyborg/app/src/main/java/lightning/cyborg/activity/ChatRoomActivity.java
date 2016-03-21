@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -72,6 +73,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     private MenuItem addFreind;
     private MenuItem callButton;
     protected Vibrator vibrate;
+
+    private AudioManager m_amAudioManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +90,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         String title = intent.getStringExtra("name");
         type =intent.getStringExtra("type");
 
-
+        m_amAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        m_amAudioManager.setMode(AudioManager.MODE_IN_CALL);
+        m_amAudioManager.setSpeakerphoneOn(false);
 
         if (chatRoomId == null) {
             Toast.makeText(getApplicationContext(), "Chat room not found!", Toast.LENGTH_SHORT).show();
@@ -194,10 +199,11 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     public void dialogCallReceiver(final Context context, final boolean typeOfgcm){
-        final MediaPlayer mp = MediaPlayer.create(context, R.raw.ringtone);
-        mp.start();
-        mp.setLooping(true);
+
         if (typeOfgcm) {
+            final MediaPlayer mp = MediaPlayer.create(context,R.raw.dial);
+            mp.start();
+            mp.setLooping(true);
             new AlertDialog.Builder(context)
                     .setTitle("Waiting For Response")
                     .setIcon(android.R.drawable.sym_call_incoming)
@@ -213,6 +219,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .show();
         }
         else {
+            final MediaPlayer mp = MediaPlayer.create(context, R.raw.ringtone);
+            mp.start();
+            mp.setLooping(true);
             vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
             if (vibrate == null) {
