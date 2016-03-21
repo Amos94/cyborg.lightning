@@ -1,80 +1,123 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@drawable/lightcolor">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:id="@+id/appbarlayout"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/guillotine_background">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/guillotine_background" />
+            android:gravity="center"
+            android:text="Call with User"
+            android:textSize="25dp"
+            android:textColor="@android:color/white"/>
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="4"
+        android:padding="30dp">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="40dp"
+            android:paddingLeft="40dp">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hang Up"
-                android:id="@+id/HangUpBtn"
-                android:onClick="endCall" />
-
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New ToggleButton"
-                android:id="@+id/muteBtn"
-                android:textOn="Mute Off"
-                android:textOff="Mute On"
-                android:nestedScrollingEnabled="false" />
-
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New ToggleButton"
-                android:id="@+id/speakerBtn"
-                android:textOff="Speaker On"
-                android:textOn="Speaker Off" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/men1"/>
 
         </LinearLayout>
 
-        <Chronometer
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/chronometer"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="initiateCall"
-            android:id="@+id/initiateCall"
-            android:layout_below="@+id/chronometer"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:onClick="makeCall" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/callersName"
+                android:textSize="30dp"
+                android:text="User's name"
+                android:layout_centerInParent="true" />
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <Chronometer
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/chronometer"
+                android:textSize="30dp"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/HangUpBtn"
+                android:onClick="endCall"
+                android:background="@drawable/ic_call_end_white_48dp"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/bottomcalltoolbar"
+        app:contentInsetStart="0dp"
+        style="@style/Toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/speakerBtn"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="125dp"
+                android:background="@drawable/ic_volume_down_white_36dp"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="125dp"
+                android:background="@drawable/ic_mic_white_36dp"
+                android:id="@+id/muteMicBtn"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
 
 </LinearLayout>

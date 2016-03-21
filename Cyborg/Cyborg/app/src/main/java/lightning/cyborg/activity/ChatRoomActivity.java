@@ -219,7 +219,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 Log.w(TAG, "No vibration service exists.");
             }
             else{
-                
+
             }
             new AlertDialog.Builder(context)
                     .setTitle("Incoming call")

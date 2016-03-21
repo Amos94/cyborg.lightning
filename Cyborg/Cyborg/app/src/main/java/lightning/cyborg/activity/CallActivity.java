@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
 import java.text.ParseException;
@@ -52,10 +53,7 @@ public class CallActivity extends AppCompatActivity {
     private static final int SET_AUTH_INFO = 2;
     private static final int UPDATE_SETTINGS_DIALOG = 3;
     private static final int HANG_UP = 4;
-    private Button hangUp;
-    private ToggleButton mute;
-    private ToggleButton speaker;
-    private Button makeNewCall;
+
 
     private UserInformation caller;
     private String callee;
@@ -69,6 +67,12 @@ public class CallActivity extends AppCompatActivity {
     private final String POSTFIX_CALLEE = "@sip.antisip.com";
 
     private String message;
+    private ImageButton hangUp;
+    private ImageButton muteMic;
+    private ImageButton speaker;
+    private Boolean isMuted;
+    private Boolean isSpeaker;
+
 
     private AlertDialog alertDialog;
 
@@ -83,10 +87,8 @@ public class CallActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.call);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.bottomcalltoolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Call");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -102,10 +104,12 @@ public class CallActivity extends AppCompatActivity {
         //this.callee = callee;
         callee = PREFIX_CALLEE + intentCalleeUsername + POSTFIX_CALLEE;
 
-        hangUp = (Button) findViewById(R.id.HangUpBtn);
-        speaker = (ToggleButton) findViewById(R.id.speakerBtn);
-        mute = (ToggleButton) findViewById(R.id.muteBtn);
-        makeNewCall = (Button) findViewById(R.id.initiateCall);
+
+        isMuted = false;
+        isSpeaker = false;
+        hangUp = (ImageButton) findViewById(R.id.HangUpBtn);
+        speaker = (ImageButton) findViewById(R.id.speakerBtn);
+        muteMic = (ImageButton) findViewById(R.id.muteMicBtn);
 
 
        // ToggleButton pushToTalkButton = (ToggleButton) findViewById(R.id.pushToTalk);
@@ -281,6 +285,45 @@ public class CallActivity extends AppCompatActivity {
             Log.d("onDestroy", "Failed to close local profile.", ee);
         }
     }
+    public void muteListener(){
+
+        muteMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isMuted == false) {
+                    call.toggleMute();
+                    isMuted = true;
+                    muteMic.setImageResource(R.drawable.ic_mic_off_white_36dp);
+                } else {
+                    call.toggleMute();
+                    isMuted = false;
+                    muteMic.setImageResource(R.drawable.ic_mic_white_36dp);
+                }
+            }
+        });
+
+    }
+
+    public void speakerListener(){
+
+        speaker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isSpeaker == false) {
+                    call.setSpeakerMode(true);
+                    isSpeaker = true;
+                    speaker.setImageResource(R.drawable.ic_volume_up_white_36dp);
+                } else {
+                    call.setSpeakerMode(false);
+                    isSpeaker = false;
+                    speaker.setImageResource(R.drawable.ic_volume_down_white_36dp);
+                }
+            }
+        });
+
+    }
+
+
 
     /**
      * Make an outgoing call.
@@ -364,38 +407,6 @@ public class CallActivity extends AppCompatActivity {
         }
     }
 
-    public void muteListener(){
-
-
-        mute.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                    call.toggleMute();
-                } else {
-                    // The toggle is disabled
-                    call.toggleMute();
-                }
-            }
-        });
-
-    }
-
-    public void speakerListener(){
-
-        speaker.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                    call.setSpeakerMode(true);
-                } else {
-                    // The toggle is disabled
-                    call.setSpeakerMode(false);
-                }
-            }
-        });
-
-    }
 
     public void makeCall(View view){
         initiateCall();
