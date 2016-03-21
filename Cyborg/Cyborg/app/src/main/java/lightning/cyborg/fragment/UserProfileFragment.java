@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -52,6 +53,10 @@ public class UserProfileFragment extends Fragment {
     private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter adapter;
     private ListView listview;
+    private TextView tvFirstandLast;
+    private TextView tvlocation;
+    private TextView tvbio;
+
     private EditText etInterest;
     private Button addInterestButt;
     private Button delInterestButt;
@@ -127,10 +132,25 @@ public class UserProfileFragment extends Fragment {
 
         listview.setAdapter(adapter);
 
+
+
+        //location, user profile name and last and bio
+
+        tvFirstandLast = (TextView) viewroot.findViewById(R.id.tvfirstandLast);
+
+        tvlocation = (TextView) viewroot.findViewById(R.id.tvLocation);
+        tvbio = (TextView) viewroot.findViewById(R.id.bioUser);
+
+
+
+
+
+
         //creating function to add more items into the interest
 
         etInterest = (EditText) viewroot.findViewById(R.id.etAddText);
         addInterestButt = (Button) viewroot.findViewById(R.id.addInterestB);
+
         //insert values into database... for interest of users
         addInterestButt.setOnClickListener(new View.OnClickListener() {
             @Override

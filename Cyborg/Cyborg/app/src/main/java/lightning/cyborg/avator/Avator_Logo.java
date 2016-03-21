@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 import lightning.cyborg.R;
 
-public class Avator_Logo extends ActionBarActivity {
+public class Avator_Logo extends AppCompatActivity {
     private GridView gridView;
     private GridViewAdapter gridAdapter;
 
@@ -67,9 +68,9 @@ public class Avator_Logo extends ActionBarActivity {
     private ArrayList<ImageItem> getData() {
         final ArrayList<ImageItem> imageItems = new ArrayList<>();
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
-        for (int i = 0; i < imgs.length(); i++) {
+        for (int i = 0; i < imgs.length()-1; i++) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap, "Avator " + i));
+            imageItems.add(new ImageItem(bitmap, "Avatar " + i));
         }
         return imageItems;
     }
