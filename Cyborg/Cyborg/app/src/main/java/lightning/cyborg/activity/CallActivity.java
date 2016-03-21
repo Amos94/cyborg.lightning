@@ -44,36 +44,80 @@ import lightning.cyborg.VOIP.SipSettings;
 
 public class CallActivity extends AppCompatActivity {
 
+
     public String sipAddress = null;
 
+    //Provides APIs for SIP tasks, such as initiating SIP connections, and provides access to related SIP services.
     public SipManager manager = null;
+
+    //Defines a SIP profile, including a SIP account, domain and server information.
     public SipProfile me = null;
+
+    //	Handles an Internet audio call over SIP.
     public SipAudioCall call = null;
+
+    //Handles the receiving of a call
     public IncomingCallReceiver callReceiver;
+
+    //Used to determine the conversation length
     public Chronometer chronometer;
 
+    //variables for handle cases
     private static final int CALL_ADDRESS = 1;
     private static final int SET_AUTH_INFO = 2;
     private static final int UPDATE_SETTINGS_DIALOG = 3;
     private static final int HANG_UP = 4;
+
+    //UI elements
     private Button hangUp;
     private ToggleButton mute;
     private ToggleButton speaker;
     private Button makeNewCall;
 
+    /*
+    UserInformation instance. Helps to keep the code clean.
+    Also this will represent the caller.
+    Info from caller will be parsed to SipProfile me
+     */
     private UserInformation caller;
+
+    //username of the callee, in order to instantiate a call
     private String callee;
 
+    /*
+    These variables will be parsed using intents to other activities
+    in order to handle the call and the receiver,
+    and may be used also for database connection.
+
+    intentCallerUsername - caller username
+    intentCallerPassword - caller password
+    intentCalleeUsername - callee username
+     */
     private String intentCallerUsername;
     private String intentCallerPassword;
     private String intentCalleeUsername;
 
+    /*
+    In order to call someone you need to provide the SIP server which is final.
+    We don't handle the calls between more SIP providers.
+     */
     private final String SIP_SERVER = "sip.antisip.com";
+
+    /*
+    callee id is PREFIX_CALEE+username+POSTFIXCALEE.
+
+    Needed in order to make a call, this is very optimal because we store just the user SIP username.
+     */
     private final String PREFIX_CALLEE = "sip:";
     private final String POSTFIX_CALLEE = "@sip.antisip.com";
 
+    //Helper variable for database and push notification for calls.
     private String message;
 
+    //TAG for all logs information
+    private String TAG;
+
+    //Constructor for the call activity. This will get the caller and the callee in order to perform a call.
     public CallActivity(String callerUn, String callerPw, String calleeUn){
 
         caller = new UserInformation(callerUn, callerPw, SIP_SERVER);
@@ -94,23 +138,44 @@ public class CallActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        /*
+        Get this info from other activity.
+        Helps for push notification and database updates.
+         */
         intentCallerUsername = intent.getStringExtra("callerUsername");
         intentCallerPassword = intent.getStringExtra("callerPassword");
         intentCalleeUsername = intent.getStringExtra("calleeUsername");
         message = intent.getStringExtra("type");
 
-        //this.caller = caller;
+        //Initialization of caller.
         caller = new UserInformation(intentCallerUsername, intentCallerPassword, SIP_SERVER);
-        //this.callee = callee;
+        //initialization of callee
         callee = PREFIX_CALLEE + intentCalleeUsername + POSTFIX_CALLEE;
 
+        //UI Elements which perform different actions
+
+        /*
+        hangUp - Terminates a call
+         */
         hangUp = (Button) findViewById(R.id.HangUpBtn);
+
+        /*
+        speaker - handles the activation and deactivation of speaker mode
+         */
         speaker = (ToggleButton) findViewById(R.id.speakerBtn);
+
+        /*
+        The user can mute his/ her microphone.
+         */
         mute = (ToggleButton) findViewById(R.id.muteBtn);
+
+        /*
+       Instantiate new call.
+         */
         makeNewCall = (Button) findViewById(R.id.initiateCall);
 
 
-       // ToggleButton pushToTalkButton = (ToggleButton) findViewById(R.id.pushToTalk);
+        // ToggleButton pushToTalkButton = (ToggleButton) findViewById(R.id.pushToTalk);
         //pushToTalkButton.setOnTouchListener(this);
 
 
@@ -123,18 +188,23 @@ public class CallActivity extends AppCompatActivity {
         callReceiver = new IncomingCallReceiver();
         this.registerReceiver(callReceiver, filter);
 
-
+        //initialize the chronometer.
         chronometer = (Chronometer) findViewById(R.id.chronometer);
 
+        /*
+        Listeners for speaker and mute UI toggle Buttons
+        Allow the user to perform the mentioned actions in-call.
+         */
         speakerListener();
         muteListener();
 
-        // "Push to talk" can be a serious pain when the screen keeps turning off.
-        // Let's prevent that.
-        /*getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);*/
 
+        //Initialize the Manager
         initializeManager();
+        //Initialize the User Local Profile
         initializeLocalProfile();
+
+        //Handles the make and receive calls.
       if(message.equals("makeCall")){
           Log.d("CallActivity", "inside make call if statment");
           initiateCall();
@@ -142,15 +212,18 @@ public class CallActivity extends AppCompatActivity {
         else if(message.equals("waitCall")){
           Log.d("CallActivity", "inside make call else statment");
       }
-       // Log.d("AAAAAAA", "Entering the call...");
-        //initiateCall();
-      //  Log.d("AAAAAA", "In call...");
+
+
+        //Initialization of TAG with the current class name for debug purposes
+        TAG = ChatRoomActivity.class.getSimpleName();
     }
 
+    //Empty constructor
     public CallActivity() {
         //
     }
 
+    //Handles the receiver.
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -166,6 +239,7 @@ public class CallActivity extends AppCompatActivity {
     }
 
 
+    //Cleans everything after it.
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -180,6 +254,7 @@ public class CallActivity extends AppCompatActivity {
         }
     }
 
+    //initialization of the manager.
     public void initializeManager() {
         if(manager == null) {
             manager = SipManager.newInstance(this);
@@ -194,32 +269,35 @@ public class CallActivity extends AppCompatActivity {
      * send SIP calls to for your SIP address.
      */
     public void initializeLocalProfile() {
-        /*if (manager == null) {
-            return;
-        }*/
 
+
+        //Closes another profile, if needed
         if (me != null) {
             closeLocalProfile();
         }
 
+        //SharedPreferences.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String username = prefs.getString("namePref", "");
         String domain = prefs.getString("domainPref", "");
         String password = prefs.getString("passPref", "");
 
-        /*if (username.length() == 0 || domain.length() == 0 || password.length() == 0) {
-            showDialog(UPDATE_SETTINGS_DIALOG);
-            return;
-        }*/
+
 
         try {
+            //For debug purposes
             Log.d("caller username: ", caller.getUsername());
             Log.d("caller password: ", caller.getPassword());
             Log.d("caller server: ", caller.getServer());
+
+            /*
+            Builds a new Profile. Take all information needed to creates a new Profile.
+             */
             SipProfile.Builder builder = new SipProfile.Builder(caller.getUsername(), caller.getServer());
             builder.setPassword(caller.getPassword());
             me = builder.build();
 
+            //Handles an incoming call
             Intent i = new Intent();
             i.setAction("android.SipDemo.INCOMING_CALL");
             PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, Intent.FILL_IN_DATA);
@@ -281,6 +359,10 @@ public class CallActivity extends AppCompatActivity {
                 // Much of the client's interaction with the SIP Stack will
                 // happen via listeners.  Even making an outgoing call, don't
                 // forget to set up a listener to set things up once the call is established.
+
+                /*
+                Establish a call, update the status and starts the audio and chronometer
+                 */
                 @Override
                 public void onCallEstablished(SipAudioCall call) {
                     Log.d("AAAAAAA", "Beginning of call established");
@@ -292,6 +374,9 @@ public class CallActivity extends AppCompatActivity {
                     Log.d("AAAAAAA", "End of call established");
                 }
 
+                /*
+                Ends a call, update the status and stops chronometer
+                 */
                 @Override
                 public void onCallEnded(SipAudioCall call) {
                     Log.d("AAAAAAA", "Beginning of call ended");
@@ -300,6 +385,7 @@ public class CallActivity extends AppCompatActivity {
                     Log.d("AAAAAAA", "End of call");
                 }
 
+                //Handles the call on Held
                 @Override
                 public void onCallHeld(SipAudioCall call){
                     Log.d("AAAAAAA", "Beginning of call held");
@@ -308,6 +394,9 @@ public class CallActivity extends AppCompatActivity {
                     Log.d("AAAAAAA", "End of call held");
                 }
 
+                /*
+                Handles the when the other user is Bussy.(the callee rejected the call)
+                 */
                 @Override
                 public void onCallBusy(SipAudioCall call){
                     try {
@@ -320,9 +409,10 @@ public class CallActivity extends AppCompatActivity {
                 }
             };
 
-            Log.i("Reached", "here");
+            //Instantiate the call, via calling the makeAudioCall method with the manager
+            Log.i(TAG, "Before the call");
             call = manager.makeAudioCall(me.getUriString(), callee, listener, 30);
-            Log.i("Reached", "here after call");
+            Log.i(TAG, "After the call");
 
         }
         catch (Exception e) {
@@ -337,12 +427,16 @@ public class CallActivity extends AppCompatActivity {
                     ee.printStackTrace();
                 }
             }
+            /*
+            Allows the user handle just one call
+             */
             if (call != null) {
                 call.close();
             }
         }
     }
 
+    //Ends the call. Useful method
     public void endCall(View view){
         try {
             call.endCall();
@@ -351,6 +445,7 @@ public class CallActivity extends AppCompatActivity {
         }
     }
 
+    //Listener that handles the user's mic mute/unmute
     public void muteListener(){
 
 
@@ -368,6 +463,7 @@ public class CallActivity extends AppCompatActivity {
 
     }
 
+    //Listener that handles the user's speaker ON/OFF
     public void speakerListener(){
 
         speaker.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -414,6 +510,7 @@ public class CallActivity extends AppCompatActivity {
         updateStatus(useName + "@" + call.getPeerProfile().getSipDomain());
     }
 
+    //Updates the sip settings
     public void updatePreferences() {
         Intent settingsActivity = new Intent(getBaseContext(),
                 SipSettings.class);

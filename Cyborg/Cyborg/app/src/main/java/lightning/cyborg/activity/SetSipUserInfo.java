@@ -29,8 +29,12 @@ import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;
 import lightning.cyborg.enums.InterestTypes;
 
+/*
+This class make the connection between the databases and the app regarding the SIP account info of the user.
+ */
 public class SetSipUserInfo extends AppCompatActivity {
 
+    //UI ELEMENTS
     private TextView userTV;
     private TextView passwordTV;
     private Button  doneBtn;
@@ -41,6 +45,7 @@ public class SetSipUserInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_sip_user_info);
 
+        //INITIALIZATION OF UI ELEMENTS
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
         doneBtn = (Button) findViewById(R.id.doneBtn);
@@ -49,6 +54,7 @@ public class SetSipUserInfo extends AppCompatActivity {
     }
 
 
+    //Updates the database entries
     public void insertSipUserInfo(View view){
 
         //parameters to post to php file
@@ -94,11 +100,13 @@ public class SetSipUserInfo extends AppCompatActivity {
         VolleyQueue.getInstance(this).addToRequestQueue(request);
     }
 
+    //Intent for going to a new Activity
     public void goToInterests(View view){
         Intent intent = new Intent(this, interestsRegistration.class);
         startActivity(intent);
     }
 
+    //Intent for going to a new Activity
     public void goToRegisterSipAccount(View view){
         Intent intent = new Intent(this, SipAccountRegistration.class);
         startActivity(intent);
