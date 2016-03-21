@@ -91,7 +91,7 @@ public class Setting extends Activity implements OnColorSelectedListener {
 		    	
 		    	layoutRipple.setRippleColor(Color.parseColor("#1E88E5"));
 		    	
-		    	layoutRipple.setRippleSpeed(30);
+		    	layoutRipple.setRippleSpeed(100);
 			}
 		});
     	
@@ -101,7 +101,18 @@ public class Setting extends Activity implements OnColorSelectedListener {
 	public void onColorSelected(int color) {
 		backgroundColor = color;
 		buttonSelectColor.setBackgroundColor(color);
-	}  
+	}
+
+
+	public void backToSetting(View view){
+
+		Intent intent = new Intent(Setting.this, Setting.class);
+		startActivity(intent);
+
+
+
+	}
+
     
 
 }

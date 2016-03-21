@@ -81,9 +81,6 @@ public class Communication extends Activity {
         });
 
 
-
-
-
     }
 
 
