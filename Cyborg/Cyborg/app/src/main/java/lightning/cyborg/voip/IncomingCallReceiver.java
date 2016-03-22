@@ -1,5 +1,4 @@
 package lightning.cyborg.voip;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +6,7 @@ import android.net.sip.SipAudioCall;
 import android.net.sip.SipProfile;
 
 import lightning.cyborg.activity.CallActivity;
+import lightning.cyborg.activity.ChatRoomActivity;
 
 /**
  * Created by Amos Madalin Neculau on 26/02/2016.

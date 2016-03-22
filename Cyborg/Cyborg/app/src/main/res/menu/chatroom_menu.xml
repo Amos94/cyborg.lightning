@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/action_addfriend"
-        android:icon="@drawable/ic_action_action_delete"
-        android:title="Call User"
+        android:icon="@drawable/ic_person_add_white_24dp"
+        android:title="Add user"
         app:showAsAction="ifRoom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -13,7 +13,7 @@
     <item
         android:id="@+id/action_calluser"
         android:icon="@drawable/ic_call_white_24dp"
-        android:title="Add Friend"
+        android:title="Call User"
         app:showAsAction="ifRoom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

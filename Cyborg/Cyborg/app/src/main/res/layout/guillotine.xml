@@ -39,15 +39,13 @@
                     android:gravity="center"
                     android:layout_weight="1">
 
-                    <Button
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:onClick="clickUserProfile"
-                        android:background="@android:color/transparent"
                         android:textColor="@android:color/white"
-                        android:text="\u2022 Edit Profile"/>
+                        android:text="Profile"/>
 
                 </LinearLayout>
 
@@ -64,12 +62,17 @@
                         android:id="@+id/settings_gil"
                         android:textColor="@android:color/white"
                         android:gravity="center"
-                        android:onClick="editCommunication"
+                        android:onClick="clickSetting"
                         android:background="@android:color/transparent"
-                        android:text="\u2022 Edit Communication"/>
+                        android:text="\u2022 Setting"/>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -81,33 +84,41 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <Button
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:onClick="sipRegis"
-                        android:background="@android:color/transparent"
                         android:textColor="@android:color/white"
-                        android:text="\u2022 Edit SIP"/>
+                        android:text="\u2022 Message"/>
 
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:onClick="aboutUS"
-                        android:background="@android:color/transparent"
-                        android:textColor="@android:color/white"
-                        android:text="\u2022 About Us"/>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:text="Settings"/>
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -122,8 +133,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -137,13 +146,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <Button
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:background="@android:color/transparent"
-                        android:onClick="logout"
                         android:textColor="@android:color/white"
                         android:text="Sign out"/>
 

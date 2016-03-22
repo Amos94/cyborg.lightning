@@ -1,19 +1,3 @@
-/**
- * Copyright 2015 Google Inc. All Rights Reserved.
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package lightning.cyborg.gcm;
 
 import android.content.Context;
@@ -78,8 +62,8 @@ public class MyGcmPushReceiver extends GcmListenerService {
             processUserMessage(title, isBackground, data);
 
         }
-        else if(flag.equals("PUSH_FLAG_CHAT_REQUEST")){
-            Log.d(TAG,"fLag is PUSH_FLAG_CHAT_REQUEST");
+        else if(flag.equals("PUSH_FLAG_CHAT_REQUEST")) {
+            Log.d(TAG, "fLag is PUSH_FLAG_CHAT_REQUEST");
             // verifying whether the app is in background or foreground
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
 
@@ -98,74 +82,23 @@ public class MyGcmPushReceiver extends GcmListenerService {
                 //resultIntent.putExtra("chat_room_id", chatRoomId);
                 //  showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
             }
+        }else if(flag.equals("PUSH_FLAG_CALL_USER")){
+            // app is in foreground, broadcast the push message
+            JSONObject datObj = null;
+            try {
+                datObj = new JSONObject(data);
+                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                pushNotification.putExtra("type", Config.PUSH_TYPE_CALL_USER);
+                pushNotification.putExtra("message",datObj.getString("message"));
+                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
-//    /**
-//     * Processing chat room push message
-//     * this message will be broadcasts to all the activities registered
-//     * */
-//    private void processChatRoomPush(String title, boolean isBackground, String data) {
-//        if (!isBackground) {
 //
-//            try {
-//                JSONObject datObj = new JSONObject(data);
-//
-//                String chatRoomId = datObj.getString("chat_room_id");
-//
-//                JSONObject mObj = datObj.getJSONObject("message");
-//                Message message = new Message();
-//                message.setMessage(mObj.getString("message"));
-//                message.setId(mObj.getString("message_id"));
-//                message.setCreatedAt(mObj.getString("created_at"));
-//                JSONObject uObj = datObj.getJSONObject("user");
-//
-//                // skip the message if the message belongs to same user as
-//                // the user would be having the same message when he was sending
-//                // but it might differs in your scenario
-//                if (uObj.getString("user_id").equals(MyApplication.getInstance().getPrefManager().getUser().getId())) {
-//                    Log.e(TAG, "Skipping the push message as it belongs to same user");
-//                    return;
-//                }
-//
-//                User user = new User();
-//                user.setId(uObj.getString("user_id"));
-//                user.setEmail(uObj.getString("email"));
-//                user.setName(uObj.getString("name"));
-//                message.setUser(user);
-//
-//
-//                // verifying whether the app is in background or foreground
-//                if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-//
-//                    // app is in foreground, broadcast the push message
-//                    Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-//                    pushNotification.putExtra("type", Config.PUSH_TYPE_CHATROOM);
-//                    pushNotification.putExtra("message", message);
-//                    pushNotification.putExtra("chat_room_id", chatRoomId);
-//                    LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-//
-//                    // play notification sound
-//                    NotificationUtils notificationUtils = new NotificationUtils();
-//                    notificationUtils.playNotificationSound();
-//                } else {
-//
-//                    // app is in background. show the message in notification try
-//                    Intent resultIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
-//                    resultIntent.putExtra("chat_room_id", chatRoomId);
-//                    showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
-//                }
-//
-//            } catch (JSONException e) {
-//                Log.e(TAG, "json parsing error: " + e.getMessage());
-//                  //                Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//
-//        } else {
-//            // the push notification is silent, may be other operations needed
-//            // like inserting it in to SQLite
-//        }
-//    }
 
     /**
      * Processing user specific push message
@@ -181,6 +114,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
                 JSONObject datObj = new JSONObject(data);
 
                 String chatRoomId = datObj.getString("chat_room_id");
+                String visibilityChange = datObj.getString("vis_change");
                 String chatType =datObj.getString("chat_type");
                 JSONObject mObj = datObj.getJSONObject("message");
                 Message message = new Message();
@@ -216,6 +150,7 @@ public class MyGcmPushReceiver extends GcmListenerService {
                     pushNotification.putExtra("message", message);
                     pushNotification.putExtra("chat_room_id", chatRoomId);
                     pushNotification.putExtra("chat_type",chatType);
+                    pushNotification.putExtra("visibilityChange",visibilityChange);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
                     // play notification sound
