@@ -6,6 +6,6 @@ public class Validation {
     }
 
     public String getValidInterest(String sin){
-        return getValidMessage(sin).toLowerCase().replaceAll(", ", "");
+        return getValidMessage(sin).toLowerCase().replaceAll(", ", ",").replaceAll(" ,", ",");
     }
 }
