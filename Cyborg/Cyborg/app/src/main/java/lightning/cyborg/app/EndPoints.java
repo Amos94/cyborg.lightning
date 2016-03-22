@@ -29,9 +29,5 @@ public class EndPoints {
     public static final String GET_INTERESTS = base+"/interests_get_user.php";
     public static final String DEL_INTERESTS = base+"/interests_delete.php";
     public static final String DISCOVER_USERS = base+"/discoverUsers.php";
-    public static final String UPDATE_USERS = base+"/users_update.php";
-    public static final String USERS_GET = base+"/users_get.php";
-    public static final String USERS_ADD = base+"/users_insert.php";
-
 
 }

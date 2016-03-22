@@ -58,10 +58,7 @@ import lightning.cyborg.gcm.GcmIntentService;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
-import lightning.cyborg.setting.AboutUs;
-import lightning.cyborg.setting.Communication;
-import lightning.cyborg.setting.UserDetails;
-import lightning.cyborg.setting.edit_Sip;
+import lightning.cyborg.setting.Setting;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -328,7 +325,7 @@ public class UserHomepage extends AppCompatActivity {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);
         intent.putExtra("name", chatRoomName);
-        intent.putExtra("type", type);
+        intent.putExtra("type",type);
         for (ChatRoom cr : normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomid)) {
                 cr.setUnreadCount(0);
@@ -490,51 +487,14 @@ public class UserHomepage extends AppCompatActivity {
     }
 
 
-    //navigating to Editing Profile...
-    public void clickUserProfile(View view){
-        Intent intent = new Intent(UserHomepage.this, UserDetails.class);
-        startActivity(intent);
+    //navigating to settings...
+    public void clickSetting(View view){
 
-    }
-
-    //edit communication ex; location or voice call
-    public void editCommunication(View view){
-
-        Intent intent = new Intent(UserHomepage.this, Communication.class);
+        Intent intent = new Intent(UserHomepage.this, Setting.class);
         startActivity(intent);
 
 
     }
-
-
-    //the about us page...
-
-    public void aboutUS(View view){
-
-        Intent intent = new Intent(UserHomepage.this, AboutUs.class);
-        startActivity(intent);
-
-    }
-
-    //voice calling registration...
-    public void sipRegis(View view){
-
-        Intent intent = new Intent(UserHomepage.this,edit_Sip.class);
-        startActivity(intent);
-    }
-
-
-    //log out the addd...
-    public void logout(View view){
-
-        MyApplication.getInstance().logout();
-        Intent intent = new Intent(UserHomepage.this, LoginActivity.class);
-        startActivity(intent);
-
-
-    }
-
-
 
 
 

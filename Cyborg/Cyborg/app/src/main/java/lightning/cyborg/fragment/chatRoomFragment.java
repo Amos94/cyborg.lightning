@@ -102,10 +102,10 @@ public class chatRoomFragment extends Fragment{
                 // when chat is clicked, launch full chat thread activity
                 ChatRoom chatRoom = chatRoomArrayList.get(position);
 
-               //if chatroom is not activiated
-                if(chatRoom.getAccess_type().equals("y"))
+                //if chatroom is not activiated
+                if(!chatRoom.getPermission().equals("n"))
                 {
-                    ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),"n");
+                    ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),"n",chatRoom.getPermission());
                 }
                 else{
                     if(!chatRoom.isChatRoomExists()){
@@ -118,7 +118,7 @@ public class chatRoomFragment extends Fragment{
 
             @Override
             public void onLongClick(View view, int position) {
-
+               ChatRoom chatRoom = chatRoomArrayList.get(position);
             }
         }));
         // Inflate the layout for this fragment
