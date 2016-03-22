@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -302,17 +303,33 @@ public class DiscoveryFragment extends Fragment {
     }
 
     private void populateList() {
-        String[] users = new String[matchedUserJson.size()];
+        final String[] users = new String[matchedUserJson.size()];
         Integer[] avatars = new Integer[matchedUserJson.size()];
 
         for(int i = 0; i < matchedUserJson.size(); i++){
             try {
-                JSONObject user = (JSONObject) matchedUserJson.get(i);
+               JSONObject  user = (JSONObject) matchedUserJson.get(i);
                 int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000) - (Integer.parseInt(user.getString("dob"))/10000);
 
                 users[i] = " - " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
                 avatars[i] = Integer.valueOf(user.getString("avatar"));
+
+                final int temp = i;
+
+                matchedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                        try {
+                            createChatroom(((JSONObject) matchedUserJson.get(temp)).getString("userID"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
             }
             catch (JSONException e) {
                 e.printStackTrace();
@@ -329,12 +346,46 @@ public class DiscoveryFragment extends Fragment {
         CustomListAdapter customList = new CustomListAdapter(getActivity(), users, images, avatars);
         matchedList.setAdapter(customList);
         customList.notifyDataSetChanged();
+
+
     }
 
-    //@Override
-    //public void onDestroy() {
-        //super.onDestroy();
-        //search.removeTextChangedListener();
-    ///
-    //}
+    private void createChatroom(String otherID) throws JSONException {
+        final String url = "http://nashdomain.esy.es/users_get_all.php";
+
+
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("cur_user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("other_user_id", otherID);
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.CREATE_CHATROOM,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", url);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        MyApplication.getInstance().addToRequestQueue(request);
+
+    }
+
+
 }

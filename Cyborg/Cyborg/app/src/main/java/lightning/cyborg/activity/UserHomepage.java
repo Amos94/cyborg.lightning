@@ -222,12 +222,11 @@ public class UserHomepage extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
-                if(TYPE.equals("n")) {
+
                     normalChatAdapter.notifyDataSetChanged();
-                }
-                else if(TYPE.equals("f")){
+
                     freindChatAdapter.notifyDataSetChanged();
-                }
+
                 // subscribing to all chat room topics
                // subscribeToAllTopics();
             }
