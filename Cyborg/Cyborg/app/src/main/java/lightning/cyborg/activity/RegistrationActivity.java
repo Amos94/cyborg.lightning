@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -58,6 +59,7 @@ public class RegistrationActivity extends AppCompatActivity {
     RadioButton maleRadioRegister;
     RadioButton femaleRadioRegister;
     RadioGroup radioGroup;
+    ImageView backButton, forwardButton;
 
 
     @Override
@@ -77,6 +79,8 @@ public class RegistrationActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.custom_register_main_menu);
 
         //USER INPUT
+        backButton = (ImageView) findViewById(R.id.registerBackButton);
+        forwardButton = (ImageView) findViewById(R.id.nextPageButton);
         emailET = (EditText) findViewById(R.id.txtEmail);
         emailConfirmET = (EditText) findViewById(R.id.txtConfirmEmail);
         nameET = (EditText) findViewById(R.id.txtName);
@@ -94,7 +98,35 @@ public class RegistrationActivity extends AppCompatActivity {
         eduAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eduSpin = (Spinner) findViewById(R.id.eduSpin);
         eduSpin.setAdapter(eduAdapter);
+
+        forwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                insertUser(v);
+                Log.d("Updating User info", "OnClick is called");
+                Toast.makeText(v.getContext(),
+                        "Registering...",
+                        Toast.LENGTH_LONG).show();
+
+                goToMainMenuFromRegistration(v);
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                backToLoginPage(v);
+
+            }
+
+
+        });
     }
+
+
+
 
     //TODO Make a button to connect this
     public void insertUser(View view){
@@ -139,7 +171,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         if(isValidateDOB(dobET.getText().toString())){
-            params.put("dob", dobET.getText().toString());
+            params.put("dob", dobET.getText().toString().replaceAll("-", ""));
         }
         else{
             dobET.setError("Please a valid date yyyy-mm-dd");
@@ -219,7 +251,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    //vaildaing users details
+    //validating users details
     public boolean isValidPassword(String password) {
         if (password.length() > 5) {
             return true;
@@ -290,7 +322,7 @@ public class RegistrationActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
                 avator_id = data.getExtras().getInt("imageID");
-                Log.d("Avator id", avator_id + "");
+                Log.d("Avatar id", avator_id + "");
                 avatorIcon.setImageBitmap(b);
             }
         }

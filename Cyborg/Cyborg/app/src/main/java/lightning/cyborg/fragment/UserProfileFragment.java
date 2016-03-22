@@ -1,6 +1,7 @@
 package lightning.cyborg.fragment;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ public class UserProfileFragment extends Fragment {
     private EditText etInterest;
     private Button addInterestButt;
     private Button delInterestButt;
+    private Bitmap [] images;
 
 
 
@@ -81,10 +83,14 @@ public class UserProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         final View viewroot = inflater.inflate(R.layout.user_profile_fragment, container, false);
 
-        //avator Changing
-        imageview = (ImageView) viewroot.findViewById(R.id.profile_image);
+        //avatar Changing
 
-        //TODO on click listener for this is broken
+        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
+        images = new Bitmap[imgs.length()];
+        for(int i = 0; i < imgs.length(); i++){
+            images[i] = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
+        }
+        imageview = (ImageView) viewroot.findViewById(R.id.profile_image);
         imageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +98,7 @@ public class UserProfileFragment extends Fragment {
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
-                alertDialogBuilder.setPositiveButton("Change Avator", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setPositiveButton("Change Avatar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -217,6 +223,9 @@ public class UserProfileFragment extends Fragment {
                                 JSONObject user = jsonResponse.getJSONObject("user");
                                 tvFirstandLast.setText(user.getString("fname") + " " + user.getString("lname"));
                                 tvlocation.setText("Lat:" + user.getString("lat") + " Lon:" + user.getString("lon"));
+
+                                imageview.setImageBitmap(images[user.getInt("avatar")]);
+
                             }
                             else{
                                 Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
