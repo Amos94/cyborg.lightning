@@ -39,13 +39,15 @@
                     android:gravity="center"
                     android:layout_weight="1">
 
-                    <TextView
+                    <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
+                        android:onClick="clickUserProfile"
+                        android:background="@android:color/transparent"
                         android:textColor="@android:color/white"
-                        android:text="Profile"/>
+                        android:text="\u2022 Edit Profile"/>
 
                 </LinearLayout>
 
@@ -62,17 +64,12 @@
                         android:id="@+id/settings_gil"
                         android:textColor="@android:color/white"
                         android:gravity="center"
-                        android:onClick="clickSetting"
+                        android:onClick="editCommunication"
                         android:background="@android:color/transparent"
-                        android:text="\u2022 Setting"/>
+                        android:text="\u2022 Edit Communication"/>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -84,41 +81,23 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <TextView
+                    <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
+                        android:onClick="aboutUS"
+                        android:background="@android:color/transparent"
                         android:textColor="@android:color/white"
-                        android:text="\u2022 Message"/>
+                        android:text="\u2022 About Us"/>
 
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white"
-                        android:text="Settings"/>
-
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -146,11 +125,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <TextView
+                    <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
+                        android:background="@android:color/transparent"
+                        android:onClick="logout"
                         android:textColor="@android:color/white"
                         android:text="Sign out"/>
 

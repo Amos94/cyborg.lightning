@@ -85,12 +85,7 @@ public class Communication extends Activity {
 
 
     public void backToSetting(View view){
-
-        Intent intent = new Intent(Communication.this, Setting.class);
-        startActivity(intent);
-
-
-
+       finish();
     }
 
 

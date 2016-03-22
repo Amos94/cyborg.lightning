@@ -58,7 +58,10 @@ import lightning.cyborg.gcm.GcmIntentService;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
+import lightning.cyborg.setting.AboutUs;
+import lightning.cyborg.setting.Communication;
 import lightning.cyborg.setting.Setting;
+import lightning.cyborg.setting.UserDetails;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -325,7 +328,7 @@ public class UserHomepage extends AppCompatActivity {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);
         intent.putExtra("name", chatRoomName);
-        intent.putExtra("type",type);
+        intent.putExtra("type", type);
         for (ChatRoom cr : normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomid)) {
                 cr.setUnreadCount(0);
@@ -487,14 +490,40 @@ public class UserHomepage extends AppCompatActivity {
     }
 
 
-    //navigating to settings...
-    public void clickSetting(View view){
+    //navigating to Editing Profile...
+    public void clickUserProfile(View view){
+        Intent intent = new Intent(UserHomepage.this, UserDetails.class);
+        startActivity(intent);
 
-        Intent intent = new Intent(UserHomepage.this, Setting.class);
+    }
+
+    //edit communication ex; location or voice call
+    public void editCommunication(View view){
+
+        Intent intent = new Intent(UserHomepage.this, Communication.class);
         startActivity(intent);
 
 
     }
+
+    public void aboutUS(View view){
+
+        Intent intent = new Intent(UserHomepage.this, AboutUs.class);
+        startActivity(intent);
+
+    }
+
+
+    public void logout(View view){
+
+        MyApplication.getInstance().logout();
+        Intent intent = new Intent(UserHomepage.this, LoginActivity.class);
+        startActivity(intent);
+
+
+    }
+
+
 
 
 

@@ -87,8 +87,7 @@ public class UserDetails extends Activity {
                     Log.d("updateProf", "Failed to parse Json");
                 }
 
-                Intent intent = new Intent(UserDetails.this,Setting.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -159,10 +158,4 @@ public class UserDetails extends Activity {
     }
     
 
-    public void backToSetting(View view){
-
-        Intent intent = new Intent(UserDetails.this, Setting.class);
-        startActivity(intent);
-
-    }
 }
