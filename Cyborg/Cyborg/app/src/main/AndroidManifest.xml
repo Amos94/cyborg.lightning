@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="lightning.cyborg">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!--
  needed for older devices -
@@ -22,7 +21,6 @@
 
     <uses-permission android:name="lightning.cyborg.permission.C2D_MESSAGE" />
 
-
     <!-- END Added for GCM -->
     <application
         android:name=".app.MyApplication"
@@ -37,6 +35,7 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -52,27 +51,22 @@
         <activity
             android:name=".activity.UserHomepage"
             android:label="Test"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.RegistrationActivity"
             android:label="Registeration"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
+        <!-- edit_Sip Activitiys: Ahad -->
 
-
-
-
-        <!-- Setting Activitiys: Ahad -->
-
-        <activity android:name=".setting.AboutUs"></activity>
-        <activity android:name=".setting.Communication"></activity>
-        <activity android:name=".setting.Setting"></activity>
-        <activity android:name=".setting.UserDetails"></activity>
-
+        <activity android:name=".setting.AboutUs" />
+        <activity android:name=".setting.Communication" />
+        <activity android:name=".setting.edit_Sip" />
+        <activity android:name=".setting.UserDetails" />
 
         <!-- Avator Activities: Ahad -->
 
-        <activity android:name=".avator.Avator_Logo"></activity>
+        <activity android:name=".avator.Avator_Logo" />
 
         <!-- START Added for GCM -->
 
@@ -105,7 +99,7 @@
         <activity
             android:name=".activity.interestsRegistration"
             android:label="@string/title_activity_interests_registration"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

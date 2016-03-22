@@ -71,6 +71,7 @@
         <item>Master\'s</item>
         <item>Doctorate</item>
     </string-array>
+    <string name="title_activity_edit_sip">Edit Sip</string>
 
 
 </resources>

@@ -60,8 +60,8 @@ import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.setting.AboutUs;
 import lightning.cyborg.setting.Communication;
-import lightning.cyborg.setting.Setting;
 import lightning.cyborg.setting.UserDetails;
+import lightning.cyborg.setting.edit_Sip;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -506,6 +506,9 @@ public class UserHomepage extends AppCompatActivity {
 
     }
 
+
+    //the about us page...
+
     public void aboutUS(View view){
 
         Intent intent = new Intent(UserHomepage.this, AboutUs.class);
@@ -513,7 +516,15 @@ public class UserHomepage extends AppCompatActivity {
 
     }
 
+    //voice calling registration...
+    public void sipRegis(View view){
 
+        Intent intent = new Intent(UserHomepage.this,edit_Sip.class);
+        startActivity(intent);
+    }
+
+
+    //log out the addd...
     public void logout(View view){
 
         MyApplication.getInstance().logout();

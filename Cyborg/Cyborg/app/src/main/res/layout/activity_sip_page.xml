@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:text="Setting"
+            android:text="SIP Configuration"
             android:textColor="#FFF"
             android:textSize="25dp"
             android:layout_alignParentTop="true"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="104dp"
-            android:text="Personal Details" />
+            android:text="Register ANTISIP Voice Calling" />
     </com.gc.materialdesign.views.LayoutRipple>
 
     <com.gc.materialdesign.views.LayoutRipple
@@ -98,30 +98,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="104dp"
-            android:text="Communication" />
+            android:text="Edit Sip Account" />
     </com.gc.materialdesign.views.LayoutRipple>
 
-    <com.gc.materialdesign.views.LayoutRipple
-        android:id="@+id/aboutUs"
-        android:layout_width="fill_parent"
-        android:layout_height="64dp"
-        android:background="#FFF"
-        android:clickable="true"
-        android:layout_weight="0.12">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="32dp"
-            android:src="@drawable/icn_switch" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="104dp"
-            android:text="About Us" />
-    </com.gc.materialdesign.views.LayoutRipple>
 
 </LinearLayout>
