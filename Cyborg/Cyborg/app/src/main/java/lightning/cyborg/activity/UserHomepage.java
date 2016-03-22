@@ -58,7 +58,10 @@ import lightning.cyborg.gcm.GcmIntentService;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
+import lightning.cyborg.setting.AboutUs;
+import lightning.cyborg.setting.Communication;
 import lightning.cyborg.setting.MenuEditSip;
+import lightning.cyborg.setting.UserDetails;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -499,7 +502,38 @@ public class UserHomepage extends AppCompatActivity {
 
 
     }
+    //navigating to Editing Profile...
+    public void clickUserProfile(View view){
+        Intent intent = new Intent(UserHomepage.this, UserDetails.class);
+        startActivity(intent);
 
+    }
+
+    //edit communication ex; location or voice call
+    public void editCommunication(View view){
+
+        Intent intent = new Intent(UserHomepage.this, Communication.class);
+        startActivity(intent);
+
+
+    }
+
+
+    //the about us page...
+
+    public void aboutUS(View view){
+
+        Intent intent = new Intent(UserHomepage.this, AboutUs.class);
+        startActivity(intent);
+
+    }
+
+    //voice calling registration...
+    public void sipRegis(View view){
+
+        Intent intent = new Intent(UserHomepage.this,MenuEditSip.class);
+        startActivity(intent);
+    }
 
 
 
