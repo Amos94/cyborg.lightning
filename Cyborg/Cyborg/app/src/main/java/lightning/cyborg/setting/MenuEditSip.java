@@ -15,6 +15,7 @@ import com.gc.materialdesign.widgets.ColorSelector.OnColorSelectedListener;
 import com.nineoldandroids.view.ViewHelper;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.LoginActivity;
 import lightning.cyborg.activity.UserHomepage;
 
 
@@ -118,6 +119,5 @@ public class MenuEditSip extends Activity implements OnColorSelectedListener {
 
 	}
 
-    
 
 }

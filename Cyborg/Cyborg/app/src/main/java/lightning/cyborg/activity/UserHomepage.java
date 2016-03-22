@@ -536,6 +536,13 @@ public class UserHomepage extends AppCompatActivity {
     }
 
 
+    public void logout(View view){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+
+
 
 
 }
