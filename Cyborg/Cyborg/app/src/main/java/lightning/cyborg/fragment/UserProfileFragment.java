@@ -413,14 +413,58 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == 1){
-            if(resultCode == Activity.RESULT_OK){
+        if(requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
                 Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
                 avator_id = data.getExtras().getInt("imageID");
-                System.out.println(avator_id );
+                Log.d("avatar ID", avator_id + "");
+
+                final Map<String, String> params = new HashMap<String, String>();
+                params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
+
                 imageview.setImageBitmap(b);
+                if (!Integer.toString(avator_id).replaceAll(", ", ",").replaceAll(" ,", ",").equals("")) {
+                    params.put("avatar", Integer.toString(avator_id));
+                }
+
+
+                //request to insert the user into the mysql database using php
+                StringRequest request = new StringRequest(Request.Method.POST, EndPoints.UPDATE_USERS,
+                        new Response.Listener<String>() {
+
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonResponse = new JSONObject(response);
+                                    boolean success = jsonResponse.getString("success").equals("1");
+                                    String message = jsonResponse.getString("message");
+                                    Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.d("JSON failed to parse: ", response);
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
+                    }
+                }
+                ) {
+                    //Parameters inserted
+                    @Override
+                    protected Map<String, String> getParams() {
+                        return params;
+                    }
+                };
+                //put the request in the static queue
+                MyApplication.getInstance().addToRequestQueue(request);
+
             }
 
         }
-    }
+
+        }
+
 }
