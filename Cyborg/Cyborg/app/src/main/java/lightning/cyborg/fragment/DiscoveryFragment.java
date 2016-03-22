@@ -42,6 +42,7 @@ import lightning.cyborg.R;
 import lightning.cyborg.adapter.CustomListAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
+import lightning.cyborg.app.Validation;
 
 public class DiscoveryFragment extends Fragment {
     private View inflatedview;
@@ -91,6 +92,7 @@ public class DiscoveryFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                searchButton.setEnabled(false);
                 discover(v);
             }
         });
@@ -100,6 +102,7 @@ public class DiscoveryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
+                    loadButton.setEnabled(false);
                     populateDiscovery(5);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -148,7 +151,7 @@ public class DiscoveryFragment extends Fragment {
     }
 
     private void discover(View v){
-        final String filtered = search.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").toLowerCase().replaceAll(" ","");
+        final String filtered = new Validation().getValidInterest(search.getText().toString());
         String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
         int radius = seekDist.getProgress() + 5;
         matchedUserJson = new ArrayList<JSONObject>();
@@ -214,12 +217,14 @@ public class DiscoveryFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        searchButton.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
+                searchButton.setEnabled(true);
             }
         }
         ){
@@ -281,12 +286,14 @@ public class DiscoveryFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        loadButton.setEnabled(false);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", url);
+                loadButton.setEnabled(false);
             }
         }
         ){
@@ -311,7 +318,7 @@ public class DiscoveryFragment extends Fragment {
                JSONObject  user = (JSONObject) matchedUserJson.get(i);
                 int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000) - (Integer.parseInt(user.getString("dob"))/10000);
 
-                users[i] = " - " + user.getString("fname") + " - " + user.getString("gender")
+                users[i] = " " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
                 avatars[i] = Integer.valueOf(user.getString("avatar"));
 

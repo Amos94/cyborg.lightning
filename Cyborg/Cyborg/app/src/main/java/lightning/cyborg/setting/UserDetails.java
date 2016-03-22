@@ -36,7 +36,6 @@ public class UserDetails extends Activity {
     EditText etchangeName;
     EditText etLastName;
     EditText etLocation;
-    EditText etBio;
     Spinner spEducation;
     String [] educationArray;
     ArrayAdapter<String> educationAdapter;
@@ -64,7 +63,6 @@ public class UserDetails extends Activity {
         maleRadioButton = (RadioButton) findViewById(R.id.maleRadioButton);
         femaleRadioButton = (RadioButton) findViewById(R.id.femaleRadioButton);
         etLocation = (EditText) findViewById(R.id.etLocation);
-        etBio = (EditText) findViewById(R.id.etBio);
 
 
         //creating array adapter for education List...
@@ -81,6 +79,7 @@ public class UserDetails extends Activity {
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Updating user details...", Toast.LENGTH_LONG).show();
                 try {
+                    btnDone.setEnabled(false);
                     updateProfile();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -116,7 +115,7 @@ public class UserDetails extends Activity {
             params.put("gender", "F");
         }
 
-        //TODO add edit location, edit email, and edit bio if we keep bio
+        //TODO add edit location, edit email
 
 
 
@@ -136,12 +135,14 @@ public class UserDetails extends Activity {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        btnDone.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
+                Log.d("VolleyError at url ", EndPoints.UPDATE_USERS);
+                btnDone.setEnabled(true);
             }
         }
         ){

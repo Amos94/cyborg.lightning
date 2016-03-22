@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
+import lightning.cyborg.app.Validation;
 import lightning.cyborg.avator.Avator_Logo;
 
 
@@ -152,12 +153,13 @@ public class UserProfileFragment extends Fragment {
         addInterestButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String temp = etInterest.getText().toString().replaceAll("\\s","").toLowerCase();
-
+                String temp = new Validation().getValidInterest(etInterest.getText().toString());
                 if(temp.length() > 0){
                     try {
+                        addInterestButt.setEnabled(false);
                         addInterest(temp);
-                    } catch (JSONException e) {
+                    }
+                    catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
@@ -175,6 +177,7 @@ public class UserProfileFragment extends Fragment {
 
                 if(temp.length() > 0){
                     try {
+                        delInterestButt.setEnabled(false);
                         deleteInterests(temp);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -277,7 +280,7 @@ public class UserProfileFragment extends Fragment {
                             if(success){
                                 for(String s : interests.split(",")){
                                     if (!items.contains(s)) {
-                                        items.add(s);
+                                        items.add(new Validation().getValidInterest(s));
                                     }
                                 }
                             }
@@ -290,12 +293,14 @@ public class UserProfileFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        addInterestButt.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
+                addInterestButt.setEnabled(true);
             }
         }
         ){
@@ -345,12 +350,14 @@ public class UserProfileFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        delInterestButt.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", EndPoints.GET_INTERESTS);
+                delInterestButt.setEnabled(true);
             }
         }
         ){

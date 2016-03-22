@@ -14,21 +14,6 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/relativeLayout">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:textColor="#01579b"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Below you can select the interests you wish to search for:"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginTop="67dp"
@@ -211,7 +196,6 @@
             android:id="@+id/searchMatches"
             android:hint="Interests"
             android:layout_weight="1"
-            android:layout_below="@+id/relativeLayout"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/searchButton"
@@ -223,7 +207,6 @@
             android:text="Search Now"
             android:id="@+id/searchButton"
             android:layout_weight="1"
-            android:layout_below="@+id/relativeLayout"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 

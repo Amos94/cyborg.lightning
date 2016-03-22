@@ -250,54 +250,6 @@
         </RelativeLayout>
 
 
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:id="@+id/relativetvBio"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#01579b"
-                android:layout_centerVertical="true"
-                android:text="Change Bio Status" />
-        </RelativeLayout>
-
-
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:id="@+id/relativeBio"
-            android:layout_height="wrap_content" >
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/etBio"
-                android:editable="true"
-                android:enabled="true"
-                android:minLines="6"
-                android:maxLines="6"
-                android:isScrollContainer="true"
-                android:hint="Type your new Bio here"
-                android:background="#fafafa"
-                android:textIsSelectable="true"
-                android:focusable="true"
-                android:gravity="top"
-                android:padding="24dp"
-                style="@style/Base.TextAppearance.AppCompat.Medium"
-                />
-
-        </RelativeLayout>
-
-
-
-
-
         <!-- SMALL FLOAT BUTTON -->
 
         <RelativeLayout
