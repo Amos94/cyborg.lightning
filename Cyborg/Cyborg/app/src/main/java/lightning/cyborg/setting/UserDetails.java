@@ -158,4 +158,12 @@ public class UserDetails extends Activity {
     }
     
 
+    public void backToSetting(View view){
+
+        finish();
+
+    }
+
+
+
 }

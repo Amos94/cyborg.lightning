@@ -25,9 +25,7 @@ public class AboutUs extends Activity {
 	}
 
 	public void backToSetting(View view){
-
-		Intent intent = new Intent(AboutUs.this, Setting.class);
-		startActivity(intent);
+finish();
 
 
 
