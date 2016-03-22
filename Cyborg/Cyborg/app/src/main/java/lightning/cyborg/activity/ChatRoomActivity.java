@@ -63,6 +63,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private EditText inputMessage;
     private Button btnSend;
+    private String permission;
     private String type;
 
     private String sipUsername;
@@ -86,6 +87,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         chatRoomId = intent.getStringExtra("chat_room_id");
         String title = intent.getStringExtra("name");
         type =intent.getStringExtra("type");
+
+        permission = intent.getStringExtra("permission");
+
 
 
 
@@ -112,22 +116,39 @@ public class ChatRoomActivity extends AppCompatActivity {
                 if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push message is received
                     handlePushNotification(intent);
-                    Log.d("MMMMMMMMMMMMMMMMMMMMM", "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");//cool
 
-                }
-                else{
-                    Log.d("MMMMMMMMMMMMMMMMMMMMM","AAAAAAAAAAAAAAAAAAAAAAAAA");
+
                 }
             }
         };
 
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                try{
+                    if(permission.equals("blocked")){
+                        new AlertDialog.Builder(ChatRoomActivity.this)
+                                .setTitle("unable to send message")
+                                .setMessage("you have been blocked from sending messages in this chatroom")
+                                .setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .show();
+                    }
+                    else{
+                        Log.d(TAG, permission.toString());
+                        Log.d(TAG,"inside else for send");
+                        sendMessage();
+                    }
+                }catch (Exception e){
+                    Log.d(TAG,"inside catch for send");
+                    sendMessage();
+
+                }
             }
         });
-
         fetchChatThread();
         fetchSip();
     }
@@ -479,6 +500,66 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
+
+    /**
+     * prevents the chat from being displayed
+     */
+    public void hideChat(){
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("chat_room_id", chatRoomId);
+        params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                EndPoints.HIDE_CHAT, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+
+                        toUserHomePageActivity();
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
     public void fetchSip(){
 
         //parameters to post to php file
@@ -606,17 +687,51 @@ public class ChatRoomActivity extends AppCompatActivity {
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
+    public void blockUser(final Context context){
 
-    public void startCall() {
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("cur_user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("chat_room_id", chatRoomId.toString());
 
-        Intent intent = new Intent(this, CallActivity.class);
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.BLOCK_USER,
+                new Response.Listener<String>() {
 
-        intent.putExtra("callerUsername", sipUsername);
-        intent.putExtra("callerPassword", sipPassword);
-        intent.putExtra("calleeUsername", sipCaleeUsername);
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
 
-        startActivity(intent);
+                            // check for error flag
+                            if (obj.getBoolean("error") == false) {
+                                Log.d(TAG, "no error");
+                                toUserHomePageActivity();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError at url ", EndPoints.FETCH_SIP);
+            }
+        }
+        ){
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        VolleyQueue.getInstance(this).addToRequestQueue(request);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -636,35 +751,90 @@ public class ChatRoomActivity extends AppCompatActivity {
         //fetchSip;
         return true;
     }
+    /**
+     * Change the change room from freinds to normal or vise versa
+     * @param type new type of the chatroom
+     */
+    public void changeChatRoomType(String type){
+        String endPoint = EndPoints.ADD_FREIND;
 
+        final Map<String, String> params = new HashMap<>();
+        params.put("chat_room_id", chatRoomId);
+        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
+        params.put("type",type);
+
+        Log.e(TAG, "endPoint: " + endPoint);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                endPoint, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
 
-        if(menuItem.getItemId()==android.R.id.home){
-            toUserHomePageActivity();
-            return true;
-        }
-        //else if(menuItem.getItemId()==R.id.action_addfriend){
-        //addFriend("f");
-        //}
-        else if(menuItem.getItemId()==R.id.action_calluser){
-
-            dialogCallReceiver(this,true);
-            IncomingCall(this,"callRequest");
-            return true;
-        }
-        else {
-            switch (menuItem.getItemId()) {
-                case R.id.action_calluser:
-                    startCall();
-                    break;
-                case R.id.action_viewprofile:
-                    break;
-                case R.id.action_addfriend:
-                    addFriend("f");
-                    break;
-                case R.id.action_blockuser:
-                    break;
-            }
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                toUserHomePageActivity();
+                break;
+            case R.id.action_calluser:
+                dialogCallReceiver(this,true);
+                IncomingCall(this,"callRequest");
+                break;
+            case R.id.action_viewprofile:
+                //hideChat();
+                break;
+            case R.id.action_addfriend:
+                if(type.equals("f")){ changeChatRoomType("n");}
+                else { changeChatRoomType("f");}
+                break;
+            case R.id.action_hideChat:
+                hideChat();
+                break;
+            case R.id.action_blockuser:
+                blockUser(this);
+                break;
         }
         return super.onOptionsItemSelected(menuItem);
     }

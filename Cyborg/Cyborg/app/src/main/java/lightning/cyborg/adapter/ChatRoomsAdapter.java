@@ -1,6 +1,5 @@
 package lightning.cyborg.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,11 +20,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -187,30 +185,30 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 }
             });
         }
-       else{
+        else{
 
-        holder.message.setText(chatRoom.getLastMessage());
-        //Buttons are removed
-        holder.accept.setVisibility(View.GONE);
-        holder.accept.setOnClickListener(null);
-        holder.decline.setVisibility(View.GONE);
-        holder.decline.setOnClickListener(null);
+            holder.message.setText(chatRoom.getLastMessage());
+            //Buttons are removed
+            holder.accept.setVisibility(View.GONE);
+            holder.accept.setOnClickListener(null);
+            holder.decline.setVisibility(View.GONE);
+            holder.decline.setOnClickListener(null);
 
-        //if there are notifications
-        if (chatRoom.getUnreadCount() > 0) {
-            holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
-            holder.count.setVisibility(View.VISIBLE);
+            //if there are notifications
+            if (chatRoom.getUnreadCount() > 0) {
+                holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
+                holder.count.setVisibility(View.VISIBLE);
 
-        }
-        else {
-            holder.count.setVisibility(View.GONE);
+            }
+            else {
+                holder.count.setVisibility(View.GONE);
 
-        }
+            }
 
             Log.d("TAG", chatRoom.getId() + "permission::" + chatRoom.getPermission());
 
-        holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
-    }
+            holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
+        }
     }
 
     @Override

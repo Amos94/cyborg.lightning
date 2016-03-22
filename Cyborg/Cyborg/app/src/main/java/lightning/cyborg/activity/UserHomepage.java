@@ -58,7 +58,7 @@ import lightning.cyborg.gcm.GcmIntentService;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
-import lightning.cyborg.setting.Setting;
+import lightning.cyborg.setting.MenuEditSip;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -199,7 +199,6 @@ public class UserHomepage extends AppCompatActivity {
                             ChatRoom cr = new ChatRoom();
                             cr.setId(chatRoomsObj.getString("chat_room_id"));
                             cr.setName(chatRoomsObj.getString("name"));
-                            cr.setAccess_type(chatRoomsObj.getString("access_type"));
                             cr.setPermission(chatRoomsObj.getString("permission"));
                             cr.setLastMessage("");
                             cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
@@ -321,11 +320,18 @@ public class UserHomepage extends AppCompatActivity {
         finish();
     }
 
-    public void chatRoomActivityIntent(String chatRoomid,String chatRoomName, String type) {
+    /**
+     * Go to the chat room
+     * @param chatRoomid  the id of the chat room
+     * @param chatRoomName the name of the chat room
+     * @param type  the type of chatroom e.g freinds or normal
+     */
+    public void chatRoomActivityIntent(String chatRoomid,String chatRoomName, String type,String permission) {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);
         intent.putExtra("name", chatRoomName);
         intent.putExtra("type",type);
+        intent.putExtra("permission",permission);
         for (ChatRoom cr : normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomid)) {
                 cr.setUnreadCount(0);
@@ -333,7 +339,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         }
         normalChatAdapter.notifyDataSetChanged();
-
 
         startActivity(intent);
     }
@@ -490,7 +495,7 @@ public class UserHomepage extends AppCompatActivity {
     //navigating to settings...
     public void clickSetting(View view){
 
-        Intent intent = new Intent(UserHomepage.this, Setting.class);
+        Intent intent = new Intent(UserHomepage.this, MenuEditSip.class);
         startActivity(intent);
 
 
