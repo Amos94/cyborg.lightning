@@ -338,11 +338,12 @@ public class UserHomepage extends AppCompatActivity {
      * @param chatRoomName the name of the chat room
      * @param type  the type of chatroom e.g freinds or normal
      */
-    public void chatRoomActivityIntent(String chatRoomid,String chatRoomName, String type) {
+    public void chatRoomActivityIntent(String chatRoomid,String chatRoomName, String type,String permission) {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);
         intent.putExtra("name", chatRoomName);
         intent.putExtra("type",type);
+        intent.putExtra("permission",permission);
         for (ChatRoom cr : normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomid)) {
                 cr.setUnreadCount(0);

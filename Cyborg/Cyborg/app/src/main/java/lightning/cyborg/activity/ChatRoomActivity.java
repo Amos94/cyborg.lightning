@@ -1,6 +1,7 @@
 package lightning.cyborg.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -65,6 +66,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private EditText inputMessage;
     private Button btnSend;
     private String type;
+    private String permission;
 
     private String sipUsername;
     private String sipPassword;
@@ -89,6 +91,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         chatRoomId = intent.getStringExtra("chat_room_id");
         String title = intent.getStringExtra("name");
         type =intent.getStringExtra("type");
+        permission = intent.getStringExtra("permission");
 
         m_amAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         m_amAudioManager.setMode(AudioManager.MODE_IN_CALL);
@@ -134,7 +137,27 @@ public class ChatRoomActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                try{
+                    if(permission.equals("blocked")){
+                        new AlertDialog.Builder(ChatRoomActivity.this)
+                                .setTitle("unable to send message")
+                                .setMessage("you have been blocked from sending messages in this chatroom")
+                                .setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .show();
+                    }
+                    else{
+                        Log.d(TAG, permission.toString());
+                        Log.d(TAG,"inside else for send");
+                        sendMessage();
+                    }
+                }catch (Exception e){
+                    Log.d(TAG,"inside catch for send");
+                    sendMessage();
+
+                }
             }
         });
 

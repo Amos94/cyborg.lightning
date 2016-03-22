@@ -114,109 +114,103 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         final ChatRoom chatRoom = chatRoomArrayList.get(position);
         holder.name.setText(chatRoom.getName());
 
+        //if user sent the request
+        if(chatRoom.getPermission().equals("s")){
 
-        //if user has full permission
-        if(chatRoom.getPermission().equals("y")){
+            holder.message.setText("pending request");
 
-            holder.message.setText(chatRoom.getLastMessage());
+
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
             holder.decline.setVisibility(View.GONE);
             holder.decline.setOnClickListener(null);
 
-            //if there are notifications
-            if (chatRoom.getUnreadCount() > 0) {
-                holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
-                holder.count.setVisibility(View.VISIBLE);
-
-            }
-            else {
-                holder.count.setVisibility(View.GONE);
-
-            }
         }
+        //if user has received a new request
+        else if(chatRoom.getPermission().equals("r")){
 
-        else{
-            //if user sent the request
-            if(chatRoom.getPermission().equals("s")){
+            //buttons are shown
+            holder.accept.setVisibility(View.VISIBLE);
+            holder.decline.setVisibility(View.VISIBLE);
 
-                holder.message.setText("pending request");
+            holder.accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    //if users accepts
+                    serverHandler("accept", chatRoom.getId());
+                    ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type,chatRoom.getPermission());
+                    //notifyDataSetChanged();
 
-                //Buttons are removed
-                holder.accept.setVisibility(View.GONE);
-                holder.accept.setOnClickListener(null);
-                holder.decline.setVisibility(View.GONE);
-                holder.decline.setOnClickListener(null);
+                }
+            });
 
-            }
-            //if user has received a new request
-            else if(chatRoom.getPermission().equals("r")){
+            //if user declines
+            holder.decline.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverHandler("decline", chatRoom.getId());
+                    chatRoom.setChatRoomExists(false);
+                    chatRoomArrayList.remove(chatRoom);
+                    notifyDataSetChanged();
+                }
+            });
+        }
+        //if user hid chat and new message arrived
+        else if(chatRoom.getPermission().equals("rmsg")){
 
-                //buttons are shown
-                holder.accept.setVisibility(View.VISIBLE);
-                holder.decline.setVisibility(View.VISIBLE);
+            //buttons are shown
+            holder.accept.setVisibility(View.VISIBLE);
+            holder.decline.setVisibility(View.VISIBLE);
 
-                holder.accept.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            //if user accepts
+            holder.accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        //if users accepts
-                        serverHandler("accept", chatRoom.getId());
-                        ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type);
-                        //notifyDataSetChanged();
-
-                    }
-                });
-
-                //if user declines
-                holder.decline.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        serverHandler("decline", chatRoom.getId());
-                        chatRoom.setChatRoomExists(false);
-                        chatRoomArrayList.remove(chatRoom);
-                        notifyDataSetChanged();
-                    }
-                });
-            }
-            //if user hid chat and new message arrived
-            else if(chatRoom.getPermission().equals("rmsg")){
-
-                //buttons are shown
-                holder.accept.setVisibility(View.VISIBLE);
-                holder.decline.setVisibility(View.VISIBLE);
-
-                //if user accepts
-                holder.accept.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        serverHandler("accept", chatRoom.getId());
-                        ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type);
+                    serverHandler("accept", chatRoom.getId());
+                    ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type,chatRoom.getPermission());
 
 
-                    }
-                });
+                }
+            });
 
-                //if user declines
-                holder.decline.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        serverHandler("declineMessage", chatRoom.getId());
-                        chatRoom.setChatRoomExists(false);
-                        chatRoomArrayList.remove(chatRoom);
-                        notifyDataSetChanged();
-                    }
-                });
-            }
+            //if user declines
+            holder.decline.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverHandler("declineMessage", chatRoom.getId());
+                    chatRoom.setChatRoomExists(false);
+                    chatRoomArrayList.remove(chatRoom);
+                    notifyDataSetChanged();
+                }
+            });
+        }
+       else{
+
+        holder.message.setText(chatRoom.getLastMessage());
+        //Buttons are removed
+        holder.accept.setVisibility(View.GONE);
+        holder.accept.setOnClickListener(null);
+        holder.decline.setVisibility(View.GONE);
+        holder.decline.setOnClickListener(null);
+
+        //if there are notifications
+        if (chatRoom.getUnreadCount() > 0) {
+            holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
+            holder.count.setVisibility(View.VISIBLE);
+
+        }
+        else {
             holder.count.setVisibility(View.GONE);
+
         }
 
-        Log.d("TAG", chatRoom.getId() + "permission::" + chatRoom.getPermission());
+            Log.d("TAG", chatRoom.getId() + "permission::" + chatRoom.getPermission());
 
         holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
+    }
     }
 
     @Override

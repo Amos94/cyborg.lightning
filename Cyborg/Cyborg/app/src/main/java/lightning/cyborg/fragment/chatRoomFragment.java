@@ -103,9 +103,9 @@ public class chatRoomFragment extends Fragment{
                 ChatRoom chatRoom = chatRoomArrayList.get(position);
 
                 //if chatroom is not activiated
-                if(chatRoom.getPermission().equals("y"))
+                if(!chatRoom.getPermission().equals("n"))
                 {
-                    ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),"n");
+                    ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),"n",chatRoom.getPermission());
                 }
                 else{
                     if(!chatRoom.isChatRoomExists()){
