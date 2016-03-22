@@ -30,6 +30,7 @@ import lightning.cyborg.adapter.BlockedListAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.helper.SimpleDividerItemDecoration;
+import lightning.cyborg.helper.ViewProfileDialog;
 import lightning.cyborg.model.User;
 
 public class ViewBlockedUsers extends AppCompatActivity {
@@ -63,9 +64,7 @@ public class ViewBlockedUsers extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-
-                Dialog dialog = new Dialog(ViewBlockedUsers.this);
-                dialog.setContentView(R.layout.dialog_view_profile);
+                ViewProfileDialog dialog = new ViewProfileDialog(ViewBlockedUsers.this,blockedUserArrayList.get(position));
                 dialog.show();
             }
         }));
@@ -104,6 +103,7 @@ public class ViewBlockedUsers extends AppCompatActivity {
                             user.setName(userObj.getString("fname"));
 
                             blockedUserArrayList.add(user);
+                            Log.d("list info", blockedUserArrayList.get(i).getId()+"id"+blockedUserArrayList.get(i).getName()+"is name");
                         }
 
                         blockedListAdapter.notifyDataSetChanged();
@@ -116,6 +116,67 @@ public class ViewBlockedUsers extends AppCompatActivity {
             }
 
     }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
+                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+
+
+        //Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
+    public void getUser(String userID){
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("user_id", userID);
+
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                EndPoints.BLOCK_LIST, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String response) {
+                Log.e(TAG, "response: " + response);
+
+                try {
+                    JSONObject obj = new JSONObject(response);
+
+                    // check for error
+                    if (obj.getBoolean("error") == false) {
+
+                        JSONArray userArray = obj.getJSONArray("users");
+
+                        for (int i = 0; i < userArray.length(); i++) {
+                            JSONObject userObj = (JSONObject) userArray.get(i);
+                            User user = new User();
+                            user.setId(userObj.getString("user_id"));
+                            user.setName(userObj.getString("fname"));
+
+                        }
+
+                    }
+
+
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {

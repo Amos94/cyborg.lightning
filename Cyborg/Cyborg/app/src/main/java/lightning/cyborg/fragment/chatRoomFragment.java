@@ -118,7 +118,7 @@ public class chatRoomFragment extends Fragment{
 
             @Override
             public void onLongClick(View view, int position) {
-
+               ChatRoom chatRoom = chatRoomArrayList.get(position);
             }
         }));
         // Inflate the layout for this fragment

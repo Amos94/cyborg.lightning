@@ -790,7 +790,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 break;
             case R.id.action_calluser:
                  dialogCallReceiver(this,true);
-                // IncomingCall(this,"callRequest");
+                IncomingCall(this,"callRequest");
                 break;
             case R.id.action_viewprofile:
                 //hideChat();

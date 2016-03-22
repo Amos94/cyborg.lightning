@@ -37,5 +37,6 @@ public class EndPoints {
     public static final String HIDE_CHAT = base +"/makeInvisible.php";
     public static final String BLOCK_LIST = base +"/blockedList.php";
     public static final String UNBLOCK_USER = base +"/removed_blockedUser.php";
+    public static final String GET_USER = base+"/getAllUserInfo.php";
 
 }

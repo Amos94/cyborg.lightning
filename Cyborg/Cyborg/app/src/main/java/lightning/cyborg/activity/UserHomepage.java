@@ -206,7 +206,7 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setId(chatRoomsObj.getString("chat_room_id"));
                             cr.setName(chatRoomsObj.getString("name"));
                             cr.setPermission(chatRoomsObj.getString("permission"));
-                            cr.setLastMessage("");
+                            cr.setVisibility(chatRoomsObj.getString("visibility"));
                             cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
 
@@ -219,12 +219,13 @@ public class UserHomepage extends AppCompatActivity {
                                 cr.setLastMessage(chatRoomsObj.getString("last_message"));
                             }
 
-                            //add to appropriate ArrayList
-                            if(TYPE.equals("n")) {
-                                normalChatRoomArrayList.add(cr);
-                            }
-                            else if (TYPE.equals("f")){
-                                freindsChatRoomArrayList.add(cr);
+                            if(!cr.getPermission().equals("n")&&cr.getVisibility().equals("y")) {
+                                //add to appropriate ArrayList
+                                if (TYPE.equals("n")) {
+                                    normalChatRoomArrayList.add(cr);
+                                } else if (TYPE.equals("f")) {
+                                    freindsChatRoomArrayList.add(cr);
+                                }
                             }
                         }
 
