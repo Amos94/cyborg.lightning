@@ -23,25 +23,24 @@ public class MenuEditSip extends Activity implements OnColorSelectedListener {
 	int backgroundColor = Color.parseColor("#1E88E5");
 	ButtonFloatSmall buttonSelectColor;
 
-    @SuppressLint("NewApi")
+	@SuppressLint("NewApi")
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-    	requestWindowFeature(Window.FEATURE_NO_TITLE);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sip_page);
-
-        
-        LayoutRipple layoutRipple = (LayoutRipple) findViewById(R.id.userDetails);
+	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_sip_page);
 
 
-        setOriginRiple(layoutRipple);
+		LayoutRipple layoutRipple = (LayoutRipple) findViewById(R.id.userDetails);
+
+
+		setOriginRiple(layoutRipple);
 
 
 
 		//amos this is where you put your work in....
+		layoutRipple.setOnClickListener(new OnClickListener() {
 
-        layoutRipple.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(MenuEditSip.this, SetingsRegisterSipAccount.class);
@@ -51,9 +50,9 @@ public class MenuEditSip extends Activity implements OnColorSelectedListener {
 
 
 		layoutRipple = (LayoutRipple) findViewById(R.id.Communication);
-        
-        
-        setOriginRiple(layoutRipple);
+
+
+		setOriginRiple(layoutRipple);
 
 
 		//amos this is where you put your work in....
@@ -70,7 +69,9 @@ public class MenuEditSip extends Activity implements OnColorSelectedListener {
 
 
 
-    }
+	}
+
+
     
 	private void setOriginRiple(final LayoutRipple layoutRipple){
     	
@@ -112,7 +113,8 @@ public class MenuEditSip extends Activity implements OnColorSelectedListener {
 	}
 
 	public void settingsEditSipAccount(View view){
-
+		Intent intent = new Intent(this, SettingsEditSipUserInfo.class);
+		startActivity(intent);
 
 	}
 

@@ -84,10 +84,10 @@
 
         <!-- Setting Activitiys: Ahad -->
 
-        <activity android:name=".setting.AboutUs"></activity>
-        <activity android:name=".setting.Communication"></activity>
-        <activity android:name=".setting.Setting"></activity>
-        <activity android:name=".setting.UserDetails"></activity>
+        <activity android:name=".setting.AboutUs" />
+        <activity android:name=".setting.Communication" />
+        <activity android:name=".setting.MenuEditSip" />
+        <activity android:name=".setting.UserDetails" />
 
 
         <!-- Avator Activities: Ahad -->
@@ -129,12 +129,12 @@
 
         <activity
             android:name=".setting.SetingsRegisterSipAccount"
-            android:label="tempo"
+            android:label="@string/title_activity_settings_register_sip_account"
             android:theme="@style/AppTheme"></activity>
 
         <activity
             android:name=".setting.SettingsEditSipUserInfo"
-            android:label="ttt"
+            android:label="@string/title_activity_settings_register_sip_account"
             android:theme="@style/AppTheme"></activity>
     </application>
 

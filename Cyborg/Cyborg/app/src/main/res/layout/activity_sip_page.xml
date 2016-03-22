@@ -61,7 +61,8 @@
         android:layout_height="64dp"
         android:background="#FFF"
         android:clickable="true"
-        android:layout_weight="0.07">
+        android:layout_weight="0.07"
+        android:onClick="settingsRegistrationSipAccount">
 
         <ImageView
             android:layout_width="40dp"
@@ -85,7 +86,7 @@
         android:background="#FFF"
         android:clickable="true"
         android:layout_weight="0.10"
-        android:nestedScrollingEnabled="false">
+        android:onClick="settingsEditSipAccount">
 
         <ImageView
             android:layout_width="40dp"

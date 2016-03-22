@@ -19,6 +19,8 @@
     </string>
     <string name="title_activity_view_profile">ViewProfile</string>
     <string name="title_activity_matched_chats">MatchedChats</string>
+    <string name="title_activity_settings_register_sip_account">SettingsRegisterSipAccount</string>
+
 
 
     <string-array name="image_ids">

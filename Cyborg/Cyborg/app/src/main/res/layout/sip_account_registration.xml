@@ -37,6 +37,17 @@
             android:layout_toRightOf="@+id/doneBtn"
             android:layout_toEndOf="@+id/doneBtn"
             android:onClick="skipSIPRegistration" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:id="@+id/backBtn"
+            android:layout_below="@+id/webView"
+            android:layout_toLeftOf="@+id/doneBtn"
+            android:layout_toStartOf="@+id/doneBtn"
+            android:nestedScrollingEnabled="false"
+            android:onClick="backToEditSip" />
     </RelativeLayout>
 
 </LinearLayout>
