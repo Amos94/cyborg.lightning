@@ -197,7 +197,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             Message message = (Message) intent.getSerializableExtra("message");
             String chatRoomId = intent.getStringExtra("chat_room_id");
-            if (message != null && chatRoomId != null && chatRoomId == this.chatRoomId) {
+            if (message != null && chatRoomId != null && chatRoomId.equals(this.chatRoomId)) {
                 messageArrayList.add(message);
                 mAdapter.notifyDataSetChanged();
                 if (mAdapter.getItemCount() > 1) {
