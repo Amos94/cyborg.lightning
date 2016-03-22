@@ -60,5 +60,17 @@
         <item>Any</item>
     </string-array>
 
+    <string-array name="education_array_not_any">
+        <item>Entry level</item>
+        <item>GCSE (D-G)</item>
+        <item>GCSE (A*-C)</item>
+        <item>AS / A level</item>
+        <item>HNC</item>
+        <item>HND</item>
+        <item>Undergrad</item>
+        <item>Master\'s</item>
+        <item>Doctorate</item>
+    </string-array>
+
 
 </resources>

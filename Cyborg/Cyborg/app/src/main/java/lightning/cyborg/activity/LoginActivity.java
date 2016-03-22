@@ -100,7 +100,12 @@ public class LoginActivity extends AppCompatActivity {
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
+                if(_inputEmail.getText().length() > 5 && _inputPassword.getText().length() > 5){
+                    login();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_SHORT);
+                }
             }
         });
     }
@@ -114,13 +119,58 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+
+    private void sendPassword(View view) {
+        final String url = "http://nashdomain.esy.es/get_user.php";
+
+        //parameters to post to php file
+        final Map<String, String> params = new HashMap<>();
+        params.put("email", _inputEmail.getText().toString());
+
+        //request to get the user from the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getString("success").equals("1");
+                            Log.d("Success", String.valueOf(success));
+                            String message = jsonResponse.getString("message");
+                            Log.d("Message is", message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError at url ", url);
+            }
+        }
+        ) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        MyApplication.getInstance().addToRequestQueue(request);
+    }
+
     /*
      Intent for REGISTER
     */
     public void goToRegisterScreen(View view) {
-        MyApplication.getappLocationListner().requestLocationUpdates();
-        //Intent intent = new Intent(this, RegistrationActivity.class);
-        //startActivity(intent);
+        //TODO dunno what this line is
+        //MyApplication.getappLocationListner().requestLocationUpdates();
+
+        Intent intent = new Intent(this, RegistrationActivity.class);
+        startActivity(intent);
     }
 
 

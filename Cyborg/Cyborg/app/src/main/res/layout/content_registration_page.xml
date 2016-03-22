@@ -62,7 +62,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Choose Avatar (optional)"
+                            android:text="Choose Avatar"
                             android:textColor="@android:color/black"
                             android:gravity="center"/>
 
@@ -247,7 +247,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Confirm password:"
+                        android:text="Education level:"
                         android:gravity="center"
                         android:textColor="@android:color/white"/>
 
@@ -258,12 +258,12 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <EditText
+                    <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="textPassword"
-                        android:id="@+id/txtConfirmPassword"
-                        android:hint="Confirm password" />
+                        android:id="@+id/eduSpin"
+                        android:spinnerMode="dropdown"
+                        />
 
                 </LinearLayout>
 
@@ -299,7 +299,7 @@
                         android:layout_height="match_parent"
                         android:inputType="date"
                         android:id="@+id/txtdob"
-                        android:hint="DD/MM/YYYY" />
+                        android:hint="YYYY-MM-DD" />
 
                 </LinearLayout>
 
