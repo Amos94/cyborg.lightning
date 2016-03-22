@@ -108,6 +108,16 @@
         <activity
             android:name=".activity.interestsRegistration"
             android:label="@string/title_activity_interests_registration"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".setting.SetingsRegisterSipAccount"
+            android:label="tempo"
+            android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".setting.SettingsEditSipUserInfo"
+            android:label="ttt"
             android:theme="@style/AppTheme"></activity>
     </application>
 

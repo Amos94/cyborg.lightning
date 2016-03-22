@@ -58,7 +58,7 @@ import lightning.cyborg.gcm.GcmIntentService;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
-import lightning.cyborg.setting.Setting;
+import lightning.cyborg.setting.MenuEditSip;
 
 public class UserHomepage extends AppCompatActivity {
 
@@ -496,17 +496,23 @@ public class UserHomepage extends AppCompatActivity {
     }
 
 
-    //navigating to settings...
-    public void clickSetting(View view){
+    public void sipRegis(View view){
 
-        Intent intent = new Intent(UserHomepage.this, Setting.class);
+        Intent intent = new Intent(UserHomepage.this,MenuEditSip.class);
+        startActivity(intent);
+    }
+
+
+    //log out the addd...
+    public void logout(View view){
+
+        MyApplication.getInstance().logout();
+        Intent intent = new Intent(UserHomepage.this, LoginActivity.class);
         startActivity(intent);
 
 
     }
 
-
-
-
-
 }
+
+

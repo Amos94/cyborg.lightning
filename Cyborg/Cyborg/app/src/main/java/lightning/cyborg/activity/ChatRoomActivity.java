@@ -93,10 +93,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         type =intent.getStringExtra("type");
         permission = intent.getStringExtra("permission");
 
-        m_amAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        m_amAudioManager.setMode(AudioManager.MODE_IN_CALL);
-        m_amAudioManager.setSpeakerphoneOn(false);
-
         if (chatRoomId == null) {
             Toast.makeText(getApplicationContext(), "Chat room not found!", Toast.LENGTH_SHORT).show();
             finish();
@@ -222,19 +218,13 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     public void dialogCallReceiver(final Context context, final boolean typeOfgcm){
-
         if (typeOfgcm) {
-            final MediaPlayer mp = MediaPlayer.create(context,R.raw.dial);
-            mp.start();
-            mp.setLooping(true);
             new AlertDialog.Builder(context)
                     .setTitle("Waiting For Response")
                     .setIcon(android.R.drawable.sym_call_incoming)
-                    .setMessage(sipCaleeUsername+" is calling you")
+                    .setMessage("User [username] calls you")
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-
-                            mp.stop();
                             //dismiss the call
                             //TODO more php
                         }
@@ -242,17 +232,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .show();
         }
         else {
-            final MediaPlayer mp = MediaPlayer.create(context, R.raw.ringtone);
-            mp.start();
-            mp.setLooping(true);
-            vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-
-            if (vibrate == null) {
-                Log.w(TAG, "No vibration service exists.");
-            }
-            else{
-
-            }
             new AlertDialog.Builder(context)
                     .setTitle("Incoming call")
                     .setIcon(android.R.drawable.sym_call_incoming)
@@ -266,9 +245,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                             intent1.putExtra("callerPassword",sipPassword);
                             intent1.putExtra("calleeUsername",sipCaleeUsername);
 
-                            IncomingCall(context, "callAccepted");
+                            IncomingCall(context,"callAccepted");
 
-                            mp.stop();
                             startActivity(intent1);
                             finish();
                         }
@@ -277,7 +255,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             //dismiss the call
-                            mp.stop();
                         }
                     })
                     .show();

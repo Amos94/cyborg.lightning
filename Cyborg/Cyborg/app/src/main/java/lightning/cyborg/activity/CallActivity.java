@@ -2,11 +2,14 @@ package lightning.cyborg.activity;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipManager;
@@ -19,20 +22,28 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.DialerFilter;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import lightning.cyborg.R;
 
 import java.text.ParseException;
 
-import lightning.cyborg.R;
 import lightning.cyborg.voip.IncomingCallReceiver;
-import lightning.cyborg.voip.SipSettings;
 import lightning.cyborg.voip.UserInformation;
+import lightning.cyborg.voip.SipSettings;
+import lightning.cyborg.app.MyApplication;
 
 /**
  * Created by Amos Madalin Neculau on 25/02/2016.
@@ -53,7 +64,10 @@ public class CallActivity extends AppCompatActivity {
     private static final int SET_AUTH_INFO = 2;
     private static final int UPDATE_SETTINGS_DIALOG = 3;
     private static final int HANG_UP = 4;
-
+    private ImageButton hangUp;
+    private ImageButton muteMic;
+    private ImageButton speaker;
+    private Button makeNewCall;
 
     private UserInformation caller;
     private String callee;
@@ -67,14 +81,12 @@ public class CallActivity extends AppCompatActivity {
     private final String POSTFIX_CALLEE = "@sip.antisip.com";
 
     private String message;
-    private ImageButton hangUp;
-    private ImageButton muteMic;
-    private ImageButton speaker;
-    private Boolean isMuted;
-    private Boolean isSpeaker;
-
 
     private AlertDialog alertDialog;
+
+    private Boolean isMuted;
+    private Boolean isSpeaker;
+    private Boolean callEnd;
 
     public CallActivity(String callerUn, String callerPw, String calleeUn){
 
@@ -87,8 +99,20 @@ public class CallActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.call);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setTitle("Call");
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.bottomcalltoolbar);
         setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getSupportActionBar().setCustomView(R.layout.custom_toolbar_call);
+
+
+        isMuted = false;
+        isSpeaker = false;
+        callEnd = false;
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -99,17 +123,16 @@ public class CallActivity extends AppCompatActivity {
         intentCalleeUsername = intent.getStringExtra("calleeUsername");
         message = intent.getStringExtra("type");
 
+
         //this.caller = caller;
         caller = new UserInformation(intentCallerUsername, intentCallerPassword, SIP_SERVER);
         //this.callee = callee;
         callee = PREFIX_CALLEE + intentCalleeUsername + POSTFIX_CALLEE;
 
-
-        isMuted = false;
-        isSpeaker = false;
         hangUp = (ImageButton) findViewById(R.id.HangUpBtn);
         speaker = (ImageButton) findViewById(R.id.speakerBtn);
         muteMic = (ImageButton) findViewById(R.id.muteMicBtn);
+        //makeNewCall = (Button) findViewById(R.id.initiateCall);
 
 
        // ToggleButton pushToTalkButton = (ToggleButton) findViewById(R.id.pushToTalk);
@@ -162,6 +185,13 @@ public class CallActivity extends AppCompatActivity {
                 }
             }
         }.start();
+
+        hangUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endCall();
+            }
+        });
 
     }
 
@@ -285,45 +315,6 @@ public class CallActivity extends AppCompatActivity {
             Log.d("onDestroy", "Failed to close local profile.", ee);
         }
     }
-    public void muteListener(){
-
-        muteMic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isMuted == false) {
-                    call.toggleMute();
-                    isMuted = true;
-                    muteMic.setImageResource(R.drawable.ic_mic_off_white_36dp);
-                } else {
-                    call.toggleMute();
-                    isMuted = false;
-                    muteMic.setImageResource(R.drawable.ic_mic_white_36dp);
-                }
-            }
-        });
-
-    }
-
-    public void speakerListener(){
-
-        speaker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isSpeaker == false) {
-                    call.setSpeakerMode(true);
-                    isSpeaker = true;
-                    speaker.setImageResource(R.drawable.ic_volume_up_white_36dp);
-                } else {
-                    call.setSpeakerMode(false);
-                    isSpeaker = false;
-                    speaker.setImageResource(R.drawable.ic_volume_down_white_36dp);
-                }
-            }
-        });
-
-    }
-
-
 
     /**
      * Make an outgoing call.
@@ -399,14 +390,86 @@ public class CallActivity extends AppCompatActivity {
         }
     }
 
-    public void endCall(View view){
+    public void endCall(){
         try {
             call.endCall();
+            endCallIntent();
+            callEnd = true;
         } catch (SipException e) {
             e.printStackTrace();
         }
     }
 
+    public void endCallIntent() {
+        Intent intent = new Intent(this, UserHomepage.class);
+        startActivity(intent);
+    }
+
+    public void muteListener(){
+
+        muteMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isMuted == false) {
+                    call.toggleMute();
+                    isMuted = true;
+                    muteMic.setImageResource(R.drawable.ic_mic_off_white_36dp);
+            } else {
+                    call.toggleMute();
+                    isMuted = false;
+                    muteMic.setImageResource(R.drawable.ic_mic_white_36dp);
+                }
+            }
+        });
+
+        //muteMic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            //public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //if (isChecked) {
+                    // The toggle is enabled
+                    //call.toggleMute();
+                //} else {
+                    // The toggle is disabled
+                    //call.toggleMute();
+                //}
+            //}
+        //});
+
+        //if(isMuted == false) {
+
+        //}
+
+    }
+
+    public void speakerListener(){
+
+        speaker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isSpeaker == false) {
+                    call.setSpeakerMode(true);
+                    isSpeaker = true;
+                    speaker.setImageResource(R.drawable.ic_volume_up_white_36dp);
+                } else {
+                    call.setSpeakerMode(false);
+                    isSpeaker = false;
+                    speaker.setImageResource(R.drawable.ic_volume_down_white_36dp);
+                }
+            }
+        });
+
+        //speaker.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            //public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //if (isChecked) {
+                    // The toggle is enabled
+                    //call.setSpeakerMode(true);
+                //} else {
+                    // The toggle is disabled
+                    //call.setSpeakerMode(false);
+                //}
+            //}
+        //});
+
+    }
 
     public void makeCall(View view){
         initiateCall();
@@ -454,4 +517,5 @@ public class CallActivity extends AppCompatActivity {
         }
         return false;
     }
+
 }

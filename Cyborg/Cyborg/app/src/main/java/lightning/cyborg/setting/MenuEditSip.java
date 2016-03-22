@@ -15,9 +15,10 @@ import com.gc.materialdesign.widgets.ColorSelector.OnColorSelectedListener;
 import com.nineoldandroids.view.ViewHelper;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.UserHomepage;
 
 
-public class Setting extends Activity implements OnColorSelectedListener {
+public class MenuEditSip extends Activity implements OnColorSelectedListener {
 	
 	int backgroundColor = Color.parseColor("#1E88E5");
 	ButtonFloatSmall buttonSelectColor;
@@ -27,20 +28,23 @@ public class Setting extends Activity implements OnColorSelectedListener {
     protected void onCreate(Bundle savedInstanceState) {
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_page);
+        setContentView(R.layout.activity_sip_page);
 
         
         LayoutRipple layoutRipple = (LayoutRipple) findViewById(R.id.userDetails);
 
 
         setOriginRiple(layoutRipple);
-        
+
+
+
+		//amos this is where you put your work in....
+
         layoutRipple.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(Setting.this,UserDetails.class);
-				intent.putExtra("BACKGROUND", backgroundColor);
+				Intent intent = new Intent(MenuEditSip.this, SetingsRegisterSipAccount.class);
 				startActivity(intent);
 			}
 		});
@@ -50,48 +54,37 @@ public class Setting extends Activity implements OnColorSelectedListener {
         
         
         setOriginRiple(layoutRipple);
-        
-        layoutRipple.setOnClickListener(new OnClickListener() {
+
+
+		//amos this is where you put your work in....
+
+
+		layoutRipple.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(Setting.this, Communication.class);
-				intent.putExtra("BACKGROUND", backgroundColor);
+				Intent intent = new Intent(MenuEditSip.this, SettingsEditSipUserInfo.class);
 				startActivity(intent);
 			}
 		});
 
 
 
-        layoutRipple = (LayoutRipple) findViewById(R.id.aboutUs);
-        
-        
-        setOriginRiple(layoutRipple);
-        
-        layoutRipple.setOnClickListener(new OnClickListener() {
-        	
-        	@Override
-        	public void onClick(View arg0) {
-        		Intent intent = new Intent(Setting.this,AboutUs.class);
-        		intent.putExtra("BACKGROUND", backgroundColor);
-        		startActivity(intent);
-        	}
-        });
     }
     
 	private void setOriginRiple(final LayoutRipple layoutRipple){
     	
     	layoutRipple.post(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				View v = layoutRipple.getChildAt(0);
-		    	layoutRipple.setxRippleOrigin(ViewHelper.getX(v)+v.getWidth()/2);
-		    	layoutRipple.setyRippleOrigin(ViewHelper.getY(v)+v.getHeight()/2);
-		    	
-		    	layoutRipple.setRippleColor(Color.parseColor("#1E88E5"));
-		    	
-		    	layoutRipple.setRippleSpeed(30);
+				layoutRipple.setxRippleOrigin(ViewHelper.getX(v) + v.getWidth() / 2);
+				layoutRipple.setyRippleOrigin(ViewHelper.getY(v) + v.getHeight() / 2);
+
+				layoutRipple.setRippleColor(Color.parseColor("#1E88E5"));
+
+				layoutRipple.setRippleSpeed(100);
 			}
 		});
     	
@@ -101,7 +94,28 @@ public class Setting extends Activity implements OnColorSelectedListener {
 	public void onColorSelected(int color) {
 		backgroundColor = color;
 		buttonSelectColor.setBackgroundColor(color);
-	}  
+	}
+
+
+	public void backToSetting(View view){
+
+		Intent intent = new Intent(MenuEditSip.this, UserHomepage.class);
+		startActivity(intent);
+
+
+
+	}
+
+	public void settingsRegistrationSipAccount(View view){
+		Intent intent = new Intent(this, SetingsRegisterSipAccount.class);
+		startActivity(intent);
+	}
+
+	public void settingsEditSipAccount(View view){
+
+
+	}
+
     
 
 }

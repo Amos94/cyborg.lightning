@@ -38,5 +38,8 @@ public class EndPoints {
     public static final String BLOCK_LIST = base +"/blockedList.php";
     public static final String UNBLOCK_USER = base +"/removed_blockedUser.php";
     public static final String GET_USER = base+"/getAllUserInfo.php";
+    public static final String UPDATE_USERS = base+"/users_update.php";
+    public static final String USERS_GET = base+"/users_get.php";
+    public static final String USERS_ADD = base+"/users_insert.php";
 
 }
