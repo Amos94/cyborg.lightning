@@ -259,7 +259,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void sendMessage() {
 
         //Message to be sent
-        final String message = this.inputMessage.getText().toString().trim()+" ";
+        final String message = this.inputMessage.getText().toString().trim();
 
 
         //if message is empty
