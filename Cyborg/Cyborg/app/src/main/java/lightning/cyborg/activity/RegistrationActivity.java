@@ -109,7 +109,17 @@ public class RegistrationActivity extends AppCompatActivity {
                         "Registering...",
                         Toast.LENGTH_LONG).show();
 
-                goToMainMenuFromRegistration(v);
+                try {
+                    Thread.sleep(1000);
+
+                    backToLoginPage(v);
+                    //ToDo Make this actually use the same as the login activity which will take the users password and email and login
+                    //Right now its set to send them back to login after registering their details.
+
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
             }
         });
 
@@ -232,14 +242,6 @@ public class RegistrationActivity extends AppCompatActivity {
     //Intent for interests registration
     private void goToInterestsPage() {
         Intent intent = new Intent(this, interestsRegistration.class);
-        startActivity(intent);
-    }
-
-    /*
-    Intent for login
-     */
-    private void changeToMainScreen(){
-        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
