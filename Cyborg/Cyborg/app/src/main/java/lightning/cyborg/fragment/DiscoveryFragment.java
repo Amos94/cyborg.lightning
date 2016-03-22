@@ -148,7 +148,7 @@ public class DiscoveryFragment extends Fragment {
     }
 
     private void discover(View v){
-        final String filtered = search.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").toLowerCase();
+        final String filtered = search.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").toLowerCase().replaceAll(" ","");
         String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
         int radius = seekDist.getProgress() + 5;
         matchedUserJson = new ArrayList<JSONObject>();
