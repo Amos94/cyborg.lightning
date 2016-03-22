@@ -117,7 +117,6 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
             holder.message.setText("pending request");
 
-
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
@@ -154,6 +153,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                     notifyDataSetChanged();
                 }
             });
+
         }
         //if user hid chat and new message arrived
         else if(chatRoom.getPermission().equals("rmsg")){
