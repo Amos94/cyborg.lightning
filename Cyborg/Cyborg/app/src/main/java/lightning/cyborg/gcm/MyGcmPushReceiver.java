@@ -101,6 +101,72 @@ public class MyGcmPushReceiver extends GcmListenerService {
         }
     }
 
+//    /**
+//     * Processing chat room push message
+//     * this message will be broadcasts to all the activities registered
+//     * */
+//    private void processChatRoomPush(String title, boolean isBackground, String data) {
+//        if (!isBackground) {
+//
+//            try {
+//                JSONObject datObj = new JSONObject(data);
+//
+//                String chatRoomId = datObj.getString("chat_room_id");
+//
+//                JSONObject mObj = datObj.getJSONObject("message");
+//                Message message = new Message();
+//                message.setMessage(mObj.getString("message"));
+//                message.setId(mObj.getString("message_id"));
+//                message.setCreatedAt(mObj.getString("created_at"));
+//                JSONObject uObj = datObj.getJSONObject("user");
+//
+//                // skip the message if the message belongs to same user as
+//                // the user would be having the same message when he was sending
+//                // but it might differs in your scenario
+//                if (uObj.getString("user_id").equals(MyApplication.getInstance().getPrefManager().getUser().getId())) {
+//                    Log.e(TAG, "Skipping the push message as it belongs to same user");
+//                    return;
+//                }
+//
+//                User user = new User();
+//                user.setId(uObj.getString("user_id"));
+//                user.setEmail(uObj.getString("email"));
+//                user.setName(uObj.getString("name"));
+//                message.setUser(user);
+//
+//
+//                // verifying whether the app is in background or foreground
+//                if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+//
+//                    // app is in foreground, broadcast the push message
+//                    Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+//                    pushNotification.putExtra("type", Config.PUSH_TYPE_CHATROOM);
+//                    pushNotification.putExtra("message", message);
+//                    pushNotification.putExtra("chat_room_id", chatRoomId);
+//                    LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+//
+//                    // play notification sound
+//                    NotificationUtils notificationUtils = new NotificationUtils();
+//                    notificationUtils.playNotificationSound();
+//                } else {
+//
+//                    // app is in background. show the message in notification try
+//                    Intent resultIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+//                    resultIntent.putExtra("chat_room_id", chatRoomId);
+//                    showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
+//                }
+//
+//            } catch (JSONException e) {
+//                Log.e(TAG, "json parsing error: " + e.getMessage());
+//                  //                Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//
+//        } else {
+//            // the push notification is silent, may be other operations needed
+//            // like inserting it in to SQLite
+//        }
+//    }
+
     /**
      * Processing user specific push message
      * It will be displayed with / without image in push notification tray

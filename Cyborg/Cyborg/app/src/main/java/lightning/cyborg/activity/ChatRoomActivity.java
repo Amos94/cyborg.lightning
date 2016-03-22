@@ -1,16 +1,10 @@
 package lightning.cyborg.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -48,7 +42,6 @@ import lightning.cyborg.adapter.ChatRoomThreadAdapter;
 import lightning.cyborg.app.Config;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
-import lightning.cyborg.app.VolleyQueue;
 import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.model.User;
@@ -66,17 +59,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private EditText inputMessage;
     private Button btnSend;
     private String type;
-    private String permission;
 
-    private String sipUsername;
-    private String sipPassword;
-    private String sipCaleeUsername;
-
-    private MenuItem addFreind;
-    private MenuItem callButton;
-    protected Vibrator vibrate;
-
-    private AudioManager m_amAudioManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +74,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         chatRoomId = intent.getStringExtra("chat_room_id");
         String title = intent.getStringExtra("name");
         type =intent.getStringExtra("type");
-        permission = intent.getStringExtra("permission");
+
+
 
         if (chatRoomId == null) {
             Toast.makeText(getApplicationContext(), "Chat room not found!", Toast.LENGTH_SHORT).show();
@@ -133,33 +117,11 @@ public class ChatRoomActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    if(permission.equals("blocked")){
-                        new AlertDialog.Builder(ChatRoomActivity.this)
-                                .setTitle("unable to send message")
-                                .setMessage("you have been blocked from sending messages in this chatroom")
-                                .setNegativeButton("ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
-                                .show();
-                    }
-                    else{
-                        Log.d(TAG, permission.toString());
-                        Log.d(TAG,"inside else for send");
-                        sendMessage();
-                    }
-                }catch (Exception e){
-                    Log.d(TAG,"inside catch for send");
-                    sendMessage();
-
-                }
+                sendMessage();
             }
         });
 
         fetchChatThread();
-        fetchSip();
-
     }
 
 
@@ -180,87 +142,22 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onPause();
     }
 
-
     /**
      * Handling new push message, will add the message to
      * recycler view and scroll it to bottom
      * */
     private void handlePushNotification(Intent intent) {
-        int type = intent.getIntExtra("type", -1);
-        if(type == Config.PUSH_TYPE_CALL_USER) {
-            String message = intent.getStringExtra("message");
-            if(message.equals("callRequest")) {
-                dialogCallReceiver(this,false);
-            }
-            else if(message.equals("callAccepted")){
-                Intent intent1 = new Intent(this,CallActivity.class);
-                intent1.putExtra("type","makeCall");
-                intent1.putExtra("callerUsername",sipUsername);
-                intent1.putExtra("callerPassword",sipPassword);
-                intent1.putExtra("calleeUsername", sipCaleeUsername);
-                startActivity(intent1);
-                finish();
-            }
-        }
+        Message message = (Message) intent.getSerializableExtra("message");
+        String chatRoomId = intent.getStringExtra("chat_room_id");
 
-        else {
-
-            Message message = (Message) intent.getSerializableExtra("message");
-            String chatRoomId = intent.getStringExtra("chat_room_id");
-            if (message != null && chatRoomId != null) {
-                messageArrayList.add(message);
-                mAdapter.notifyDataSetChanged();
-                if (mAdapter.getItemCount() > 1) {
-                    recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
-                }
+        if (message != null && chatRoomId != null) {
+            messageArrayList.add(message);
+            mAdapter.notifyDataSetChanged();
+            if (mAdapter.getItemCount() > 1) {
+                recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
             }
         }
     }
-
-    public void dialogCallReceiver(final Context context, final boolean typeOfgcm){
-        if (typeOfgcm) {
-            new AlertDialog.Builder(context)
-                    .setTitle("Waiting For Response")
-                    .setIcon(android.R.drawable.sym_call_incoming)
-                    .setMessage("User [username] calls you")
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            //dismiss the call
-                            //TODO more php
-                        }
-                    })
-                    .show();
-        }
-        else {
-            new AlertDialog.Builder(context)
-                    .setTitle("Incoming call")
-                    .setIcon(android.R.drawable.sym_call_incoming)
-                    .setMessage("User [username] calls you")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            Intent intent1 = new Intent(context,CallActivity.class);
-                            intent1.putExtra("type","waitCall");
-                            intent1.putExtra("callerUsername",sipUsername);
-                            intent1.putExtra("callerPassword",sipPassword);
-                            intent1.putExtra("calleeUsername",sipCaleeUsername);
-
-                            IncomingCall(context,"callAccepted");
-
-                            startActivity(intent1);
-                            finish();
-                        }
-                    })
-
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            //dismiss the call
-                        }
-                    })
-                    .show();
-        }
-    }
-
 
     /**
      * Posting a new message in chat room
@@ -277,8 +174,6 @@ public class ChatRoomActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Enter a message", Toast.LENGTH_SHORT).show();
             return;
         }
-
-
 
         //url of request
         String endPoint = EndPoints.CHAT_ROOM_MESSAGE; //chatRoomId);
@@ -362,7 +257,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         };
 
 
-        // disabling retry policy to prevent multiple calls
+        // disabling retry policy so that it won't make
+        // multiple http calls
         int socketTimeout = 0;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -374,51 +270,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
-    public void IncomingCall(final Context context,String message){
-
-        final Context context1 =context;
-        //parameters to post to php file
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
-        params.put("chat_room_id", chatRoomId.toString());
-        params.put("message",message);
-
-        //request to insert the user into the mysql database using php
-        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.INCOMING_CALL,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject obj = new JSONObject(response);
-
-                            // check for error flag
-                            if (obj.getBoolean("error") == false) {
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("JSON failed to parse: ", response);
-                        }
-                    }
-                }, new Response.ErrorListener(){
-
-            @Override
-            public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", EndPoints.FETCH_SIP);
-            }
-        }
-        ){
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return params;
-            }
-        };
-        //put the request in the static queue
-        VolleyQueue.getInstance(this).addToRequestQueue(request);
-    }
 
     /**
      * Fetching all the messages of a single chat room
@@ -512,64 +363,37 @@ public class ChatRoomActivity extends AppCompatActivity {
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
-    /**
-     * fetch sip data
-     */
-    public void fetchSip(){
-
-        //parameters to post to php file
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
-        params.put("chat_room_id", chatRoomId.toString());
-
-        //request to insert the user into the mysql database using php
-        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.FETCH_SIP,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject obj = new JSONObject(response);
-
-                            // check for error flag
-                            if (obj.getBoolean("error") == false) {
-                                Log.d(TAG, "no error");
-
-                                //CALLER USERNAME
-                                sipUsername = obj.getString("user_sip_username");
-                                sipPassword = obj.getString("user_sip_password");
-
-                                //CALLEE USERNAME
-                                sipCaleeUsername = obj.getString("calling_sip_username");
-
-                                if(sipUsername != null && sipPassword != null && sipCaleeUsername != null){
-                                    callButton.setVisible(true);
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("JSON failed to parse: ", response);
-                        }
-                    }
-                }, new Response.ErrorListener(){
-
-            @Override
-            public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", EndPoints.FETCH_SIP);
-            }
-        }
-        ){
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return params;
-            }
-        };
-        //put the request in the static queue
-        VolleyQueue.getInstance(this).addToRequestQueue(request);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.chatroom_menu, menu);
+        return true;
     }
 
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+
+        if(menuItem.getItemId()==android.R.id.home){
+            toUserHomePageActivity();
+            return true;
+        }
+        else if(menuItem.getItemId()==R.id.action_addfriend){
+            addFriend("f");
+        }
+        else {
+            switch (menuItem.getItemId()) {
+                case R.id.action_calluser:
+                    break;
+                case R.id.action_viewprofile:
+                    break;
+                case R.id.action_addfriend:
+                    break;
+                case R.id.action_blockuser:
+                    break;
+            }
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
     private void toUserHomePageActivity(){
         Intent intent = new Intent(this,UserHomepage.class);
 
@@ -586,11 +410,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         finish();
     }
 
-    /**
-     * Change the change room from freinds to normal or vise versa
-     * @param type new type of the chatroom
-     */
-    public void changeChatRoomType(String type){
+    public void addFriend(String type){
         String endPoint = EndPoints.ADD_FREIND;
 
         final Map<String, String> params = new HashMap<>();
@@ -645,168 +465,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
-    }
-
-    public void startCall() {
-
-        Intent intent = new Intent(this, CallActivity.class);
-
-        intent.putExtra("callerUsername", sipUsername);
-        intent.putExtra("callerPassword", sipPassword);
-        intent.putExtra("calleeUsername", sipCaleeUsername);
-
-        startActivity(intent);
-    }
-
-    /**
-     * prevents the chat from being displayed
-     */
-    public void hideChat(){
-
-        final Map<String, String> params = new HashMap<>();
-        params.put("chat_room_id", chatRoomId);
-        params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
-
-
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                EndPoints.HIDE_CHAT, new Response.Listener<String>() {
-
-
-            @Override
-            public void onResponse(String response) {
-                Log.e(TAG, "response: " + response);
-
-                try {
-                    JSONObject obj = new JSONObject(response);
-
-                    // check for error
-                    if (obj.getBoolean("error") == false) {
-
-                        toUserHomePageActivity();
-
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (JSONException e) {
-                    Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                NetworkResponse networkResponse = error.networkResponse;
-                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        ) {
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams() {
-                return params;
-            }
-        };
-
-
-        //Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq);
-    }
-
-    public void blockUser(final Context context){
-
-        //parameters to post to php file
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("cur_user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
-        params.put("chat_room_id", chatRoomId.toString());
-
-        //request to insert the user into the mysql database using php
-        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.BLOCK_USER,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject obj = new JSONObject(response);
-
-                            // check for error flag
-                            if (obj.getBoolean("error") == false) {
-                                Log.d(TAG, "no error");
-                                toUserHomePageActivity();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("JSON failed to parse: ", response);
-                        }
-                    }
-                }, new Response.ErrorListener(){
-
-            @Override
-            public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", EndPoints.FETCH_SIP);
-            }
-        }
-        ){
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return params;
-            }
-        };
-        //put the request in the static queue
-        VolleyQueue.getInstance(this).addToRequestQueue(request);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.chatroom_menu, menu);
-        addFreind = menu.findItem(R.id.action_addfriend);
-        if(type.equals("f")){
-            addFreind.setIcon(R.drawable.ic_action_content_mail);
-            //addFreind.setVisible(false);
-        }
-        else{
-            //addFreind.set;;
-        }
-        callButton = menu.findItem(R.id.action_calluser);
-        callButton.setVisible(false);
-        //fetchSip;
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-
-        switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                toUserHomePageActivity();
-                break;
-            case R.id.action_calluser:
-                 dialogCallReceiver(this,true);
-                IncomingCall(this,"callRequest");
-                break;
-            case R.id.action_viewprofile:
-                //hideChat();
-                break;
-            case R.id.action_addfriend:
-                if(type.equals("f")){ changeChatRoomType("n");}
-                else { changeChatRoomType("f");}
-                break;
-            case R.id.action_hideChat:
-                hideChat();
-                break;
-            case R.id.action_blockuser:
-                blockUser(this);
-                break;
-        }
-        return super.onOptionsItemSelected(menuItem);
     }
 
 }
