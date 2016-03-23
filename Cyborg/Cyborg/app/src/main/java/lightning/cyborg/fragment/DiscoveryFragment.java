@@ -350,14 +350,14 @@ public class DiscoveryFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
-                        loadButton.setEnabled(false);
+                      loadButton.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", url);
-                loadButton.setEnabled(false);
+               loadButton.setEnabled(true);
             }
         }
         ){
