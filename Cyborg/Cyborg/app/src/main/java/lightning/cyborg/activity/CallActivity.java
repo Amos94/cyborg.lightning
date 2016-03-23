@@ -422,22 +422,6 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
-        //muteMic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            //public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //if (isChecked) {
-                    // The toggle is enabled
-                    //call.toggleMute();
-                //} else {
-                    // The toggle is disabled
-                    //call.toggleMute();
-                //}
-            //}
-        //});
-
-        //if(isMuted == false) {
-
-        //}
-
     }
 
     public void speakerListener(){
@@ -457,17 +441,6 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
-        //speaker.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            //public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //if (isChecked) {
-                    // The toggle is enabled
-                    //call.setSpeakerMode(true);
-                //} else {
-                    // The toggle is disabled
-                    //call.setSpeakerMode(false);
-                //}
-            //}
-        //});
 
     }
 
