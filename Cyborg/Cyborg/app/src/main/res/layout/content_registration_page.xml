@@ -242,6 +242,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textColor="@android:color/white"
+
                         android:inputType="textPersonName"
                         android:id="@+id/txtConfirmEmail"
                         android:hint="Example@email.co.uk" />
@@ -280,6 +282,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textPassword"
+                        android:textColor="@android:color/white"
+
                         android:id="@+id/txtPassword"
                         android:hint="Enter password" />
 
@@ -355,6 +359,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="date"
+                        android:textColor="@android:color/white"
                         android:id="@+id/txtdob"
                         android:hint="YYYY-MM-DD" />
 
