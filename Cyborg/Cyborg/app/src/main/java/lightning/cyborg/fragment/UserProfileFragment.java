@@ -350,14 +350,12 @@ public class UserProfileFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
-                        delInterestButt.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", EndPoints.GET_INTERESTS);
-                delInterestButt.setEnabled(true);
             }
         }
         ){
@@ -403,12 +401,14 @@ public class UserProfileFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        delInterestButt.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
+                Log.d("VolleyError at url ", EndPoints.DEL_INTERESTS);
+                delInterestButt.setEnabled(true);
             }
         }
         ){
