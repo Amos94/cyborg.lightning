@@ -206,12 +206,17 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setLastMessage("");
                             cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
+                            cr.setVisibility(chatRoomsObj.getString("visibility"));
+                            Log.d("FAFFa",cr.getPermission());
+                            if(cr.getPermission().equals("n") || cr.getVisibility().equals("n"))
+                            {
 
-                            if(TYPE.equals("n")) {
-                                normalChatRoomArrayList.add(cr);
-                            }
-                            else if (TYPE.equals("f")){
-                                freindsChatRoomArrayList.add(cr);
+                            } else{
+                                if (TYPE.equals("n")) {
+                                    normalChatRoomArrayList.add(cr);
+                                } else if (TYPE.equals("f")) {
+                                    freindsChatRoomArrayList.add(cr);
+                                }
                             }
                         }
 
