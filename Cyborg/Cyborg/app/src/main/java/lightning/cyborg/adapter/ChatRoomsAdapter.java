@@ -309,11 +309,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
                     // check for error flag
                     if (obj.getBoolean("error") == false) {
-
-                        if(choice.equals("accept")){
                             notifyDataSetChanged();
-                        }
-                    } else {
+
 
                         // error in fetching chat rooms
                         //  Toast.makeText(mContext, "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
