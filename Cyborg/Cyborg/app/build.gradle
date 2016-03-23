@@ -18,8 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/androidTest/java'] } }
 }
-sourceSets{main{java.srcDirs = ['src/main/java']}}
+sourceSets { main { java.srcDirs = ['src/main/java'] } }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'

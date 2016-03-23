@@ -13,6 +13,15 @@ import lightning.cyborg.testassistants.testPasswordConfirmation;
 
 import static org.junit.Assert.*;
 
+
+/**
+ * Team CyborgLightning 2016 - King's College London - Project Run
+ * testEmailValidation implements the JUNIT testing for the Password Confirmation function of
+ * RegistrationActivity. Tests include i/o testing, SQLi testing, Sound and Correctness
+ * @author Simeon
+ */
+
+
 public class testPasswordConfirmationTest {
 
     SQLiAssistantStrings sqlStrings = new SQLiAssistantStrings();

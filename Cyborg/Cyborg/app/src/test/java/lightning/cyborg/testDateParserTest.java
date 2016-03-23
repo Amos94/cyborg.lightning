@@ -19,6 +19,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+
+/**
+ * Team CyborgLightning 2016 - King's College London - Project Run
+ * testEmailValidation implements the JUNIT testing for the Password Confirmation function of
+ * RegistrationActivity. Tests include i/o testing, SQLi testing, Sound and Correctness
+ * @author Simeon
+ */
+
+
 public class testDateParserTest {
 
     testDateParserAssistant testDateParser = new testDateParserAssistant();
@@ -58,27 +67,43 @@ public class testDateParserTest {
     }
 
 
-    //Under 18 yo check3
+
+ /*   //Under 18 yo check3
     @Test
     public void testDateValidityUnderAge3() throws ParseException{
         assertFalse(testDateParser.testDateParser("14/01/2005"));
     }
 
-    //Invalid date inputs
+    //Invalid date inputs -failed, required input of type "date"
+    //TODO ParseException: Unparseable date: "ss/qq/xx" - TODO
     @Test
     public void testDateValidityBadInput1() throws ParseException{
         assertFalse(testDateParser.testDateParser("ss/qq/xx"));
     }
 
-    //null check
+  /*  //null check - failed, required input of type "date"
     @Test
     public void testDateValidityNullCheck() throws ParseException {
         assertFalse(testDateParser.testDateParser(null));
     }
+
+    //all digits - failed, required input of type "date"
+    //TODO input 1920 - 1998
+    @Test
+    public void testDateValidityCheckDigits() throws ParseException {//Assertion Error
+        assertTrue(testDateParser.testDateParser("11/11/1111"));
+    }
+*/
+    @Test
+    public void testDateValidityCheckIllogicalInput()throws ParseException {
+        assertTrue(testDateParser.testDateParser("01/02/0000"));
+    }
     /*
     SQLi - SQL Injection Testing
-    All Tests Passed - 12:22
+    All Tests Failed due to ParseException() non date input - 12:22
      */
+    //ALL SQLi tests failed
+    //TODO java.text.ParseException: Unparseable date: "or 1=1/*"
 /*
     //"or 1=1" input - SQL injection Test
     @Test

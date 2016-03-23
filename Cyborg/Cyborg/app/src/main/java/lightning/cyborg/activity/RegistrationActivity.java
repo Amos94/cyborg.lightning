@@ -382,7 +382,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    //vaildaing users details
+    //Validating users details
     public boolean validPassword(String password, String comfirmPassword) {
         boolean valid_pass1=true;
         boolean valid_pass2=true;
@@ -445,6 +445,10 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
         }
+
+       // private boolean stringChecker(String x){
+      //  if (x.l)
+   // }
 
     }
 
