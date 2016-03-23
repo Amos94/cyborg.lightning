@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
@@ -85,8 +87,6 @@ public class UserDetails extends Activity {
                     e.printStackTrace();
                     Log.d("updateProf", "Failed to parse Json");
                 }
-
-                finish();
             }
         });
     }
@@ -96,6 +96,9 @@ public class UserDetails extends Activity {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
 
+        if(!etLocation.getText().toString().equals("")) {
+            updateLocation();
+        }
         if(!etchangeName.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").equals("")){
             params.put("fname", etchangeName.getText().toString());
         }
@@ -130,6 +133,10 @@ public class UserDetails extends Activity {
                             boolean success = jsonResponse.getString("success").equals("1");
                             String message = jsonResponse.getString("message");
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                            if (success){
+                                backToMain();
+                            }
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -157,14 +164,100 @@ public class UserDetails extends Activity {
         MyApplication.getInstance().addToRequestQueue(request);
 
     }
-    
 
-    public void backToSetting(View view){
-
+    private void backToMain(){
         finish();
-
     }
 
+    public void backToSetting(View view){
+        finish();
+    }
 
+    private void updateLocation() throws JSONException {
+        final String url = "https://maps.googleapis.com/maps/api/geocode/json?address=uk%20";
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9]*$");
+        Matcher matcher = pattern.matcher(etLocation.getText().toString().trim());
+
+        if(!matcher.find()){
+            Toast.makeText(getApplicationContext(), "Invalid postcode entered", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //request to insert the user into the mysql database using php
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            JSONObject results = jsonResponse.getJSONArray("results").getJSONObject(0);
+                            JSONObject geometry = results.getJSONObject("geometry");
+                            JSONObject location = geometry.getJSONObject("location");
+
+                            String lat = location.getString("lat");
+                            Log.d("geoRes", lat.toString());
+                            String lng = location.getString("lng");
+                            Log.d("geoRes", lng.toString());
+
+
+                            //parameters to post to php file
+                            final Map<String, String> params = new HashMap<String, String>();
+                            params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
+                            params.put("lat", lat);
+                            params.put("lon", lng);
+
+                            StringRequest request = new StringRequest(Request.Method.POST, EndPoints.UPDATE_USERS,
+                                    new Response.Listener<String>() {
+
+                                        @Override
+                                        public void onResponse(String response) {
+                                            try {
+                                                JSONObject jsonResponse = new JSONObject(response);
+                                                //boolean success = jsonResponse.getString("success").equals("1");
+                                                String message = jsonResponse.getString("message");
+                                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                            }
+                                            catch (JSONException e) {
+                                                e.printStackTrace();
+                                                Log.d("JSON failed to parse: ", response);
+                                            }
+                                        }
+                                    }, new Response.ErrorListener(){
+
+                                @Override
+                                public void onErrorResponse(VolleyError error){
+                                    Log.d("VolleyError at url ", EndPoints.UPDATE_USERS);
+                                }
+                            }
+                            ){
+                                //Parameters inserted
+                                @Override
+                                protected Map<String, String> getParams()
+                                {
+                                    return params;
+                                }
+                            };
+                            //put the request in the static queue
+                            MyApplication.getInstance().addToRequestQueue(request);
+
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("JSON failed to parse: ", response);
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.d("VolleyError at url ", url);
+            }
+        }
+        );
+        //put the request in the static queue
+        MyApplication.getInstance().addToRequestQueue(request);
+
+    }
 
 }
