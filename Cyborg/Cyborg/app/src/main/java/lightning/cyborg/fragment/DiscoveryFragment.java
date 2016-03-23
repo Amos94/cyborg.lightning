@@ -53,8 +53,8 @@ public class DiscoveryFragment extends Fragment {
     private ArrayAdapter adapter;
     private Button searchButton;
     private Button loadButton;
-    private String[] matchedUserIDs;
-    private ArrayList matchedUserJson;
+    private ArrayList<String> matchedUserIDs;
+    private ArrayList<JSONObject> matchedUserJson;
     private SeekBar seekDist;
     private Spinner genderSpin;
     private Spinner eduSpin;
@@ -85,10 +85,10 @@ public class DiscoveryFragment extends Fragment {
         educationArr = getResources().getStringArray(R.array.education_array);
         matchedList = (ListView) inflatedview.findViewById(R.id.listMatched);
         seekDist = (SeekBar) inflatedview.findViewById(R.id.seekDist);
-        checkBoxLoc = (CheckBox)inflatedview.findViewById(R.id.checkBoxLoc);
+        checkBoxLoc = (CheckBox) inflatedview.findViewById(R.id.checkBoxLoc);
         search = (EditText) inflatedview.findViewById(R.id.searchMatches);
         search.setText("");
-        searchButton = (Button)inflatedview.findViewById(R.id.searchButton);
+        searchButton = (Button) inflatedview.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +96,7 @@ public class DiscoveryFragment extends Fragment {
                 discover(v);
             }
         });
-        loadButton = (Button)inflatedview.findViewById(R.id.loadButton);
+        loadButton = (Button) inflatedview.findViewById(R.id.loadButton);
         loadButton.setEnabled(false);
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,11 +121,11 @@ public class DiscoveryFragment extends Fragment {
         eduSpin.setSelection(9);
 
         Integer[] age = new Integer[82];
-        for(int i = 0;i<age.length;i++){
-            int temp = i+18;
-            age[i]=temp;
+        for (int i = 0; i < age.length; i++) {
+            int temp = i + 18;
+            age[i] = temp;
         }
-        ArrayAdapter <Integer> ageAdapter = new ArrayAdapter<Integer>( getContext(),android.R.layout.simple_spinner_item, age );
+        ArrayAdapter<Integer> ageAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_item, age);
         ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         lowAge = (Spinner) inflatedview.findViewById(R.id.lowAgeSpin);
         highAge = (Spinner) inflatedview.findViewById(R.id.highAgeSpin);
@@ -141,16 +141,36 @@ public class DiscoveryFragment extends Fragment {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        matchedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    createChatroom((matchedUserJson.get(position)).getString("userID"));
+                    Toast.makeText(getContext(), "Chat request sent", Toast.LENGTH_SHORT).show();
+
+                    matchedUserIDs.remove(position);
+                    matchedUserJson.remove(position);
+
+                    populateList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
         });
 
         return inflatedview;
     }
 
-    private void discover(View v){
+    private void discover(View v) {
         final String filtered = new Validation().getValidInterest(search.getText().toString());
         String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
         int radius = seekDist.getProgress() + 5;
@@ -168,16 +188,16 @@ public class DiscoveryFragment extends Fragment {
         params.put("minDate", Integer.toString(minDate));
         params.put("maxDate", Integer.toString(maxDate));
 
-        if (!filtered.equals("")){
+        if (!filtered.equals("")) {
             params.put("interests", filtered);
         }
-        if (checkBoxLoc.isChecked()){
+        if (checkBoxLoc.isChecked()) {
             params.put("radius", Integer.toString(radius));
         }
-        if(!genderSpin.getSelectedItem().equals("Any")){
+        if (!genderSpin.getSelectedItem().equals("Any")) {
             params.put("gender", genderSpin.getSelectedItem().toString());
         }
-        if(!eduSpin.getSelectedItem().equals("Any")){
+        if (!eduSpin.getSelectedItem().equals("Any")) {
             params.put("edu_level", Integer.toString(eduSpin.getSelectedItemPosition()));
         }
 
@@ -195,43 +215,40 @@ public class DiscoveryFragment extends Fragment {
                             JSONArray jsonIDs = jsonResponse.getJSONArray("users");
                             Log.d("jsonIDs", jsonIDs.toString());
 
-                            matchedUserIDs = new String[jsonIDs.length()];
-                            for(int i=0; i<jsonIDs.length(); i++){
-                                matchedUserIDs[i] = jsonIDs.getString(i);
+                            matchedUserIDs = new ArrayList();
+                            for (int i = 0; i < jsonIDs.length(); i++) {
+                                matchedUserIDs.add(jsonIDs.getString(i));
                             }
 
-                            if(matchedUserIDs.length > 0){
+                            if (matchedUserIDs.size() > 0) {
                                 populateDiscovery(5);
 
-                                if(matchedUserIDs.length > 5){
+                                if (matchedUserIDs.size() > 5) {
                                     loadButton.setEnabled(true);
                                 }
-                            }
-                            else {
+                            } else {
                                 populateList();
                             }
                             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                             Log.d("disMes", message);
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
                         searchButton.setEnabled(true);
                     }
-                }, new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error){
+            public void onErrorResponse(VolleyError error) {
                 Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
                 searchButton.setEnabled(true);
             }
         }
-        ){
+        ) {
             //Parameters inserted
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
@@ -242,21 +259,21 @@ public class DiscoveryFragment extends Fragment {
     private void populateDiscovery(int inc) throws JSONException {
         final String url = "http://nashdomain.esy.es/users_get_all.php";
 
-        if (matchedUserJson.size() == matchedUserIDs.length){
+        if (matchedUserJson.size() == matchedUserIDs.size()) {
             loadButton.setEnabled(false);
             Log.d("popDis", "No more users to load");
             Toast.makeText(getActivity(), "No more users to load", Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (inc + matchedUserJson.size() > matchedUserIDs.length){
-            inc = matchedUserIDs.length - matchedUserJson.size();
+        if (inc + matchedUserJson.size() > matchedUserIDs.size()) {
+            inc = matchedUserIDs.size() - matchedUserJson.size();
         }
 
         String idsToGet = "";
 
-        for(int i = matchedUserJson.size(); i < inc + matchedUserJson.size(); i++){
-            idsToGet += matchedUserIDs[i] + ",";
+        for (int i = matchedUserJson.size(); i < inc + matchedUserJson.size(); i++) {
+            idsToGet += matchedUserIDs.get(i) + ",";
         }
 
         //parameters to post to php file
@@ -275,32 +292,30 @@ public class DiscoveryFragment extends Fragment {
                             String message = jsonResponse.getString("message");
                             JSONArray temp = jsonResponse.getJSONArray("users");
 
-                            for (int i = 0; i < temp.length(); i++){
+                            for (int i = 0; i < temp.length(); i++) {
                                 matchedUserJson.add(temp.getJSONObject(i));
                                 Log.d("popDis loading", temp.getJSONObject(i).toString());
                             }
 
                             populateList();
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
-                      loadButton.setEnabled(true);
+                        loadButton.setEnabled(true);
                     }
-                }, new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error){
+            public void onErrorResponse(VolleyError error) {
                 Log.d("VolleyError at url ", url);
-               loadButton.setEnabled(true);
+                loadButton.setEnabled(true);
             }
         }
-        ){
+        ) {
             //Parameters inserted
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
@@ -313,32 +328,15 @@ public class DiscoveryFragment extends Fragment {
         final String[] users = new String[matchedUserJson.size()];
         Integer[] avatars = new Integer[matchedUserJson.size()];
 
-        for(int i = 0; i < matchedUserJson.size(); i++){
+        for (int i = 0; i < matchedUserJson.size(); i++) {
             try {
-               JSONObject  user = (JSONObject) matchedUserJson.get(i);
-                int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))/10000) - (Integer.parseInt(user.getString("dob"))/10000);
+                JSONObject user = matchedUserJson.get(i);
+                int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date())) / 10000) - (Integer.parseInt(user.getString("dob")) / 10000);
 
                 users[i] = " " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
                 avatars[i] = Integer.valueOf(user.getString("avatar"));
-
-                final int temp = i;
-
-                matchedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                        try {
-                            createChatroom(((JSONObject) matchedUserJson.get(temp)).getString("userID"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d("Json error parsing ", users.toString());
             }
@@ -346,25 +344,24 @@ public class DiscoveryFragment extends Fragment {
 
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         Bitmap[] images = new Bitmap[imgs.length()];
-        for(int i = 0; i < imgs.length(); i++){
+        for (int i = 0; i < imgs.length(); i++) {
             images[i] = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
         }
+        imgs.recycle();
 
         CustomListAdapter customList = new CustomListAdapter(getActivity(), users, images, avatars);
         matchedList.setAdapter(customList);
         customList.notifyDataSetChanged();
-
-
     }
 
     private void createChatroom(String otherID) throws JSONException {
-        final String url = "http://nashdomain.esy.es/users_get_all.php";
-
-
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("cur_user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
         params.put("other_user_id", otherID);
+        Log.d("createChat", "My ID " + MyApplication.getInstance().getPrefManager().getUser().getId());
+        Log.d("createChat", "otherID " + otherID);
+
 
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, EndPoints.CREATE_CHATROOM,
@@ -372,20 +369,19 @@ public class DiscoveryFragment extends Fragment {
 
                     @Override
                     public void onResponse(String response) {
-
+                        Log.d("createChat resp", response);
                     }
-                }, new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", url);
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError at url ", EndPoints.CREATE_CHATROOM);
             }
         }
-        ){
+        ) {
             //Parameters inserted
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 return params;
             }
         };

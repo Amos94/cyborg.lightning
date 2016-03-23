@@ -189,7 +189,7 @@ public class UserHomepage extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.e(TAG, "response: " + response);
+                Log.d(TAG, "response: " + response);
 
                 try {
                     JSONObject obj = new JSONObject(response);
