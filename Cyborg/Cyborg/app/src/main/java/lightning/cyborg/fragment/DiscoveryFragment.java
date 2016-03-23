@@ -205,7 +205,6 @@ public class DiscoveryFragment extends Fragment {
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, EndPoints.DISCOVER_USERS,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         try {
@@ -219,11 +218,8 @@ public class DiscoveryFragment extends Fragment {
                             for (int i = 0; i < jsonIDs.length(); i++) {
                                 matchedUserIDs.add(jsonIDs.getString(i));
                             }
-
                             filterMatchedUsers();
 
-                            //
-                            if(matchedUserIDs.length > 0){
                             if (matchedUserIDs.size() > 0) {
                                 populateDiscovery(5);
 
@@ -235,90 +231,95 @@ public class DiscoveryFragment extends Fragment {
                             }
                             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                             Log.d("disMes", message);
-                        } catch (JSONException e) {
+                        }
+                        catch(JSONException e){
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
                         searchButton.setEnabled(true);
                     }
-                }, new Response.ErrorListener() {
+                },new Response.ErrorListener(){
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
-                searchButton.setEnabled(true);
-            }
-        }
-        ) {
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams() {
-                return params;
-            }
-        };
-        //put the request in the static queue
-        MyApplication.getInstance().addToRequestQueue(request);
-    }
+                        @Override
+                        public void onErrorResponse (VolleyError error){
+                        Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
+                        searchButton.setEnabled(true);
+                    }
+                    }
+
+                    )
+
+                    {
+                        //Parameters inserted
+                        @Override
+                        protected Map<String, String> getParams () {
+                        return params;
+                    }
+                    }
+
+                    ;
+                    //put the request in the static queue
+                    MyApplication.getInstance().
+
+                    addToRequestQueue(request);
+                }
 
     private void filterMatchedUsers() {
-        //request to insert the user into the mysql database using php
-        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.DISCOVER_USERS,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getString("success").equals("1");
-                            String message = jsonResponse.getString("message");
-                            JSONArray jsonIDs = jsonResponse.getJSONArray("users");
-                            Log.d("jsonIDs", jsonIDs.toString());
-
-                            matchedUserIDs = new String[jsonIDs.length()];
-                            for(int i=0; i<jsonIDs.length(); i++){
-                                matchedUserIDs[i] = jsonIDs.getString(i);
-                            }
-
-                            filterMatchedUsers();
-
-                            //
-                            if(matchedUserIDs.length > 0){
-                                populateDiscovery(5);
-
-                                if(matchedUserIDs.length > 5){
-                                    loadButton.setEnabled(true);
-                                }
-                            }
-                            else {
-                                populateList();
-                            }
-                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                            Log.d("disMes", message);
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("JSON failed to parse: ", response);
-                        }
-                        searchButton.setEnabled(true);
-                    }
-                }, new Response.ErrorListener(){
-
-            @Override
-            public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
-                searchButton.setEnabled(true);
-            }
-        }
-        ){
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return null;
-            }
-        };
-        //put the request in the static queue
-        MyApplication.getInstance().addToRequestQueue(request);
+//        //request to insert the user into the mysql database using php
+//        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.DISCOVER_USERS,
+//                new Response.Listener<String>() {
+//
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            JSONObject jsonResponse = new JSONObject(response);
+//                            boolean success = jsonResponse.getString("success").equals("1");
+//                            String message = jsonResponse.getString("message");
+//                            JSONArray jsonIDs = jsonResponse.getJSONArray("users");
+//                            Log.d("jsonIDs", jsonIDs.toString());
+//
+//                            matchedUserIDs = new ArrayList<>();
+//                            for (int i = 0; i < jsonIDs.length(); i++) {
+//                                matchedUserIDs.get(i) = jsonIDs.getString(i);
+//                            }
+//
+//                            filterMatchedUsers();
+//
+//                            //
+//                            if (matchedUserIDs.size() > 0) {
+//                                populateDiscovery(5);
+//
+//                                if (matchedUserIDs.size() > 5) {
+//                                    loadButton.setEnabled(true);
+//                                }
+//                            } else {
+//                                populateList();
+//                            }
+//                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+//                            Log.d("disMes", message);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            Log.d("JSON failed to parse: ", response);
+//                        }
+//                        searchButton.setEnabled(true);
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
+//                searchButton.setEnabled(true);
+//            }
+//        }
+//        ) {
+//            //Parameters inserted
+//            @Override
+//            protected Map<String, String> getParams() {
+//                return null;
+//            }
+//        };
+//        //put the request in the static queue
+//        MyApplication.getInstance().addToRequestQueue(request);
     }
 
     private void populateDiscovery(int inc) throws JSONException {
