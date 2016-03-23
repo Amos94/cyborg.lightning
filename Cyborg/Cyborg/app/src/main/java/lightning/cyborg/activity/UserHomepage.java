@@ -76,10 +76,9 @@ public class UserHomepage extends AppCompatActivity {
     private ChatRoomsAdapter normalChatAdapter;
     private ChatRoomsAdapter freindChatAdapter;
     private RecyclerView recyclerView;
-    private int onChatFragment =0;
+    private int onChatFragment = 0;
 
     private Button settingsButton;
-
 
 
     private static final long RIPPLE_DURATION = 500;
@@ -112,10 +111,10 @@ public class UserHomepage extends AppCompatActivity {
         }
 
         normalChatRoomArrayList = new ArrayList<>();
-        freindsChatRoomArrayList= new ArrayList<>();
+        freindsChatRoomArrayList = new ArrayList<>();
 
-        normalChatAdapter = new ChatRoomsAdapter(this, normalChatRoomArrayList,"n");
-        freindChatAdapter =new ChatRoomsAdapter(this,freindsChatRoomArrayList,"f");
+        normalChatAdapter = new ChatRoomsAdapter(this, normalChatRoomArrayList, "n");
+        freindChatAdapter = new ChatRoomsAdapter(this, freindsChatRoomArrayList, "f");
         /**
          * Broadcast receiver calls in two scenarios
          * 1. gcm registration is completed
@@ -129,7 +128,7 @@ public class UserHomepage extends AppCompatActivity {
                 if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
-                 //   subscribeToGlobalTopic();
+                    //   subscribeToGlobalTopic();
 
                 } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
                     // gcm registration id is stored in our server's MySQL
@@ -161,7 +160,7 @@ public class UserHomepage extends AppCompatActivity {
          * Always check for google play services availability before
          * proceeding further with GCM
          * */
-        if (checkPlayServices()){
+        if (checkPlayServices()) {
             registerGCM();
         }
         try {
@@ -170,19 +169,20 @@ public class UserHomepage extends AppCompatActivity {
             viewPager.setCurrentItem(Integer.parseInt(key));
 
 
-        }catch (Exception e){
-            Log.d(TAG,"no bundle was attached");
+        } catch (Exception e) {
+            Log.d(TAG, "no bundle was attached");
         }
 
         fetchChatRooms("n");
         fetchChatRooms("f");
 
     }
+
     /**
      * fetching the chat rooms by making http call
      */
     private void fetchChatRooms(String type) {
-        final String TYPE =type;
+        final String TYPE = type;
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.CHAT_ROOMS, new Response.Listener<String>() {
@@ -207,11 +207,10 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
                             cr.setVisibility(chatRoomsObj.getString("visibility"));
-                            Log.d("FAFFa",cr.getPermission());
-                            if(cr.getPermission().equals("n") || cr.getVisibility().equals("n"))
-                            {
+                            Log.d("FAFFa", cr.getPermission());
+                            if (cr.getPermission().equals("n") || cr.getVisibility().equals("n")) {
 
-                            } else{
+                            } else {
                                 if (TYPE.equals("n")) {
                                     normalChatRoomArrayList.add(cr);
                                 } else if (TYPE.equals("f")) {
@@ -231,12 +230,12 @@ public class UserHomepage extends AppCompatActivity {
                 }
 
 
-                    normalChatAdapter.notifyDataSetChanged();
+                normalChatAdapter.notifyDataSetChanged();
 
-                    freindChatAdapter.notifyDataSetChanged();
+                freindChatAdapter.notifyDataSetChanged();
 
                 // subscribing to all chat room topics
-               // subscribeToAllTopics();
+                // subscribeToAllTopics();
             }
         }, new Response.ErrorListener() {
 
@@ -246,21 +245,20 @@ public class UserHomepage extends AppCompatActivity {
                 Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
                 Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        })
-        {
+        }) {
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("type", TYPE);
-                params.put("user_id",  MyApplication.getInstance().getPrefManager().getUser().getId());
+                params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
 
                 Log.e(TAG, "params: " + params.toString());
                 return params;
             }
         };
 
-       // subscribeToAllTopics();
+        // subscribeToAllTopics();
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
@@ -277,16 +275,30 @@ public class UserHomepage extends AppCompatActivity {
         if (type == Config.PUSH_TYPE_CHATROOM) {
             Message message = (Message) intent.getSerializableExtra("message");
             String chatRoomId = intent.getStringExtra("chat_room_id");
-            String chatType =intent.getStringExtra("chat_type");
+            String chatType = intent.getStringExtra("chat_type");
+            String visibilityChange = intent.getStringExtra("visibilityChange");
 
+            Log.d("ffsaf", "insdie handle");
             if (message != null && chatRoomId != null) {
-                if(chatType.equals("n"))
-                    updateRow(chatRoomId,message, normalChatRoomArrayList,normalChatAdapter);
-                else {
-                    updateRow(chatRoomId, message, freindsChatRoomArrayList, freindChatAdapter);
+                if (chatType.equals("n")) {
+                    if (visibilityChange.equals("true")) {
+                        normalChatRoomArrayList.clear();
+                        fetchChatRooms("n");
+                    } else {
+                        updateRow(chatRoomId, message, normalChatRoomArrayList, normalChatAdapter);
+                    }
+                } else if (chatType.equals("f")) {
+                    if (visibilityChange.equals("true")) {
+                        freindsChatRoomArrayList.clear();
+                        fetchChatRooms("f");
+                    } else {
+                        updateRow(chatRoomId, message, freindsChatRoomArrayList, freindChatAdapter);
+                    }
+
                 }
             }
         }
+
         //else if (type == Config.PUSH_TYPE_USER) {
 //            // push belongs to user alone
 //            // just showing the message in a toast
