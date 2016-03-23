@@ -60,6 +60,7 @@ public class ViewBlockedUsers extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new BlockedListAdapter.RecyclerTouchListener(this, recyclerView, new BlockedListAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+
             }
 
             @Override
