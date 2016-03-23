@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#01579b"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,6 +15,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            android:background="#01579b"
             app:contentInsetStart="0dp"
             style="@style/Toolbar">
 
@@ -63,7 +64,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="Choose Avatar"
-                            android:textColor="@android:color/black"
+                            android:textColor="#01579b"
                             android:gravity="center"/>
 
                     </LinearLayout>
@@ -104,7 +105,8 @@
                         android:layout_height="match_parent"
                         android:text="Name:"
                         android:gravity="center"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="#01579b"
+                        />
 
                 </LinearLayout>
 
@@ -140,7 +142,8 @@
                         android:layout_height="match_parent"
                         android:text="Enter email:"
                         android:gravity="center"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="#01579b"
+                        />
 
                 </LinearLayout>
 
@@ -177,7 +180,8 @@
                         android:layout_height="match_parent"
                         android:text="Confirm email"
                         android:gravity="center"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="#01579b"
+                        />
 
                 </LinearLayout>
 

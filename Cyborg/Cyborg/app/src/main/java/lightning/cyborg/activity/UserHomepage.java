@@ -538,7 +538,18 @@ public class UserHomepage extends AppCompatActivity {
 
     public void logout(View view){
         Intent intent = new Intent(this, LoginActivity.class);
+        MyApplication.getInstance().logout();
         startActivity(intent);
+    }
+
+
+
+    public void blockedUser(View view){
+
+        Intent intent = new Intent(this, ViewBlockedUsers.class);
+        startActivity(intent);
+
+
     }
 
 
