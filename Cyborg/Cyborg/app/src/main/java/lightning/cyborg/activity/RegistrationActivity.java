@@ -53,6 +53,7 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText emailConfirmET;
     Button chooseAvator;
     EditText nameET;
+    EditText lastnameET;
     EditText passwordET;
     EditText dobET;
     Spinner eduSpin;
@@ -90,6 +91,8 @@ public class RegistrationActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupRegister);
         maleRadioRegister = (RadioButton) findViewById(R.id.rbMale);
         avatorIcon = (ImageView) findViewById(R.id.avatorIcon);
+
+        lastnameET = (EditText) findViewById(R.id.txtLastName);
 
         femaleRadioRegister = (RadioButton) findViewById(R.id.rbFemal);
         maleRadioRegister.setChecked(true);
