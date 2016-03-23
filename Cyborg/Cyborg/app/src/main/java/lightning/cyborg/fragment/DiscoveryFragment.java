@@ -102,7 +102,7 @@ public class DiscoveryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    loadButton.setEnabled(false);
+                    //loadButton.setEnabled(false);
                     populateDiscovery(5);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -286,14 +286,14 @@ public class DiscoveryFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
-                        loadButton.setEnabled(false);
+                      // loadButton.setEnabled(false);
                     }
                 }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", url);
-                loadButton.setEnabled(false);
+               // loadButton.setEnabled(false);
             }
         }
         ){
