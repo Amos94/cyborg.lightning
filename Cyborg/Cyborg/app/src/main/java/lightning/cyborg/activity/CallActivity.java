@@ -1,6 +1,5 @@
 package lightning.cyborg.activity;
 
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -55,7 +54,6 @@ import lightning.cyborg.app.MyApplication;
  */
 
 public class CallActivity extends AppCompatActivity {
-
     public String sipAddress = null;
 
     private String TAG= CallActivity.class.getSimpleName();

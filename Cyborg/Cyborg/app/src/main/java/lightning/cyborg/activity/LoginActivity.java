@@ -30,9 +30,13 @@ import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.helper.InputVerification;
 import lightning.cyborg.model.User;
 
-
+/**
+ * This class creates a grid which displays all of the avatars for the users to pick
+ * once clicked it will change the profile avatar.
+ *
+ * Created by Team Cyborg Lightning
+ */
 public class LoginActivity extends AppCompatActivity {
-
     private String TAG = LoginActivity.class.getSimpleName();
     private EditText _inputEmail, _inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutEmail;
@@ -46,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
          * Check for login session. It user is already logged in
          * redirect him to main activity
          * */
-
         if (MyApplication.getInstance().getPrefManager().getUser() != null) {
             toUserHomePageActivity();
         }
@@ -81,6 +84,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Method that navigates user to the homepage
+     */
     private void toUserHomePageActivity(){
         Intent intent = new Intent(this,UserHomepage.class);
         Bundle bundle = new Bundle();
@@ -90,7 +96,10 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    //TODO Make a button for this
+    /**
+     * Method that sends password
+     * @param view the container that calls this method
+     */
     private void sendPassword(View view) {
         final String url = EndPoints.SEND_PASS;
 
@@ -135,24 +144,22 @@ public class LoginActivity extends AppCompatActivity {
         MyApplication.getInstance().addToRequestQueue(request);
     }
 
-    /*
-     Intent for REGISTER
-    */
+    /**
+     * Navigates user to register screen
+     * @param view the container that calls this method
+     */
     public void goToRegisterScreen(View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
     }
-
 
     /**
      * logging in user. Will make http post request with name, email
      * as parameters
      */
     private void login() {
-
         final String email = _inputEmail.getText().toString();
         final String password = _inputPassword.getText().toString();
-
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.LOGIN, new Response.Listener<String>() {
 
@@ -162,30 +169,16 @@ public class LoginActivity extends AppCompatActivity {
 
                 try {
                     JSONObject obj = new JSONObject(response);
-
-                    // check for error flag
                     if (obj.getString("success").equals("1")) {
-                        // user successfully logged in
-                        //id, name, email, created_at
-
                         JSONObject userObj = obj.getJSONObject("user");
                         Log.d("login", userObj.toString());
                         User user = new User(userObj);
-
-                        // storing user in shared preferences
                         MyApplication.getInstance().getPrefManager().storeUser(user);
-
-                        // start main activity
-                        // startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         toUserHomePageActivity();
-
                         finish();
-
                     } else {
-                        // login error - simply toast the message
                         Toast.makeText(getApplicationContext(), "" + obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
-
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
                     Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -193,7 +186,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginBtn.setEnabled(true);
             }
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 loginBtn.setEnabled(true);
@@ -202,7 +194,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }) {
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -213,16 +204,7 @@ public class LoginActivity extends AppCompatActivity {
                 return params;
             }
         };
-
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
-
-
 }
