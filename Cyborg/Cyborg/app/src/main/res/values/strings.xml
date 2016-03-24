@@ -51,7 +51,6 @@
 
     <string-array name ="interest_menu">
     <item>Delete</item>
-    <item>Search</item>
     </string-array>
 
 
