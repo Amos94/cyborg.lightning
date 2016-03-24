@@ -67,7 +67,6 @@ public class UserHomepage extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private LinearLayout testerLayout;
     private String TAG = UserHomepage.class.getSimpleName();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -75,10 +74,8 @@ public class UserHomepage extends AppCompatActivity {
     private ArrayList<ChatRoom> freindsChatRoomArrayList;
     private ChatRoomsAdapter normalChatAdapter;
     private ChatRoomsAdapter freindChatAdapter;
-    private RecyclerView recyclerView;
     private int onChatFragment = 0;
 
-    private Button settingsButton;
 
 
     private static final long RIPPLE_DURATION = 500;
@@ -204,7 +201,7 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setId(chatRoomsObj.getString("chat_room_id"));
                             cr.setName(chatRoomsObj.getString("name"));
                             cr.setPermission(chatRoomsObj.getString("permission"));
-                            cr.setLastMessage("");
+                            cr.setLastMessage(" ");
                             cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
                             cr.setVisibility(chatRoomsObj.getString("visibility"));
@@ -228,11 +225,12 @@ public class UserHomepage extends AppCompatActivity {
 
                     } else {
                         // error in fetching chat rooms
-                        Log.d("Error", "No Chat Rooms Found");
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
-                    Log.d(TAG, "json parsing error: " + e.getMessage());
+                    Log.e(TAG, "json parsing error: " + e.getMessage());
+                    ;
                 }
 
 
@@ -249,7 +247,7 @@ public class UserHomepage extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse networkResponse = error.networkResponse;
                 Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         }) {
 
@@ -258,6 +256,7 @@ public class UserHomepage extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("type", TYPE);
                 params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
+
                 Log.e(TAG, "params: " + params.toString());
                 return params;
             }
@@ -492,7 +491,7 @@ public class UserHomepage extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(menuItem);
     }
-    
+
     public void goToBlocked(){
         Intent intent = new Intent(UserHomepage.this, ViewBlockedUsers.class);
         startActivity(intent);
