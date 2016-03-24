@@ -17,6 +17,9 @@ import java.util.ArrayList;
 
 import lightning.cyborg.R;
 
+/**
+ *
+ */
 public class Avator_Logo extends ActionBarActivity {
     private GridView gridView;
     private GridViewAdapter gridAdapter;
@@ -26,24 +29,20 @@ public class Avator_Logo extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avator);
 
-
-        //inserting the Avator and Name into a custom GridLayout I made in a seperate Class..
-
+        //Images are put into gridView Adapter
         gridView = (GridView) findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(this, R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
 
-
-
-        // When you click the Imageview, this will find the position and then compress into Bitmap and than return the Avator
-        // back to a its appropirate activitiy.. for example: registration or Homepage...
-
+        //onClickListener for GridView
         gridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                //retrieves the item that was clicked
                 Bitmap item = (Bitmap) parent.getItemAtPosition(position);
                 android.graphics.Bitmap x = item;
-                //UserProfileFragment.imageview.setImageBitmap(x);
-                // RegistrationActivity.avatorIcon.setImageBitmap(x);
+
+                //image is compressed
                 Intent intent = new Intent();
                 ByteArrayOutputStream bs  = new ByteArrayOutputStream();
                 x.compress(android.graphics.Bitmap.CompressFormat.PNG,50,bs );
@@ -51,6 +50,7 @@ public class Avator_Logo extends ActionBarActivity {
                 intent.putExtra("Bitmap", bs.toByteArray());
                 intent.putExtra("imageID",position);
 
+                //return return to activity
                 setResult(Activity.RESULT_OK, intent);
                 finish();
 
@@ -59,13 +59,9 @@ public class Avator_Logo extends ActionBarActivity {
     }
 
     /**
-     * Prepare Avator Image for gridview..
-     * Images are stored in an arraylist inside the String xml to add more avator or images.. in the future...
+     * Gets the avatar data
+     * @return an ArrayList of Avatars in Bitmap format
      */
-
-
-
-
     private ArrayList<Bitmap> getData() {
         final ArrayList<Bitmap> imageItems = new ArrayList<>();
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);

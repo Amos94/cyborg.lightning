@@ -1,8 +1,5 @@
 package lightning.cyborg.app;
 
-/**
- * Created by Lincoln on 14/10/15.
- */
 
 import android.app.Application;
 import android.content.Context;
@@ -20,9 +17,8 @@ import lightning.cyborg.helper.MyPreferenceManager;
 
 
 /**
- * Created by Ravi on 13/05/15.
+ * Created by Team Cyborg Lightning
  */
-
 public class MyApplication extends Application {
 
     public static final String TAG = MyApplication.class
@@ -40,10 +36,18 @@ public class MyApplication extends Application {
         mInstance = this;
     }
 
+    /**
+     * Get current Instance
+     * @return current Instance
+     */
     public static synchronized MyApplication getInstance() {
         return mInstance;
     }
 
+    /**
+     * Get the Volley Request Queue
+     * @return queue
+     */
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -52,6 +56,10 @@ public class MyApplication extends Application {
         return mRequestQueue;
     }
 
+    /**
+     * Get the preference Manager
+     * @return the preference Manager
+     */
     public MyPreferenceManager getPrefManager() {
         if (pref == null) {
             pref = new MyPreferenceManager(this);
@@ -60,22 +68,25 @@ public class MyApplication extends Application {
         return pref;
     }
 
+    /**
+     * Add http request to Volley Queue
+     */
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
     }
 
+    /**
+     * Add http request to Volley Queue
+     */
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
     }
 
-    public void cancelPendingRequests(Object tag) {
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(tag);
-        }
-    }
-
+    /**
+     * Clear shared prefence when logging out.
+     */
     public void logout() {
         pref.clear();
         Intent intent = new Intent(this, LoginActivity.class);

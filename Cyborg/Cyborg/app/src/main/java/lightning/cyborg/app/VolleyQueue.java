@@ -10,13 +10,14 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 /**
- * A class which has a single static Request Queue for the application to use
+ * Created by Team Cyborg Lightning
  */
 public class VolleyQueue {
-    private static VolleyQueue mInstance;
-    private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
-    private static Context mCtx;
+    private static VolleyQueue mInstance;          //the volleyQueue used across the app
+    private RequestQueue mRequestQueue;           //the Request Queue the http requests will be filtered into
+    private ImageLoader mImageLoader;              //TODO
+    private static Context mCtx;                  //the context of the request.
+
 
     private VolleyQueue(Context context) {
         mCtx = context;
@@ -46,6 +47,10 @@ public class VolleyQueue {
         return mInstance;
     }
 
+    /**
+     * Returns the requestQueue, if null, a new Queue is created
+     * @return the requestQueue
+     */
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the

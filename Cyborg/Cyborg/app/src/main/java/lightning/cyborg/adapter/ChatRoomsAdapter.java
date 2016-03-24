@@ -116,6 +116,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         holder.name.setText(chatRoom.getName());
         TypedArray imgs = mContext.getResources().obtainTypedArray(R.array.image_ids);
 
+
         Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
         holder.avatar.setImageBitmap(image);
         Log.d(TAG,image.toString());
