@@ -28,11 +28,10 @@ import lightning.cyborg.app.VolleyQueue;
 import lightning.cyborg.fragment.UserProfileFragment;
 
 /**
- * Created by Amos Madalin Neculau on 22/03/2016.
+ * This 
+ * Created by Team Cyborg Lightning
  */
 public class SettingsEditSipUserInfo extends AppCompatActivity {
-
-
     //UI ELEMENTS
     private TextView userTV;
     private TextView passwordTV;
@@ -134,6 +133,4 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         Intent intent = new Intent(this, UserHomepage.class);
         startActivity(intent);
     }
-
-
 }
