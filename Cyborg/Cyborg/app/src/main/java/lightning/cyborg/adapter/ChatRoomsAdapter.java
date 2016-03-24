@@ -120,12 +120,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         holder.avatar.setImageBitmap(image);
         Log.d(TAG,image.toString());
 
-
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
 
             holder.message.setText("Pending request");
-
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
