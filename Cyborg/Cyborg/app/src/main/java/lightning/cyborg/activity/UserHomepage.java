@@ -205,7 +205,11 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
                             cr.setVisibility(chatRoomsObj.getString("visibility"));
                             cr.setAvatar(chatRoomsObj.getString("avatar"));
-                            Log.d("FAFFa", cr.getPermission()+"avtarar"+cr.getAvatar());
+                            Log.d("FAFFa", cr.getPermission() + "avtarar" + cr.getAvatar());
+                            if(chatRoomsObj.getString("last_message") ==null){}
+                            else{
+                                cr.setLastMessage(chatRoomsObj.getString("last_message"));
+                            }
                             if (cr.getPermission().equals("n") || cr.getVisibility().equals("n")) {
 
                             } else {
