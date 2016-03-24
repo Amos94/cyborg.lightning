@@ -76,8 +76,6 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public void writeToParcel(Parcel dest, int flags) {
     }
 
-
-    //
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
         public ImageView avatar;
@@ -90,12 +88,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             timestamp = (TextView) view.findViewById(R.id.timestamp);
             count = (TextView) view.findViewById(R.id.count);
             avatar = (ImageView) view.findViewById(R.id.showAvatar);
-
             accept = (Button) view.findViewById(R.id.acceptbutton);
             decline = (Button) view.findViewById(R.id.rejectbutton);
         }
     }
-
 
     public ChatRoomsAdapter(Context mContext, ArrayList<ChatRoom> chatRoomArrayList, String type) {
         this.mContext = mContext;
@@ -115,25 +111,18 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
         final ChatRoom chatRoom = chatRoomArrayList.get(position);
         holder.name.setText(chatRoom.getName());
-
-
         TypedArray imgs = mContext.getResources().obtainTypedArray(R.array.image_ids);
 
         Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
         holder.avatar.setImageBitmap(image);
         Log.d(TAG,image.toString());
 
-
-
-
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
 
             holder.message.setText("Pending request");
-
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
@@ -149,7 +138,6 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                         chatRoomArrayList.remove(chatRoom);
                         notifyDataSetChanged();
                     }
-
                 }
             });
         }
@@ -159,16 +147,13 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
-
             holder.accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     //if users accepts
                     serverHandler("accept", chatRoom.getId());
                     ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type,chatRoom.getPermission(), chatRoom.getAvatar());
                     //notifyDataSetChanged();
-
                 }
             });
 
@@ -177,20 +162,17 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 @Override
                 public void onClick(View v) {
                     if(canRemove){
-                    serverHandler("decline", chatRoom.getId());
-                    chatRoom.setChatRoomExists(false);
-                    chatRoomArrayList.remove(chatRoom);
-                    notifyDataSetChanged();
+                        serverHandler("decline", chatRoom.getId());
+                        chatRoom.setChatRoomExists(false);
+                        chatRoomArrayList.remove(chatRoom);
+                        notifyDataSetChanged();
                     }
-
                 }
             });
-
         }
 
         //if user hid chat and new message arrived
         else if(chatRoom.getPermission().equals("rmsg")){
-
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
@@ -204,7 +186,6 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                     serverHandler("accept", chatRoom.getId());
                     Log.d(TAG, "onClick: after accept");
                     ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type, chatRoom.getPermission(), chatRoom.getAvatar());
-
                 }
             });
 
@@ -221,7 +202,6 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         }
 
         else{
-
             holder.message.setText(chatRoom.getLastMessage());
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
@@ -234,15 +214,12 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             if (chatRoom.getUnreadCount() > 0) {
                 holder.count.setText(String.valueOf(chatRoom.getUnreadCount()));
                 holder.count.setVisibility(View.VISIBLE);
-
             }
             else {
                 holder.count.setVisibility(View.GONE);
-
             }
 
             Log.d("TAG", chatRoom.getId() + "permission::" + chatRoom.getPermission());
-
             holder.timestamp.setText(getTimeStamp(chatRoom.getTimestamp()));
         }
     }
@@ -252,13 +229,11 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         return chatRoomArrayList.size();
     }
 
-    //
     public static String getTimeStamp(String dateStr) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String timestamp = "";
 
         today = today.length() < 2 ? "0" + today : today;
-
         try {
             Date date = format.parse(dateStr);
             SimpleDateFormat todayFormat = new SimpleDateFormat("dd");
@@ -269,21 +244,15 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return timestamp;
     }
 
     public interface ClickListener {
         void onClick(View view, int position);
-
-
-
         void onLongClick(View view, int position);
-
     }
 
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
 
@@ -307,13 +276,12 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
             View child = rv.findChildViewUnder(e.getX(), e.getY());
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-               try{ clickListener.onClick(child, rv.getChildPosition(child));}
-               catch (Exception e1){
-                   e1.printStackTrace();
-               }
+                try{ clickListener.onClick(child, rv.getChildPosition(child));}
+                catch (Exception e1){
+                    e1.printStackTrace();
+                }
             }
             return false;
         }
@@ -324,7 +292,6 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
         }
     }
 
@@ -344,19 +311,14 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             @Override
             public void onResponse(String response) {
                 Log.e(TAG, "response: " + response);
-
                 try {
                     JSONObject obj = new JSONObject(response);
 
                     // check for error flag
                     if (obj.getBoolean("error") == false) {
                         Log.d(TAG, "inServer: before");
-                            notifyDataSetChanged();
+                        notifyDataSetChanged();
                         Log.d(TAG, "inServer: after");
-
-
-                        // error in fetching chat rooms
-                        //  Toast.makeText(mContext, "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
@@ -377,6 +339,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 Toast.makeText(mContext, "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         })
+
         {
             @Override
             protected Map<String, String> getParams() {
@@ -395,10 +358,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
-
     public void setChatRoomArrayList(ArrayList<ChatRoom> newArraylist){
         chatRoomArrayList = newArraylist;
         notifyDataSetChanged();
     }
-
 }
