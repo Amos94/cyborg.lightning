@@ -380,9 +380,9 @@ public class UserHomepage extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter PageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         PageAdapter.addFragment(new UserProfileFragment(), "Profile");
-        PageAdapter.addFragment(new DiscoveryFragment(), "Discovery");
+        PageAdapter.addFragment(new DiscoveryFragment(), "Search");
         PageAdapter.addFragment(new FriendsListFragment(), "Friends");
-        PageAdapter.addFragment(new chatRoomFragment(), "ChatRoom");
+        PageAdapter.addFragment(new chatRoomFragment(), "Matches");
         viewPager.setAdapter(PageAdapter);
     }
 

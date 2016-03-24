@@ -111,7 +111,7 @@ public class UserDetails extends Activity {
         if(!etnewPasword.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").equals("")){
             params.put("password", etnewPasword.getText().toString());
         }
-        if(spEducation.getSelectedItemPosition() == 9){
+        if(spEducation.getSelectedItemPosition() != 9){
             params.put("edu_level", Integer.toString(spEducation.getSelectedItemPosition()));
             localUser.setEdu_level(params.get("edu_level"));
         }
