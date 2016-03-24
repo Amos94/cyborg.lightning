@@ -32,6 +32,9 @@ import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 
+/**
+ * Created by Amos Madalin Neculau on 28/02/2016.
+ */
 
 public class UserDetails extends Activity {
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 
@@ -26,6 +27,9 @@ public class SipAccountRegistration extends Activity{
 
         wv = (WebView) findViewById(R.id.webView);
         doneBtn = (Button) findViewById(R.id.doneBtn);
+
+        WebSettings webSettings = wv.getSettings();
+        webSettings.setJavaScriptEnabled(true);
 
         wv.loadUrl("https://www.antisip.com/sip-antisip-com-register");
     }

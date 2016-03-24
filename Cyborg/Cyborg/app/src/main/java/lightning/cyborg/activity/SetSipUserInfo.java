@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.setting.SetingsRegisterSipAccount;
 import lightning.cyborg.voip.SipAccountRegistration;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
@@ -111,5 +112,7 @@ public class SetSipUserInfo extends AppCompatActivity {
         Intent intent = new Intent(this, SipAccountRegistration.class);
         startActivity(intent);
     }
+
+
 
 }

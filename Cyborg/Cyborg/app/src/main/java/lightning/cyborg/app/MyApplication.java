@@ -19,10 +19,6 @@ import lightning.cyborg.activity.LoginActivity;
 import lightning.cyborg.helper.MyPreferenceManager;
 
 
-/**
- * Created by Ravi on 13/05/15.
- */
-
 public class MyApplication extends Application {
 
     public static final String TAG = MyApplication.class

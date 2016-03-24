@@ -52,6 +52,14 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         registerBtn = (Button) findViewById(R.id.registerBtn);
         homeBtn = (Button) findViewById(R.id.backToUserHomepageBtn);
 
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsEditSipUserInfo.this, SetingsRegisterSipAccount.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
