@@ -69,8 +69,8 @@ public class Avator_Logo extends ActionBarActivity {
     private ArrayList<Bitmap> getData() {
         final ArrayList<Bitmap> imageItems = new ArrayList<>();
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
-        for (int i = 0; i < imgs.length()-1; i++) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
+        for (int i = 0; i < imgs.length(); i++) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, 0));
             imageItems.add(bitmap);
         }
         return imageItems;
