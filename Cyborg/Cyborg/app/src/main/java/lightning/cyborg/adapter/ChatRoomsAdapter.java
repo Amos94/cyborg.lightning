@@ -118,12 +118,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
         Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
         holder.avatar.setImageBitmap(image);
-<<<<<<< HEAD
         Log.d(TAG,image.toString());
-=======
-      Log.d(TAG,image.toString());
 
->>>>>>> tempBranch
 
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
@@ -154,11 +150,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
-<<<<<<< HEAD
-=======
             holder.cancel.setVisibility(View.GONE);
-
->>>>>>> tempBranch
             holder.accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -376,8 +368,5 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         chatRoomArrayList = newArraylist;
         notifyDataSetChanged();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> tempBranch
+

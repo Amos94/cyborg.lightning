@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -77,6 +78,7 @@ public class UserHomepage extends AppCompatActivity {
     private ChatRoomsAdapter normalChatAdapter;
     private ChatRoomsAdapter freindChatAdapter;
     private int onChatFragment = 0;
+    private boolean requestBoth;
 
 
 
@@ -270,6 +272,9 @@ public class UserHomepage extends AppCompatActivity {
                 return params;
             }
         };
+        strReq.setRetryPolicy(new DefaultRetryPolicy(5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
@@ -313,8 +318,11 @@ public class UserHomepage extends AppCompatActivity {
         }
         else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
+            requestBoth=true;
             normalChatRoomArrayList.clear();
             fetchChatRooms("n");
+            freindsChatRoomArrayList.clear();
+            fetchChatRooms("f");
 
         }
 
