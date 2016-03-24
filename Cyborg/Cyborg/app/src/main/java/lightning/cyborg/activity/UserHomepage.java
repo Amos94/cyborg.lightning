@@ -475,51 +475,11 @@ public class UserHomepage extends AppCompatActivity {
         return true;
     }
 
-<<<<<<< HEAD
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.user_menu, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.action_logout:
-                MyApplication.getInstance().logout();
-                break;
-            case R.id.action_viewBlockedList:
-                goToBlocked();
-                break;
-        }
-        return super.onOptionsItemSelected(menuItem);
-    }
-
-    public void goToBlocked(){
-        Intent intent = new Intent(UserHomepage.this, ViewBlockedUsers.class);
-        startActivity(intent);
-    }
-
-
-    //navigating to settings...
-    public void clickSetting(View view) {
-
-        Intent intent = new Intent(UserHomepage.this, MenuEditSip.class);
-        startActivity(intent);
-
-
-    }
-=======
->>>>>>> sipcontentFix
-
     //navigating to Editing Profile...
     public void clickUserProfile(View view) {
         Intent intent = new Intent(UserHomepage.this, UserDetails.class);
         startActivity(intent);
-
     }
-
 
     //the about us page...
 

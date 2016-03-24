@@ -363,15 +363,9 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
                         android:id="@+id/etDob"
-<<<<<<< HEAD
                         android:hint="YYYY-MM-DD"
-                        android:text="Pick a Date..." />
-
-=======
-                        android:hint="Click to pick date"
                         android:layout_weight="1" />
->>>>>>> sipcontentFix
-                </LinearLayout>
+               </LinearLayout>
 
             </LinearLayout>
 

@@ -41,11 +41,8 @@ import lightning.cyborg.helper.InputVerification;
 public class RegistrationActivity extends AppCompatActivity {
 
     //Info for register
-<<<<<<< HEAD
-    private EditText emailET;
-=======
+
    private EditText emailET;
->>>>>>> sipcontentFix
     private ImageView avatorIcon;
     private int avator_id;
     private EditText emailConfirmET;
@@ -188,11 +185,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         try {
             if (InputVerification.DoBVerification(dobET.getText().toString())) {
-<<<<<<< HEAD
                 params.put("dob", dobET.getText().toString().replaceAll("-",""));
-=======
                 params.put("dob", dobET.getText().toString());
->>>>>>> sipcontentFix
             } else {
                 validInput = false;
                 dobET.setError("Please a valid date yyyy-mm-dd");
@@ -225,15 +219,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                 boolean success = jsonResponse.getString("success").equals("1");
                                 Log.d("Success", String.valueOf(success));
-<<<<<<< HEAD
                                 if(success){
                                     toLogin();
                                 }
-=======
-                                 if(success){
-                                     toLogin();
-                                 }
->>>>>>> sipcontentFix
 
                                 String message = jsonResponse.getString("message");
                                 Log.d("Message is", message);

@@ -25,7 +25,6 @@ public class InputVerification {
         int age;
         DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         Date dateofBirth;
-<<<<<<< HEAD
         try {
             dateofBirth = df.parse(date.toString());
         }catch (ParseException p){
@@ -33,15 +32,6 @@ public class InputVerification {
         }catch (NullPointerException e){
             return false;
         }
-=======
-       try {
-            dateofBirth = df.parse(date.toString());
-       }catch (ParseException p){
-           return false;
-       }catch (NullPointerException e){
-           return false;
-       }
->>>>>>> sipcontentFix
         Calendar dob = Calendar.getInstance();
         dob.setTime(dateofBirth);
 
@@ -49,7 +39,6 @@ public class InputVerification {
         age = todayDate.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
 
         if (todayDate.get(Calendar.DAY_OF_YEAR) <= dob.get(Calendar.DAY_OF_YEAR)) {
-<<<<<<< HEAD
             age--;
         }
         if (age >= 18) {
@@ -59,17 +48,7 @@ public class InputVerification {
             System.out.println("Under 18: " + age);
             return false;
         }
-=======
-                age--;
-            }
-            if (age >= 18) {
-                System.out.println("Above 18: " + age);
-                return true;
-            } else {
-                System.out.println("Under 18: " + age);
-                return false;
-            }
->>>>>>> sipcontentFix
+
     }
 
     //TODO ADD TO REGISTER ACTIVITY
@@ -78,7 +57,6 @@ public class InputVerification {
      * @param email - String
      * @return boolean
      */
-<<<<<<< HEAD
     public static  boolean EmailVerification(String email){
         String emailRegEx;
         Pattern pattern;
@@ -92,21 +70,7 @@ public class InputVerification {
         }
         return true;
     }
-=======
-        public static  boolean EmailVerification(String email){
-            String emailRegEx;
-            Pattern pattern;
-            // Regex for a valid email address
-            emailRegEx = "^[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,4}$";
-            // Compare the regex with the email address
-            pattern = Pattern.compile(emailRegEx);
-            Matcher matcher = pattern.matcher(email);
-            if (!matcher.find()) {
-                return false;
-            }
-            return true;
-        }
->>>>>>> sipcontentFix
+
 
 
     //TODO ADD TO REGISTER ACTIVITY
@@ -116,7 +80,6 @@ public class InputVerification {
      * @param confirmPassword - String
      * @return - boolean
      */
-<<<<<<< HEAD
     public static  boolean PasswordVerification(String password, String confirmPassword) {
         if(checkUserPasswordInput(password)==false) return false;
         if(checkUserPasswordInput(confirmPassword)==false)return false;
@@ -126,17 +89,7 @@ public class InputVerification {
         //  passwordET.setError("Please Enter same password");
         return false;
     }
-=======
-        public static  boolean PasswordVerification(String password, String confirmPassword) {
-            if(checkUserPasswordInput(password)==false) return false;
-            if(checkUserPasswordInput(confirmPassword)==false)return false;
-            if (password.toString().equals(confirmPassword.toString()) && (!password.equals("") || !confirmPassword.equals(""))) {
-                return true;
-            }
-            //  passwordET.setError("Please Enter same password");
-            return false;
-        }
->>>>>>> sipcontentFix
+
 
 
     //TODO ADD TO REGISTER ACTIVITY
@@ -145,7 +98,6 @@ public class InputVerification {
      * @param input - String
      * @return boolean
      */
-<<<<<<< HEAD
     public static boolean isStringAlphaVerification(String input){
         int charCount=0;
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -162,24 +114,7 @@ public class InputVerification {
         }
         return true;
     }
-=======
-        public static boolean isStringAlphaVerification(String input){
-           int charCount=0;
-            String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            if(input.length() == 0) return false;//zero length string ain't alpha
-            for(int i=0;i<input.length();i++){
-                for(int j=0;j<alphabet.length();j++){
-                   if(input.substring(i,i+1).equals(alphabet.substring(j,j+1))
-                           || input.substring(i,i+1).equals(alphabet.substring(j,j+1).toLowerCase())) charCount++;
-              }
-                    if(charCount != (i+1)){
-                      System.out.println("\n**Invalid input! Enter alpha values**\n");
-                        return false;
-                    }
-              }
-            return true;
-        }
->>>>>>> sipcontentFix
+
     //TODO ADD TO REGISTER ACTIVITY
     /**
      * isStringAlphaNumericalVerification function returns true if only AlphaNumerical Chars
@@ -204,14 +139,10 @@ public class InputVerification {
     }
 
 
-<<<<<<< HEAD
-    // USER INPUT 15 long max, all chars, not null
-=======
-                                // USER INPUT 15 long max, all chars, not null
->>>>>>> sipcontentFix
     //TODO ADD TO REGISTER ACTIVITY
     /**
      * checkUserNameInput - Returns true if input (String) is a valid username
+     * must be 15 long max, all chars, not null
      * @param name - String
      * @return boolean
      */
