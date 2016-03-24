@@ -178,12 +178,9 @@ public class UserHomepage extends AppCompatActivity {
 
     }
 
-<<<<<<< HEAD
     /**
      * fetching the chat rooms by making http call
      */
-=======
->>>>>>> visualimporvment
     private void fetchChatRooms(String type) {
         final String TYPE = type;
 
@@ -210,16 +207,13 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setUnreadCount(Integer.parseInt(chatRoomsObj.getString("unread_count")));
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
                             cr.setVisibility(chatRoomsObj.getString("visibility"));
-<<<<<<< HEAD
                             Log.d("FAFFa", cr.getPermission());
-=======
                             cr.setAvatar(chatRoomsObj.getString("avatar"));
                             Log.d("FAFFa", cr.getPermission() + "avtarar" + cr.getAvatar());
                             if(chatRoomsObj.getString("last_message") ==null){}
                             else{
                                 cr.setLastMessage(chatRoomsObj.getString("last_message"));
                             }
->>>>>>> visualimporvment
                             if (cr.getPermission().equals("n") || cr.getVisibility().equals("n")) {
 
                             } else {
@@ -311,16 +305,6 @@ public class UserHomepage extends AppCompatActivity {
             }
 
         }
-<<<<<<< HEAD
-
-        //else if (type == Config.PUSH_TYPE_USER) {
-//            // push belongs to user alone
-//            // just showing the message in a toast
-//            Message message = (Message) intent.getSerializableExtra("message");
-//            Toast.makeText(getApplicationContext(), "New push: " + message.getMessage(), Toast.LENGTH_LONG).show();
-//        }
-=======
->>>>>>> visualimporvment
         else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
             normalChatRoomArrayList.clear();
@@ -441,10 +425,7 @@ public class UserHomepage extends AppCompatActivity {
         }
     }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> visualimporvment
     @Override
     protected void onResume() {
         super.onResume();
@@ -512,14 +493,12 @@ public class UserHomepage extends AppCompatActivity {
         return super.onOptionsItemSelected(menuItem);
     }
 
-<<<<<<< HEAD
     public void goToBlocked(){
         Intent intent = new Intent(UserHomepage.this, ViewBlockedUsers.class);
         startActivity(intent);
     }
 
-=======
->>>>>>> visualimporvment
+
     //navigating to settings...
     public void clickSetting(View view) {
 
@@ -572,6 +551,10 @@ public class UserHomepage extends AppCompatActivity {
         Intent intent = new Intent(this, ViewBlockedUsers.class);
         startActivity(intent);
 
+
+    }
+    @Override
+    public void onBackPressed() {
 
     }
 

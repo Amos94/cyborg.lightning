@@ -793,5 +793,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(menuItem);
     }
-
+    @Override
+    public void onBackPressed() {
+        toUserHomePageActivity();
+    }
 }
