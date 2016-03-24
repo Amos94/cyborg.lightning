@@ -184,7 +184,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         try {
             if (InputVerification.DoBVerification(dobET.getText().toString())) {
-                params.put("dob", dobET.getText().toString());
+                params.put("dob", dobET.getText().toString().replaceAll("-",""));
             } else {
                 validInput = false;
                 dobET.setError("Please a valid date yyyy-mm-dd");
