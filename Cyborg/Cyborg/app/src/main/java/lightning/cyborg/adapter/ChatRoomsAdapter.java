@@ -315,6 +315,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                    e1.printStackTrace();
                }
             }
+
+            
             return false;
         }
 
