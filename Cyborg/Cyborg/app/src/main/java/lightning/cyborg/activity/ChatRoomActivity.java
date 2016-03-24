@@ -133,7 +133,6 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
         fetchChatThread();
-        fetchSip();
     }
 
 
@@ -593,8 +592,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 //CALLEE USERNAME
                                 sipCaleeUsername = obj.getString("calling_sip_username");
 
-                                if(!sipUsername.equals("null") && sipPassword.equals("null") && sipCaleeUsername.equals("null")){
+                                if(!(sipUsername.equals("null") || sipPassword.equals("null") || sipCaleeUsername.equals("null"))){
                                     callButton.setEnabled(true);
+                                    callButton.setVisible(true);
                                 }
                             }
                         } catch (JSONException e) {
@@ -698,7 +698,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             addFriend.setIcon(R.drawable.ic_person_add_white_24dp);
         }
         callButton = menu.findItem(R.id.action_calluser);
-        //callButton.setVisible(false);
+        callButton.setVisible(false);
+        fetchSip();
         //fetchSip;
         return true;
     }
@@ -770,6 +771,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
 
