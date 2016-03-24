@@ -37,20 +37,16 @@ import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.avator.Avator_Logo;
 import lightning.cyborg.fragment.DateDialog;
 import lightning.cyborg.helper.InputVerification;
+import lightning.cyborg.model.User;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     //Info for register
 
-   private EditText emailET;
+   private EditText emailET, nameET, lastNameET, emailConfirmET, passwordConfirmET, dobET, passwordET;
     private ImageView avatorIcon;
     private int avator_id;
-    private EditText emailConfirmET;
     private Button chooseAvatar;
-    private EditText nameET;
-    private EditText lastnameET;
-    private EditText passwordET;
-    private EditText dobET;
     private Spinner eduSpin;
     private RadioButton maleRadioRegister;
     private RadioButton femaleRadioRegister;
@@ -75,31 +71,40 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //USER INPUT
 
-        backButton = (ImageView) findViewById(R.id.registerBackButton);
+        chooseAvatar = (Button) findViewById(R.id.btnSelectAvator);
         forwardButton = (ImageView) findViewById(R.id.nextPageButton);
         emailET = (EditText) findViewById(R.id.txtEmail);
         emailConfirmET = (EditText) findViewById(R.id.txtConfirmEmail);
         nameET = (EditText) findViewById(R.id.txtName);
 
+        passwordConfirmET = (EditText) findViewById(R.id.txtConfirmPass);
         passwordET = (EditText) findViewById(R.id.txtPassword);
         dobET = (EditText) findViewById(R.id.etDob);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupRegister);
         maleRadioRegister = (RadioButton) findViewById(R.id.rbMale);
         avatorIcon = (ImageView) findViewById(R.id.avatorIcon);
 
-        lastnameET = (EditText) findViewById(R.id.txtLastName);
+        lastNameET = (EditText) findViewById(R.id.txtLastName);
 
         femaleRadioRegister = (RadioButton) findViewById(R.id.rbFemal);
         maleRadioRegister.setChecked(true);
+
 
         ArrayAdapter<CharSequence> eduAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.education_array_not_any, android.R.layout.simple_spinner_item);
         eduAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eduSpin = (Spinner) findViewById(R.id.eduSpin);
         eduSpin.setAdapter(eduAdapter);
 
+        backButton = (ImageView) findViewById(R.id.registerBackButton);
+        chooseAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Loading Avatars...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(RegistrationActivity.this, Avator_Logo.class);
+                startActivityForResult(intent, 0);
+            }
 
-
-
+        });
 
         dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View view, boolean hasfocus) {
@@ -137,11 +142,9 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-
-    //TODO Make a button to connect this
     public void insertUser(View view) {
         String fname = nameET.getText().toString();
-        String lname = lastnameET.getText().toString();
+        String lname = lastNameET.getText().toString();
         Log.d(fname, lname);
 
         boolean validInput = true;
@@ -149,7 +152,7 @@ public class RegistrationActivity extends AppCompatActivity {
         final Map<String, String> params = new HashMap<String, String>();
 
         if (emailET.getText().toString().equals(emailConfirmET.getText().toString())) {
-            if (InputVerification.EmailVerification(emailET.getText().toString())) {
+            if (InputVerification.isValidEmail(emailET.getText().toString())) {
                 params.put("email", emailET.getText().toString());
             } else {
                 validInput = false;
@@ -176,15 +179,15 @@ public class RegistrationActivity extends AppCompatActivity {
             nameET.setError("Please enter a valid name");
         }
 
-        if (InputVerification.checkUserPasswordInput(passwordET.getText().toString())) {
+        if (InputVerification.isValidPasswordPair(passwordET.getText().toString(), passwordConfirmET.getText().toString())) {
             params.put("password", passwordET.getText().toString());
         } else {
             validInput = false;
-            passwordET.setError("Please enter a valid password");
+            passwordET.setError("Password is invalid / passwords do not match");
         }
 
         try {
-            if (InputVerification.DoBVerification(dobET.getText().toString())) {
+            if (InputVerification.isValidDOB(dobET.getText().toString())) {
                 params.put("dob", dobET.getText().toString().replaceAll("-",""));
                 params.put("dob", dobET.getText().toString());
             } else {
@@ -203,6 +206,7 @@ public class RegistrationActivity extends AppCompatActivity {
             params.put("gender", "F");
         }
 
+        params.put("edu_level", eduSpin.getSelectedItem().toString());
         params.put("avatar", Integer.toString(avator_id));
 
         if (!validInput) {
@@ -220,7 +224,28 @@ public class RegistrationActivity extends AppCompatActivity {
                                 boolean success = jsonResponse.getString("success").equals("1");
                                 Log.d("Success", String.valueOf(success));
                                 if(success){
-                                    toLogin();
+                                    User localUser = new User();
+                                    localUser.setEmail(params.get("email"));
+                                    localUser.setName(params.get("fname"));
+                                    localUser.setLname(params.get("lname"));
+                                    localUser.setDob(params.get("dob"));
+                                    localUser.setGender(params.get("gender"));
+                                    localUser.setAvatar(params.get("avatar"));
+                                    localUser.setEdu_level(eduSpin.getSelectedItemPosition() + "");
+                                    localUser.setId(jsonResponse.getString("id"));
+                                    Log.d("logintohome", localUser.getId() + "");
+                                    localUser.setLat("0");
+                                    localUser.setLon("0");
+
+
+                                    // storing user in shared preferences
+                                    MyApplication.getInstance().getPrefManager().storeUser(localUser);
+
+                                    // start main activity
+                                    // startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    toUserHomePageActivity();
+
+                                    finish();
                                 }
 
                                 String message = jsonResponse.getString("message");
@@ -249,21 +274,23 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private  void toLogin(){
-        Intent intent = new Intent(this, LoginActivity.class);
+    private void toUserHomePageActivity(){
+        Intent intent = new Intent(this,UserHomepage.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("FragmentNum", "0");
+        intent.replaceExtras(bundle);
         startActivity(intent);
+        finish();
     }
+
     //go back to login Page
     private void backToLoginPage(View view){
-
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if(requestCode == 0){
             if(resultCode == Activity.RESULT_OK){
                 Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
@@ -272,20 +299,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 avatorIcon.setImageBitmap(b);
             }
         }
-    }
-
-    public void chooseAvator(View view){
-        chooseAvatar = (Button) findViewById(R.id.btnSelectAvator);
-        chooseAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Loading Avatars..." , Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(RegistrationActivity.this, Avator_Logo.class);
-                startActivityForResult(intent, 0);
-            }
-
-        });
-
     }
 }
 

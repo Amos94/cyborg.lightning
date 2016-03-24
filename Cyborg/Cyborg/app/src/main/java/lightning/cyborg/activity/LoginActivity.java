@@ -1,16 +1,8 @@
 package lightning.cyborg.activity;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,7 +27,7 @@ import java.util.Map;
 import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
-import lightning.cyborg.app.Validation;
+import lightning.cyborg.helper.InputVerification;
 import lightning.cyborg.model.User;
 
 
@@ -79,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (new Validation().isValidEmail(_inputEmail.getText().toString()) && new Validation().isValidPassword(_inputPassword.getText().toString())) {
+                if (InputVerification.isValidEmail(_inputEmail.getText().toString()) && InputVerification.isValidPassword(_inputPassword.getText().toString())) {
                     loginBtn.setEnabled(false);
                     login();
                 } else {
@@ -118,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("Success", String.valueOf(success));
                             String message = jsonResponse.getString("message");
                             Log.d("Message is", message);
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
@@ -128,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("VolleyError at url ", url);
+                Toast.makeText(getApplicationContext(), "Server timed out, please try again.", Toast.LENGTH_SHORT).show();
             }
         }
         ) {
@@ -189,7 +183,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else {
                         // login error - simply toast the message
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "" + obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {

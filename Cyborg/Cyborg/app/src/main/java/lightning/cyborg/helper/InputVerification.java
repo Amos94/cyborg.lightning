@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
 public class InputVerification {
 
     /**
-     * DoBVerification function returns true if param is date type object
+     * isValidDOB function returns true if param is date type object
      * @param date - String
      * @return boolean
      * @throws ParseException - Date Type Object
      */
-    public static boolean DoBVerification(String date) throws ParseException {
+    public static boolean isValidDOB(String date) throws ParseException {
         int age;
         DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         Date dateofBirth;
@@ -53,11 +53,11 @@ public class InputVerification {
 
     //TODO ADD TO REGISTER ACTIVITY
     /**
-     * EmailVerification function returns true if input string is a valid email input
+     * isValidEmail function returns true if input string is a valid email input
      * @param email - String
      * @return boolean
      */
-    public static  boolean EmailVerification(String email){
+    public static  boolean isValidEmail(String email){
         String emailRegEx;
         Pattern pattern;
         // Regex for a valid email address
@@ -75,14 +75,14 @@ public class InputVerification {
 
     //TODO ADD TO REGISTER ACTIVITY
     /**
-     * PasswordVerification function returns true if both password are a match
+     * isValidPasswordPair function returns true if both password are a match
      * @param password - String
      * @param confirmPassword - String
      * @return - boolean
      */
-    public static  boolean PasswordVerification(String password, String confirmPassword) {
-        if(checkUserPasswordInput(password)==false) return false;
-        if(checkUserPasswordInput(confirmPassword)==false)return false;
+    public static  boolean isValidPasswordPair(String password, String confirmPassword) {
+        if(isValidPassword(password)==false) return false;
+        if(isValidPassword(confirmPassword)==false)return false;
         if (password.toString().equals(confirmPassword.toString()) && (!password.equals("") || !confirmPassword.equals(""))) {
             return true;
         }
@@ -166,11 +166,11 @@ public class InputVerification {
 
     //TODO ADD TO REGISTER ACTIVITY
     /**
-     * checkUserPasswordInput returns true if input (String) is only AlphaNumerical Chars
+     * isValidPassword returns true if input (String) is only AlphaNumerical Chars
      * @param password - String
      * @return boolean
      */
-    public static boolean checkUserPasswordInput(String password){
+    public static boolean isValidPassword(String password){
         boolean valid = true;
         if(isStringAlphaNumericalVerification(password)) valid =true;
         else {valid = false;}
@@ -182,4 +182,11 @@ public class InputVerification {
         }
     }
 
+    public static String getValidMessage(String sin){
+        return sin.replaceAll("\\\\", "").replaceAll(";", "");
+    }
+
+    public static String getValidInterest(String sin){
+        return getValidMessage(sin).toLowerCase().replaceAll(", ", ",").replaceAll(" ,", ",");
+    }
 }

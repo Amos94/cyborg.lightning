@@ -34,9 +34,6 @@ import lightning.cyborg.app.Config;
 import lightning.cyborg.app.MyApplication;
 
 
-/**
- * Created by Ravi on 01/06/15.
- */
 public class NotificationUtils {
 
     private static String TAG = NotificationUtils.class.getSimpleName();

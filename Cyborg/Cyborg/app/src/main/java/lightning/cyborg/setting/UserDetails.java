@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
+import lightning.cyborg.model.User;
 
 
 public class UserDetails extends Activity {
@@ -45,10 +46,7 @@ public class UserDetails extends Activity {
     RadioButton maleRadioButton;
     RadioButton femaleRadioButton;
     Button btnDone;
-
-
-
-    int backgroundColor = Color.parseColor("#1E88E5");
+    User localUser;
 
     @SuppressLint("NewApi")
     @Override
@@ -65,6 +63,7 @@ public class UserDetails extends Activity {
         maleRadioButton = (RadioButton) findViewById(R.id.maleRadioButton);
         femaleRadioButton = (RadioButton) findViewById(R.id.femaleRadioButton);
         etLocation = (EditText) findViewById(R.id.etLocation);
+        localUser = MyApplication.getInstance().getPrefManager().getUser();
 
 
         //creating array adapter for education List...
@@ -92,6 +91,8 @@ public class UserDetails extends Activity {
     }
 
     private void updateProfile() throws JSONException {
+        final User backupUser = localUser;
+
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -101,26 +102,27 @@ public class UserDetails extends Activity {
         }
         if(!etchangeName.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").equals("")){
             params.put("fname", etchangeName.getText().toString());
+            localUser.setName(params.get("fname"));
         }
         if(!etLastName.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").equals("")){
             params.put("lname", etLastName.getText().toString());
+            localUser.setLname(params.get("lname"));
         }
         if(!etnewPasword.getText().toString().replaceAll(", ", ",").replaceAll(" ,", ",").equals("")){
             params.put("password", etnewPasword.getText().toString());
         }
         if(spEducation.getSelectedItemPosition() == 9){
             params.put("edu_level", Integer.toString(spEducation.getSelectedItemPosition()));
+            localUser.setEdu_level(params.get("edu_level"));
         }
         if(maleRadioButton.isChecked()){
             params.put("gender", "M");
+            localUser.setGender(params.get("gender"));
         }
         if(femaleRadioButton.isChecked()){
             params.put("gender", "F");
+            localUser.setGender(params.get("gender"));
         }
-
-        //TODO add edit location, edit email
-
-
 
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, EndPoints.UPDATE_USERS,
@@ -142,6 +144,7 @@ public class UserDetails extends Activity {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        MyApplication.getInstance().getPrefManager().storeUser(localUser);
                         btnDone.setEnabled(true);
                     }
                 }, new Response.ErrorListener(){
@@ -150,6 +153,7 @@ public class UserDetails extends Activity {
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", EndPoints.UPDATE_USERS);
                 btnDone.setEnabled(true);
+                localUser = backupUser;
             }
         }
         ){
@@ -162,7 +166,6 @@ public class UserDetails extends Activity {
         };
         //put the request in the static queue
         MyApplication.getInstance().addToRequestQueue(request);
-
     }
 
     private void backToMain(){
@@ -174,6 +177,7 @@ public class UserDetails extends Activity {
     }
 
     private void updateLocation() throws JSONException {
+        final User backupUser = localUser;
         final String url = "https://maps.googleapis.com/maps/api/geocode/json?address=uk%20";
         Pattern pattern = Pattern.compile("^[A-Za-z0-9]*$");
         Matcher matcher = pattern.matcher(etLocation.getText().toString().trim());
@@ -193,7 +197,7 @@ public class UserDetails extends Activity {
                             JSONObject jsonResponse = new JSONObject(response);
                             JSONObject results = jsonResponse.getJSONArray("results").getJSONObject(0);
                             JSONObject geometry = results.getJSONObject("geometry");
-                            JSONObject location = geometry.getJSONObject("location");
+                            final JSONObject location = geometry.getJSONObject("location");
 
                             String lat = location.getString("lat");
                             Log.d("geoRes", lat.toString());
@@ -206,6 +210,8 @@ public class UserDetails extends Activity {
                             params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
                             params.put("lat", lat);
                             params.put("lon", lng);
+                            localUser.setLat(lat);
+                            localUser.setLon(lng);
 
                             StringRequest request = new StringRequest(Request.Method.POST, EndPoints.UPDATE_USERS,
                                     new Response.Listener<String>() {
@@ -222,12 +228,14 @@ public class UserDetails extends Activity {
                                                 e.printStackTrace();
                                                 Log.d("JSON failed to parse: ", response);
                                             }
+                                            MyApplication.getInstance().getPrefManager().storeUser(localUser);
                                         }
                                     }, new Response.ErrorListener(){
 
                                 @Override
                                 public void onErrorResponse(VolleyError error){
                                     Log.d("VolleyError at url ", EndPoints.UPDATE_USERS);
+                                    localUser = backupUser;
                                 }
                             }
                             ){
