@@ -174,6 +174,17 @@ public class ChatRoomActivity extends AppCompatActivity {
                 startActivity(intent1);
                 finish();
             }
+            if(message.equals("requestCanceled")){
+                new AlertDialog.Builder(getApplicationContext())
+                        .setTitle("call canceled")
+                        .setMessage("call has been canceled")
+                        .setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .show();
+            }
+
         }
 
         else {
@@ -198,7 +209,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .setMessage("User [username] calls you")
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            //dismiss the call
+                            IncomingCall(context, "requestCanceled");
                             //TODO more php
                         }
                     })
@@ -208,20 +219,19 @@ public class ChatRoomActivity extends AppCompatActivity {
             new AlertDialog.Builder(context)
                     .setTitle("Incoming call")
                     .setIcon(android.R.drawable.sym_call_incoming)
-                    .setMessage("User [username] calls you")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            Intent intent1 = new Intent(context,CallActivity.class);
-                            intent1.putExtra("Calltype","waitCall");
-                            intent1.putExtra("callerUsername",sipUsername);
-                            intent1.putExtra("callerPassword",sipPassword);
-                            intent1.putExtra("calleeUsername",sipCaleeUsername);
-                            intent1.putExtra("chatRoomId",chatRoomId);
-                            intent1.putExtra("name",title);
-                            intent1.putExtra("chat",type);
-                            intent1.putExtra("avatar",avatar);
-                            intent1.putExtra("permission",permission);
+                            Intent intent1 = new Intent(context, CallActivity.class);
+                            intent1.putExtra("Calltype", "waitCall");
+                            intent1.putExtra("callerUsername", sipUsername);
+                            intent1.putExtra("callerPassword", sipPassword);
+                            intent1.putExtra("calleeUsername", sipCaleeUsername);
+                            intent1.putExtra("chatRoomId", chatRoomId);
+                            intent1.putExtra("name", title);
+                            intent1.putExtra("chat", type);
+                            intent1.putExtra("avatar", avatar);
+                            intent1.putExtra("permission", permission);
                             IncomingCall(context, "callAccepted");
 
                             startActivity(intent1);
@@ -229,11 +239,11 @@ public class ChatRoomActivity extends AppCompatActivity {
                         }
                     })
 
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            //dismiss the call
-                        }
-                    })
+                            IncomingCall(context, "requestCanceled");
+
+                        }})
                     .show();
         }
     }
