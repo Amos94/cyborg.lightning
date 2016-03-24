@@ -6,8 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,6 +26,7 @@ import lightning.cyborg.avator.Avator_Logo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +57,7 @@ import java.util.Set;
 public class UserProfileFragment extends Fragment {
 
 
+    private String sendString="";
     public static ImageView  imageview;
     private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter adapter;
@@ -146,6 +153,8 @@ public class UserProfileFragment extends Fragment {
 
         //creating function to add more items into the interest
 
+        registerForContextMenu(listview);
+
         etInterest = (EditText) viewroot.findViewById(R.id.etAddText);
         addInterestButt = (Button) viewroot.findViewById(R.id.addInterestB);
 
@@ -204,6 +213,50 @@ public class UserProfileFragment extends Fragment {
         }
 
         return viewroot;
+    }
+
+
+    public String getSearch() {
+        return sendString;
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+            case 0:
+                try {
+
+                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+                    deleteInterests(items.get(info.position));
+                    Log.d("String to Delete", items.get(info.position));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case 1:
+
+
+
+
+                break;
+
+        }
+        return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId()==R.id.listInterest) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+            menu.setHeaderTitle(items.get(info.position));
+            String[] menuItems = getResources().getStringArray(R.array.interest_menu);
+            for (int i = 0; i<menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
+        }
     }
 
     private void loadProfile() throws JSONException {
@@ -482,5 +535,8 @@ public class UserProfileFragment extends Fragment {
         }
 
         }
+
+
+
 
 }
