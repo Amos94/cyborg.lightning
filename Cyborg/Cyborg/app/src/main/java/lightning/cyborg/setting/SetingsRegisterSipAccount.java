@@ -7,6 +7,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import lightning.cyborg.R;
 import lightning.cyborg.activity.SetSipUserInfo;
@@ -23,8 +24,8 @@ public class SetingsRegisterSipAccount extends Activity{
 
     // UI ELEMENTS
     private WebView wv;
-    private Button doneBtn;
-    private Button homeBtn;
+    private ImageButton doneBtn;
+    private ImageButton homeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,8 @@ public class SetingsRegisterSipAccount extends Activity{
 
         // Initializig the UI elements
         wv = (WebView) findViewById(R.id.webView);
-        doneBtn = (Button) findViewById(R.id.doneBtn);
-        homeBtn = (Button) findViewById(R.id.backToUserHomepageBtn);
+        doneBtn = (ImageButton) findViewById(R.id.doneBtn);
+        homeBtn = (ImageButton) findViewById(R.id.backToUserHomepageBtn);
 
         //Allow JavaScript in order to have a very simple Captcha, also meant for improving the User friendliness
         WebSettings webSettings = wv.getSettings();

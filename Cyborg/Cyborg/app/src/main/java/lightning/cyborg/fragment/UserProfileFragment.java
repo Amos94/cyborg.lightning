@@ -64,7 +64,6 @@ public class UserProfileFragment extends Fragment {
     private ListView listview;
     private int avator_id;
     private TextView tvFirstandLast, tvlocation, tvEdu, tvDob;
-    private int image_id;
     private EditText etInterest;
     private Button addInterestButt;
     private Button delInterestButt;

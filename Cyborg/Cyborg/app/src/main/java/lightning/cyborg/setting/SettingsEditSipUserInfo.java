@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -36,9 +37,9 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
     //UI ELEMENTS
     private TextView userTV;
     private TextView passwordTV;
-    private Button doneBtn;
+    private ImageButton doneBtn;
     private Button registerBtn;
-    private Button homeBtn;
+    private ImageButton homeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +49,9 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         //INITIALIZATION OF UI ELEMENTS
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
-        doneBtn = (Button) findViewById(R.id.doneBtn);
+        doneBtn = (ImageButton) findViewById(R.id.doneBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
-        homeBtn = (Button) findViewById(R.id.backToUserHomepageBtn);
+        homeBtn = (ImageButton) findViewById(R.id.backToUserHomepageBtn);
 
     }
 

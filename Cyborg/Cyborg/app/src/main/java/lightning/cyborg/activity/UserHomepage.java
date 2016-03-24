@@ -132,7 +132,7 @@ public class UserHomepage extends AppCompatActivity {
 
                 } else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER)) {
                     // gcm registration id is stored in our server's MySQL
-                    Log.e(TAG, "GCM registration id is sent to our server");
+                    Log.d(TAG, "GCM registration id is sent to our server");
 
                 } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
