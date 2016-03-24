@@ -301,6 +301,12 @@ public class UserHomepage extends AppCompatActivity {
             }
 
         }
+        else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
+            Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
+            normalChatRoomArrayList.clear();
+            fetchChatRooms("n");
+        }
+
     }
 
     /**
