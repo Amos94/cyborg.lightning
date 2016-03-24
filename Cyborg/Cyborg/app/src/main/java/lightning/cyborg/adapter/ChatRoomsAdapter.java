@@ -80,7 +80,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
         public ImageView avatar;
-        public Button accept, decline;
+        public Button accept, decline, cancel;
 
         public ViewHolder(View view) {
             super(view);
@@ -92,6 +92,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
             accept = (Button) view.findViewById(R.id.acceptbutton);
             decline = (Button) view.findViewById(R.id.rejectbutton);
+            cancel = (Button) view.findViewById(R.id.cancelbutton);
         }
     }
 
@@ -131,15 +132,18 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
 
-            holder.message.setText("pending request");
+            holder.message.setText("Pending request");
 
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
-            holder.accept.setText("cancel request");
-            holder.decline.setVisibility(View.VISIBLE);
+            holder.decline.setOnClickListener(null);
+            holder.decline.setVisibility(View.GONE);
+
+            holder.cancel.setVisibility(View.VISIBLE);
+
             //if user declines
-            holder.decline.setOnClickListener(new View.OnClickListener() {
+            holder.cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     serverHandler("decline", chatRoom.getId());
@@ -152,9 +156,12 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         //if user has received a new request
         else if(chatRoom.getPermission().equals("r")){
 
+            holder.message.setText("Please respond to request");
+
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
+
 
             holder.accept.setOnClickListener(new View.OnClickListener() {
                 @Override

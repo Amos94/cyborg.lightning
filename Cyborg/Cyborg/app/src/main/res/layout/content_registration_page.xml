@@ -363,7 +363,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
                         android:id="@+id/etDob"
-                        android:hint="Click to pick date"
+                        android:hint="YYYY-MM-DD"
                         android:layout_weight="1" />
                 </LinearLayout>
 

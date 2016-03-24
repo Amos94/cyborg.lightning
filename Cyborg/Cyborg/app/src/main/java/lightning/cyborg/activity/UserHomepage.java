@@ -12,17 +12,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -59,9 +53,7 @@ import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.setting.AboutUs;
-import lightning.cyborg.setting.Communication;
 import lightning.cyborg.setting.MenuEditSip;
-import lightning.cyborg.setting.SetingsRegisterSipAccount;
 import lightning.cyborg.setting.SettingsEditSipUserInfo;
 import lightning.cyborg.setting.UserDetails;
 
@@ -474,26 +466,6 @@ public class UserHomepage extends AppCompatActivity {
         }
         return true;
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.user_menu, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.action_logout:
-                MyApplication.getInstance().logout();
-                break;
-            case R.id.action_viewBlockedList:
-                goToBlocked();
-                break;
-        }
-        return super.onOptionsItemSelected(menuItem);
-    }
     
     public void goToBlocked(){
         Intent intent = new Intent(UserHomepage.this, ViewBlockedUsers.class);
@@ -514,15 +486,6 @@ public class UserHomepage extends AppCompatActivity {
     public void clickUserProfile(View view) {
         Intent intent = new Intent(UserHomepage.this, UserDetails.class);
         startActivity(intent);
-
-    }
-
-    //edit communication ex; location or voice call
-    public void editCommunication(View view) {
-
-        Intent intent = new Intent(UserHomepage.this, Communication.class);
-        startActivity(intent);
-
 
     }
 
