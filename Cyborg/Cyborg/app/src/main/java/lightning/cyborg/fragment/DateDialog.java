@@ -10,27 +10,14 @@ import android.widget.EditText;
 
 import java.util.Calendar;
 
-/**
- * This class allows user to interact with a Dialog calendar to input date of birth
- * Created by Team Cyborg Lightning
- */
 public class DateDialog extends DialogFragment
         implements DatePickerDialog.OnDateSetListener{
 
-    private EditText etDate;
-
-    /**
-     * Default constructor for class
-     * @param view the container that calls this method
-     */
+    EditText etDate;
     public DateDialog(View view) {
         etDate = (EditText) view;
     }
     @Override
-
-    /**
-     * Default method that is required for this class
-     */
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
@@ -41,22 +28,22 @@ public class DateDialog extends DialogFragment
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
-    /**
-     * Method that helps to format the date that was chosen
-     * @param view the container that calls this class object
-     * @param year year that was chosen in the Calendar
-     * @param month month that was chosen in the Calendar
-     * @param day day that was chosen in the Calendar
-     */
+
+
+
     @Override
-    public void onDateSet(DatePicker view, int year, int month, int day) {
+    public void onDateSet(DatePicker view, int year, int monthIn, int day) {
+
+        int month = monthIn+1;
         String date;
         String daySingle;
         String monthSingle;
         if(day<10 && month <10){
+
             daySingle = "0"+day;
             monthSingle= "0"+month;
             date = year+"-"+monthSingle+"-"+daySingle;
+
         }else if(day<10){
             daySingle = "0"+day;
             date = year+"-"+month+"-"+daySingle;
@@ -67,6 +54,10 @@ public class DateDialog extends DialogFragment
         }else
             //show to the selected date in the text box
             date = String.format("%d-%d-%d", year, month, day);
+
         etDate.setText(date);
+
     }
+
+
 }
