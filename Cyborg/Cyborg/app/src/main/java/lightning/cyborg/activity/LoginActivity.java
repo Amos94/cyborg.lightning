@@ -41,9 +41,6 @@ import lightning.cyborg.model.User;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String Data = "SAVED_DATA";
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor editor;
     private String TAG = LoginActivity.class.getSimpleName();
     private EditText _inputEmail, _inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutEmail;
@@ -56,16 +53,12 @@ public class LoginActivity extends AppCompatActivity {
          * Check for login session. It user is already logged in
          * redirect him to main activity
          * */
+
         if (MyApplication.getInstance().getPrefManager().getUser() != null) {
             toUserHomePageActivity();
         }
 
-
         setContentView(R.layout.activity_login);
-
-        sharedPref = getSharedPreferences(Data, 0);
-        editor = sharedPref.edit();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

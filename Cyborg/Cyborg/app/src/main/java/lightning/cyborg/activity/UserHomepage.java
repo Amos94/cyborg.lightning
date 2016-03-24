@@ -249,7 +249,6 @@ public class UserHomepage extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("type", TYPE);
                 params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
-
                 Log.e(TAG, "params: " + params.toString());
                 return params;
             }
