@@ -1,6 +1,5 @@
 package lightning.cyborg.fragment;
 
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,10 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +41,10 @@ import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.helper.InputVerification;
 
+/**
+ * This class represents the fragment responsible for searching for people via interests and/or location
+ * Created by Team Cyborg Lightning
+ */
 public class DiscoveryFragment extends Fragment {
     private View inflatedview;
     private EditText search;
@@ -62,23 +62,32 @@ public class DiscoveryFragment extends Fragment {
     private Spinner lowAge, highAge;
     private String[] educationArr;
 
-
+    /**
+     * Default constructor for the class
+     */
     public DiscoveryFragment() {
-        // Required empty public constructor
     }
 
+    /**
+     * Default method that is ran by app
+     * @param savedInstanceState  where user previously left off
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Default method that is ran by app for the layout
+     * @param inflater allows xml files to work with source code
+     * @param container special view that allows content to be displayed
+     * @param savedInstanceState where user previously left off
+     * @return View to be returned
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        // Inflate the layout for this fragment
         this.inflatedview = inflater.inflate(R.layout.discovery_fragment, container, false);
 
         slideTV = (TextView) inflatedview.findViewById(R.id.sliderTV);
@@ -96,6 +105,7 @@ public class DiscoveryFragment extends Fragment {
                 discover(v);
             }
         });
+
         loadButton = (Button) inflatedview.findViewById(R.id.loadButton);
         loadButton.setEnabled(false);
         loadButton.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +119,7 @@ public class DiscoveryFragment extends Fragment {
                 }
             }
         });
+
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         genderSpin = (Spinner) inflatedview.findViewById(R.id.genderSpin);
@@ -133,9 +144,6 @@ public class DiscoveryFragment extends Fragment {
         highAge.setAdapter(ageAdapter);
         highAge.setSelection(age.length - 1);
 
-
-
-
         seekDist.setMax(95);
         seekDist.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -158,22 +166,22 @@ public class DiscoveryFragment extends Fragment {
                 try {
                     createChatroom((matchedUserJson.get(position)).getString("userID"));
                     Toast.makeText(getContext(), "Chat request sent", Toast.LENGTH_SHORT).show();
-
                     matchedUserIDs.remove(position);
                     matchedUserJson.remove(position);
-
                     populateList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
-
         return inflatedview;
     }
 
-    private void discover(View v) {
+    /**
+     * Method that allows user to search Database to look for matches
+     * @param view the container that calls this method
+     */
+    private void discover(View view) {
         final String filtered = InputVerification.getValidInterest(search.getText().toString());
         String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
         int radius = seekDist.getProgress() + 5;
@@ -204,7 +212,6 @@ public class DiscoveryFragment extends Fragment {
             params.put("edu_level", Integer.toString(eduSpin.getSelectedItemPosition()));
         }
 
-
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, EndPoints.DISCOVER_USERS,
                 new Response.Listener<String>() {
@@ -221,7 +228,6 @@ public class DiscoveryFragment extends Fragment {
                             for (int i = 0; i < jsonIDs.length(); i++) {
                                 matchedUserIDs.add(jsonIDs.getString(i));
                             }
-                            filterMatchedUsers();
 
                             if (matchedUserIDs.size() > 0) {
                                 populateDiscovery(5);
@@ -256,69 +262,15 @@ public class DiscoveryFragment extends Fragment {
         };
         //put the request in the static queue
         MyApplication.getInstance().
-
                 addToRequestQueue(request);
     }
 
-    private void filterMatchedUsers() {
-//        //request to insert the user into the mysql database using php
-//        StringRequest request = new StringRequest(Request.Method.POST, EndPoints.DISCOVER_USERS,
-//                new Response.Listener<String>() {
-//
-//                    @Override
-//                    public void onResponse(String response) {
-//                        try {
-//                            JSONObject jsonResponse = new JSONObject(response);
-//                            boolean success = jsonResponse.getString("success").equals("1");
-//                            String message = jsonResponse.getString("message");
-//                            JSONArray jsonIDs = jsonResponse.getJSONArray("users");
-//                            Log.d("jsonIDs", jsonIDs.toString());
-//
-//                            matchedUserIDs = new ArrayList<>();
-//                            for (int i = 0; i < jsonIDs.length(); i++) {
-//                                matchedUserIDs.get(i) = jsonIDs.getString(i);
-//                            }
-//
-//                            filterMatchedUsers();
-//
-//                            //
-//                            if (matchedUserIDs.size() > 0) {
-//                                populateDiscovery(5);
-//
-//                                if (matchedUserIDs.size() > 5) {
-//                                    loadButton.setEnabled(true);
-//                                }
-//                            } else {
-//                                populateList();
-//                            }
-//                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-//                            Log.d("disMes", message);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                            Log.d("JSON failed to parse: ", response);
-//                        }
-//                        searchButton.setEnabled(true);
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
-//                searchButton.setEnabled(true);
-//            }
-//        }
-//        ) {
-//            //Parameters inserted
-//            @Override
-//            protected Map<String, String> getParams() {
-//                return null;
-//            }
-//        };
-//        //put the request in the static queue
-//        MyApplication.getInstance().addToRequestQueue(request);
-    }
-
-    private void populateDiscovery(int inc) throws JSONException {
+    /**
+     * Method matches that are found are stored as JSONObject
+     * @param increment value that increments the number of results to be shown
+     * @throws JSONException exception throw to prevent app crashes
+     */
+    private void populateDiscovery(int increment) throws JSONException {
         final String url = "http://nashdomain.esy.es/users_get_all.php";
 
         if (matchedUserJson.size() == matchedUserIDs.size()) {
@@ -328,13 +280,13 @@ public class DiscoveryFragment extends Fragment {
             return;
         }
 
-        if (inc + matchedUserJson.size() > matchedUserIDs.size()) {
-            inc = matchedUserIDs.size() - matchedUserJson.size();
+        if (increment + matchedUserJson.size() > matchedUserIDs.size()) {
+            increment = matchedUserIDs.size() - matchedUserJson.size();
         }
 
         String idsToGet = "";
 
-        for (int i = matchedUserJson.size(); i < inc + matchedUserJson.size(); i++) {
+        for (int i = matchedUserJson.size(); i < increment + matchedUserJson.size(); i++) {
             idsToGet += matchedUserIDs.get(i) + ",";
         }
 
@@ -345,13 +297,10 @@ public class DiscoveryFragment extends Fragment {
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getString("success").equals("1");
-                            String message = jsonResponse.getString("message");
                             JSONArray temp = jsonResponse.getJSONArray("users");
 
                             for (int i = 0; i < temp.length(); i++) {
@@ -382,9 +331,11 @@ public class DiscoveryFragment extends Fragment {
         };
         //put the request in the static queue
         MyApplication.getInstance().addToRequestQueue(request);
-
     }
 
+    /**
+     * Method that fills up the listView to display search results to the user
+     */
     private void populateList() {
         final String[] users = new String[matchedUserJson.size()];
         Integer[] avatars = new Integer[matchedUserJson.size()];
@@ -414,6 +365,11 @@ public class DiscoveryFragment extends Fragment {
         customList.notifyDataSetChanged();
     }
 
+    /**
+     * Method that assists in starting chat with other users
+     * @param otherID primary key of a person that the user wishes to attempt communication with
+     * @throws JSONException exception throw to prevent app crashes
+     */
     private void createChatroom(String otherID) throws JSONException {
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
@@ -449,6 +405,4 @@ public class DiscoveryFragment extends Fragment {
         MyApplication.getInstance().addToRequestQueue(request);
 
     }
-
-
 }

@@ -44,15 +44,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * Created by Lewis on 21/02/2016.
+ * This class represents the fragment responsible for searching for people via interests and/or location
+ * Created by Team Cyborg Lightning
  */
 public class UserProfileFragment extends Fragment {
-
     public static ImageView  imageview;
     private ArrayList<String> items = new ArrayList<>();
     private ArrayAdapter adapter;
@@ -67,9 +65,10 @@ public class UserProfileFragment extends Fragment {
     private String[] menuItems;
     private User localUser;
 
-
+    /**
+     * Default constructor for the class
+     */
     public UserProfileFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -78,17 +77,18 @@ public class UserProfileFragment extends Fragment {
 
     }
 
+    /**
+     * Default method that is ran by app
+     * @param savedInstanceState  where user previously left off
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View viewroot = inflater.inflate(R.layout.user_profile_fragment, container, false);
-
         localUser = MyApplication.getInstance().getPrefManager().getUser();
         Log.d("SharedPrefTest", localUser.getInterests());
-
         menuItems = getResources().getStringArray(R.array.education_array);
-
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         images = new Bitmap[imgs.length()];
         for(int i = 0; i < imgs.length(); i++){
@@ -106,7 +106,6 @@ public class UserProfileFragment extends Fragment {
                         startActivityForResult(intent, 1);
                     }
                 });
-
                 alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -116,9 +115,7 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-        /**
-         * Add item into arraylist
-         */
+        //Add items to ArrayList
         adapter = new ArrayAdapter<String>(this.getActivity().getApplicationContext(), R.layout.list_black, R.id.list_content, items);
         listview = (ListView) viewroot.findViewById(R.id.listInterest);
         listview.setAdapter(adapter);
@@ -132,7 +129,6 @@ public class UserProfileFragment extends Fragment {
         //creating function to add more items into the interest
 
         registerForContextMenu(listview);
-
         etInterest = (EditText) viewroot.findViewById(R.id.etAddText);
         addInterestButt = (Button) viewroot.findViewById(R.id.addInterestB);
 
@@ -171,43 +167,40 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
-
-
         loadProfile();
-
         return viewroot;
     }
 
+    /**
+     * Method that allows contextMenu interaction
+     * @param item the MenuItem that was interacted with
+     * @return boolean the variable that signifies end of the interaction
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
         switch(item.getItemId()) {
             case 0:
                 try {
-
                     AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
                     deleteInterests(items.get(info.position));
                     Log.d("String to Delete", items.get(info.position));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                break;
-
-            case 1:
-
-
-
-
-                break;
-
         }
         return true;
     }
 
+    /**
+     * Method that creates contextMenu
+     * @param menu the ContextMenu to be created
+     * @param view the container that called this method
+     * @param menuInfo the information of the contextMenu contents
+     */
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
+    public void onCreateContextMenu(ContextMenu menu, View view,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==R.id.listInterest) {
+        if (view.getId()==R.id.listInterest) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
             menu.setHeaderTitle(items.get(info.position));
             String[] menuItems = getResources().getStringArray(R.array.interest_menu);
@@ -216,7 +209,10 @@ public class UserProfileFragment extends Fragment {
             }
         }
     }
-    
+
+    /**
+     * Method that loads user's profile via cache or database connection
+     */
     private void loadProfile() {
         String name = localUser.getName()+ " " + localUser.getLname();
         tvFirstandLast.setText(name);
@@ -248,6 +244,11 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Method that adds interest for the user to the database
+     * @param interests the interest to be added
+     * @throws JSONException exception throw to prevent app crashes
+     */
     private void addInterest(final String interests) throws JSONException {
         Log.d("interAdd1", localUser.getInterests());
         //parameters to post to php file
@@ -258,14 +259,12 @@ public class UserProfileFragment extends Fragment {
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, EndPoints.ADD_INTERESTS,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getString("success").equals("1");
                             String message = jsonResponse.getString("message");
-
                             if (success) {
                                 for (String s : interests.split(",")) {
                                     if (!items.contains(s)) {
@@ -295,7 +294,6 @@ public class UserProfileFragment extends Fragment {
             }
         }
         ) {
-            //Parameters inserted
             @Override
             protected Map<String, String> getParams() {
                 return params;
@@ -303,11 +301,14 @@ public class UserProfileFragment extends Fragment {
         };
         //put the request in the static queue
         MyApplication.getInstance().addToRequestQueue(request);
-
     }
 
+    /**
+     * Loads interests to be displayed in the ListView
+     * @throws JSONException exception throw to prevent app crashes
+     */
     private void loadInterests() throws JSONException {
-        Log.d("interLoad1", localUser.getInterests()+"");
+        Log.d("interLoad1", localUser.getInterests() + "");
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -353,7 +354,6 @@ public class UserProfileFragment extends Fragment {
             }
         }
         ) {
-            //Parameters inserted
             @Override
             protected Map<String, String> getParams() {
                 return params;
@@ -363,6 +363,11 @@ public class UserProfileFragment extends Fragment {
         MyApplication.getInstance().addToRequestQueue(request);
     }
 
+    /**
+     * Method that allows deletion of interests via Database connection
+     * @param interests the interest to be deleted
+     * @throws JSONException exception throw to prevent app crashes
+     */
     private void deleteInterests(final String interests) throws JSONException {
         Log.d("interDel1", localUser.getInterests());
         //parameters to post to php file
@@ -419,6 +424,12 @@ public class UserProfileFragment extends Fragment {
 
     }
 
+    /**
+     * Dispatch incoming result to the correct fragment
+     * @param requestCode checks to see if requestCode mathes
+     * @param resultCode ensures that the request was successful
+     * @param data allows data to be retrieves from another fragment
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -444,7 +455,6 @@ public class UserProfileFragment extends Fragment {
                             public void onResponse(String response) {
                                 try {
                                     JSONObject jsonResponse = new JSONObject(response);
-                                    boolean success = jsonResponse.getString("success").equals("1");
                                     String message = jsonResponse.getString("message");
                                     Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                                 } catch (JSONException e) {
@@ -470,7 +480,5 @@ public class UserProfileFragment extends Fragment {
                 MyApplication.getInstance().addToRequestQueue(request);
             }
         }
-
-        }
-
+    }
 }
