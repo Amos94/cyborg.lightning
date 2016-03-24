@@ -41,7 +41,9 @@ import lightning.cyborg.activity.UserHomepage;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.model.ChatRoom;
-
+/**
+ * Created by TeamCyborgLightning
+ */
 
 public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.ViewHolder> implements Parcelable {
 

@@ -39,7 +39,7 @@ import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.model.User;
 
 /**
- * Created by nashwan on 20/03/2016.
+ * Created by TeamCyborgLightning
  */
 public class BlockedListAdapter extends RecyclerView.Adapter<BlockedListAdapter.ViewHolder>{
     private Context mContext;

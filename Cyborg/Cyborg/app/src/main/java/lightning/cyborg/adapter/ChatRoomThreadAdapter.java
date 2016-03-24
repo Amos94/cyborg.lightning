@@ -15,7 +15,9 @@ import java.util.Date;
 
 import lightning.cyborg.R;
 import lightning.cyborg.model.Message;
-
+/**
+ * Created by TeamCyborgLightning
+ */
 public class ChatRoomThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static String TAG = ChatRoomThreadAdapter.class.getSimpleName();
