@@ -9,8 +9,7 @@ public class SQLiAssistantStrings {
     public String[] strings;
 
     public SQLiAssistantStrings(){
-        setArray();
-
+    setArray();
     }
 
     public void setArray(){

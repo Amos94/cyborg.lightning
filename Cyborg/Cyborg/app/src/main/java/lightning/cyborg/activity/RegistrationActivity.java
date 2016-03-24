@@ -41,7 +41,8 @@ import lightning.cyborg.helper.InputVerification;
 public class RegistrationActivity extends AppCompatActivity {
 
     //Info for register
-    private EditText emailET;
+
+   private EditText emailET;
     private ImageView avatorIcon;
     private int avator_id;
     private EditText emailConfirmET;
@@ -185,6 +186,7 @@ public class RegistrationActivity extends AppCompatActivity {
         try {
             if (InputVerification.DoBVerification(dobET.getText().toString())) {
                 params.put("dob", dobET.getText().toString().replaceAll("-",""));
+                params.put("dob", dobET.getText().toString());
             } else {
                 validInput = false;
                 dobET.setError("Please a valid date yyyy-mm-dd");

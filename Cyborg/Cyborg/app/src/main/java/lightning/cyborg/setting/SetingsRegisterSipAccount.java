@@ -30,12 +30,11 @@ public class SetingsRegisterSipAccount extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_settings_register_sip_account);
+        setContentView(R.layout.sip_account_registration);
 
         // Initializig the UI elements
         wv = (WebView) findViewById(R.id.webView);
-        doneBtn = (ImageButton) findViewById(R.id.doneBtn);
-        homeBtn = (ImageButton) findViewById(R.id.backToUserHomepageBtn);
+        doneBtn = (ImageButton) findViewById(R.id.webviewdoneBtn);
 
         //Allow JavaScript in order to have a very simple Captcha, also meant for improving the User friendliness
         WebSettings webSettings = wv.getSettings();
@@ -51,21 +50,10 @@ public class SetingsRegisterSipAccount extends Activity{
     */
     public void doneRegistration(View view){
 
-        Intent i = new Intent(this, SetSipUserInfo.class);
+        Intent i = new Intent(this, SettingsEditSipUserInfo.class);
         startActivity(i);
     }
 
 
-    //Intent to user homepage
-    public void backToHomepage(View view){
-        Intent intent = new Intent(this, UserHomepage.class);
-        startActivity(intent);
-    }
-
-    //Simple back button
-    public void backToEditSip(View view){
-        Intent intent = new Intent(this, MenuEditSip.class);
-        startActivity(intent);
-    }
 
 }

@@ -48,6 +48,7 @@ public class InputVerification {
             System.out.println("Under 18: " + age);
             return false;
         }
+
     }
 
     //TODO ADD TO REGISTER ACTIVITY
@@ -71,6 +72,7 @@ public class InputVerification {
     }
 
 
+
     //TODO ADD TO REGISTER ACTIVITY
     /**
      * PasswordVerification function returns true if both password are a match
@@ -87,6 +89,7 @@ public class InputVerification {
         //  passwordET.setError("Please Enter same password");
         return false;
     }
+
 
 
     //TODO ADD TO REGISTER ACTIVITY
@@ -111,6 +114,7 @@ public class InputVerification {
         }
         return true;
     }
+
     //TODO ADD TO REGISTER ACTIVITY
     /**
      * isStringAlphaNumericalVerification function returns true if only AlphaNumerical Chars
@@ -135,10 +139,10 @@ public class InputVerification {
     }
 
 
-    // USER INPUT 15 long max, all chars, not null
     //TODO ADD TO REGISTER ACTIVITY
     /**
      * checkUserNameInput - Returns true if input (String) is a valid username
+     * must be 15 long max, all chars, not null
      * @param name - String
      * @return boolean
      */

@@ -50,6 +50,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     private static String today;
     private String type;
     public static String TAG = ChatRoomsAdapter.class.getSimpleName();
+    private boolean canRemove=true;
 
     protected ChatRoomsAdapter(Parcel in) {
     }
@@ -131,14 +132,26 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
 
-            holder.message.setText("pending request");
+            holder.message.setText("Pending request");
 
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
-            holder.decline.setVisibility(View.GONE);
-            holder.decline.setOnClickListener(null);
+            holder.accept.setText("Cancel request");
+            holder.decline.setVisibility(View.VISIBLE);
+            //if user declines
+            holder.decline.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(canRemove) {
+                        serverHandler("decline", chatRoom.getId());
+                        chatRoom.setChatRoomExists(false);
+                        chatRoomArrayList.remove(chatRoom);
+                        notifyDataSetChanged();
+                    }
 
+                }
+            });
         }
         //if user has received a new request
         else if(chatRoom.getPermission().equals("r")){
@@ -163,10 +176,13 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             holder.decline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(canRemove){
                     serverHandler("decline", chatRoom.getId());
                     chatRoom.setChatRoomExists(false);
                     chatRoomArrayList.remove(chatRoom);
                     notifyDataSetChanged();
+                    }
+
                 }
             });
 
@@ -294,7 +310,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
             View child = rv.findChildViewUnder(e.getX(), e.getY());
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
+               try{ clickListener.onClick(child, rv.getChildPosition(child));}
+               catch (Exception e1){
+                   e1.printStackTrace();
+               }
             }
             return false;
         }
@@ -317,6 +336,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public void serverHandler(String reply,String chatRoomId){
         final String choice = reply;
         final String cR_Id =chatRoomId;
+
+        canRemove=false;
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.REQUEST_RESPONSE, new Response.Listener<String>() {
 
@@ -341,6 +362,9 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
                     Toast.makeText(mContext, "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+                finally {
+                    canRemove=true;
                 }
 
             }

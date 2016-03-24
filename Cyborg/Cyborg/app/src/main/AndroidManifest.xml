@@ -3,17 +3,6 @@
     package="lightning.cyborg">
 
 
-
-
-
-
-
-
-
-
-
-
-
     <uses-feature
         android:name="android.hardware.sip.voip"
         android:required="true" />
@@ -32,13 +21,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
-
-
-
-
-
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -121,8 +103,7 @@
         <activity android:name=".voip.SipAccountRegistration"></activity>
         <activity android:name=".voip.SipSettings"></activity>
         <activity android:name=".voip.IncomingGui"></activity>
-
-
+        <activity android:name=".activity.SetSipUserInfo"></activity>
 
 
         <activity
