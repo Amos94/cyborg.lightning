@@ -89,7 +89,7 @@ public class UserProfileFragment extends Fragment {
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         images = new Bitmap[imgs.length()];
         for(int i = 0; i < imgs.length(); i++){
-            images[i] = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
+            images[i] = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, 0));
         }
         imageview = (ImageView) viewroot.findViewById(R.id.profile_image);
         imageview.setOnClickListener(new View.OnClickListener() {

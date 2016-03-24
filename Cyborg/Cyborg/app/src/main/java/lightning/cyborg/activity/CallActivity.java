@@ -145,7 +145,7 @@ public class CallActivity extends AppCompatActivity {
 
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
 
-        Bitmap image = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(Integer.parseInt(avatar), -1));
+        Bitmap image = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(Integer.parseInt(avatar), 0));
         avatarImage.setImageBitmap(image);
         Log.d(TAG,image.toString());
 
