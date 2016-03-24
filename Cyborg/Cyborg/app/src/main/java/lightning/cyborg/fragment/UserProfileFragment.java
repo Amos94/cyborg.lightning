@@ -221,21 +221,33 @@ public class UserProfileFragment extends Fragment {
     }
     
     private void loadProfile() {
-        String name = localUser.getName() + " " + localUser.getLname();
+        String name = localUser.getName()+ " " + localUser.getLname();
         tvFirstandLast.setText(name);
-        imageview.setImageBitmap(images[Integer.parseInt(localUser.getAvatar())]);
-        adapter.notifyDataSetChanged();
-        Log.d("interLoad1", localUser.getInterests() + "");
-
-
-        tvFirstandLast.setText(localUser.getName() + " " + localUser.getLname());
         tvlocation.setText("Lat:" + localUser.getLat() + " Lon:" + localUser.getLon());
         tvDob.setText("DOB:" + localUser.getDob());
-        Log.d("Education L", menuItems[Integer.getInteger(localUser.getEdu_level())]);
+        imageview.setImageBitmap(images[Integer.parseInt(localUser.getAvatar())]);
+        adapter.notifyDataSetChanged();
+        Log.d("Education L", menuItems[Integer.parseInt(localUser.getEdu_level())]);
+        tvEdu.setText("Education LVL: " + menuItems[Integer.parseInt(localUser.getEdu_level())]);
+        Log.d("interLoad1", localUser.getInterests() + "");
 
-        tvEdu.setText("Education LVL: " + menuItems[Integer.getInteger(localUser.getEdu_level())]);
-
-        imageview.setImageBitmap(images[Integer.getInteger(localUser.getAvatar())]);
+        items.clear();
+        if(localUser.getInterests().length() > 0){
+            String[] interests = localUser.getInterests().split(",");
+            for (int i = 0; i < interests.length; i++) {
+                items.add(interests[i]);
+            }
+            adapter.notifyDataSetChanged();
+        }
+        else {
+            try {
+                loadInterests();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("loadProfile", "Error loading interests from server");
+                Toast.makeText(getActivity(), "Error loading interests", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void addInterest(final String interests) throws JSONException {
