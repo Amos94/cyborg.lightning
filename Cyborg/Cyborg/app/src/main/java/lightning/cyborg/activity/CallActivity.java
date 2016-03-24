@@ -130,11 +130,6 @@ public class CallActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         avatarImage = (ImageView) findViewById(R.id.callAvatar);
-        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
-
-        Bitmap image = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(Integer.parseInt(avatar), -1));
-        avatarImage.setImageBitmap(image);
-        Log.d(TAG,image.toString());
 
         Intent intent = getIntent();
 
@@ -147,6 +142,13 @@ public class CallActivity extends AppCompatActivity {
         avatar =intent.getStringExtra("avatar");
         permission = intent.getStringExtra("permission");
         message = intent.getStringExtra("Calltype");
+
+        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
+
+        Bitmap image = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(Integer.parseInt(avatar), -1));
+        avatarImage.setImageBitmap(image);
+        Log.d(TAG,image.toString());
+
 
 
         //this.caller = caller;

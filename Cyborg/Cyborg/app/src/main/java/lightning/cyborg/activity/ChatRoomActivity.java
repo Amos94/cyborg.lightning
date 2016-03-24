@@ -128,27 +128,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    if(permission.equals("blocked")){
-                        new AlertDialog.Builder(ChatRoomActivity.this)
-                                .setTitle("unable to send message")
-                                .setMessage("you have been blocked from sending messages in this chatroom")
-                                .setNegativeButton("ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
-                                .show();
-                    }
-                    else{
-                        Log.d(TAG, permission.toString());
-                        Log.d(TAG,"inside else for send");
                         sendMessage();
-                    }
-                }catch (Exception e){
-                    Log.d(TAG,"inside catch for send");
-                    sendMessage();
 
-                }
             }
         });
         fetchChatThread();
@@ -376,7 +357,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
         params.put("chat_room_id", chatRoomId.toString());
-        params.put("message",message);
+        params.put("message", message);
 
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, EndPoints.INCOMING_CALL,
@@ -637,62 +618,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         finish();
     }
 
-    public void addFriend(String type){
-        String endPoint = EndPoints.ADD_FREIND;
 
-        final Map<String, String> params = new HashMap<>();
-        params.put("chat_room_id", chatRoomId);
-        params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
-        params.put("type",type);
-
-        Log.e(TAG, "endPoint: " + endPoint);
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                endPoint, new Response.Listener<String>() {
-
-
-            @Override
-            public void onResponse(String response) {
-                Log.e(TAG, "response: " + response);
-
-                try {
-                    JSONObject obj = new JSONObject(response);
-
-                    // check for error
-                    if (obj.getBoolean("error") == false) {
-
-
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (JSONException e) {
-                    Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "json parse error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                NetworkResponse networkResponse = error.networkResponse;
-                Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        ) {
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams() {
-                return params;
-            }
-        };
-
-
-        //Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq);
-    }
     public void blockUser(final Context context){
 
         //parameters to post to php file
@@ -750,7 +676,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             //addFreind.setVisible(false);
         }
         else{
-            //addFreind.set;;
+            addFriend.setIcon(R.drawable.ic_person_add_white_24dp);
         }
         callButton = menu.findItem(R.id.action_calluser);
         //callButton.setVisible(false);
@@ -759,15 +685,15 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
     /**
      * Change the change room from freinds to normal or vise versa
-     * @param type new type of the chatroom
+     * @param type1 new type of the chatroom
      */
-    public void changeChatRoomType(String type){
+    public void changeChatRoomType(final String type1){
         String endPoint = EndPoints.ADD_FREIND;
 
         final Map<String, String> params = new HashMap<>();
         params.put("chat_room_id", chatRoomId);
         params.put("user_id",MyApplication.getInstance().getPrefManager().getUser().getId());
-        params.put("type",type);
+        params.put("type",type1);
 
         Log.e(TAG, "endPoint: " + endPoint);
 
@@ -784,6 +710,14 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                     // check for error
                     if (obj.getBoolean("error") == false) {
+                        if(type.equals("n")){
+                            type="f";
+                            addFriend.setIcon(R.drawable.ic_person_remove_white_24dp);
+                        }
+                        else if(type.equals("f")){
+                            type ="n";
+                            addFriend.setIcon(R.drawable.ic_person_add_white_24dp);
+                        }
 
 
                     }
