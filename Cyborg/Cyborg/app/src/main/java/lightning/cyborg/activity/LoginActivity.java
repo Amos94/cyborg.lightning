@@ -3,6 +3,7 @@ package lightning.cyborg.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -53,12 +54,12 @@ public class LoginActivity extends AppCompatActivity {
          * Check for login session. It user is already logged in
          * redirect him to main activity
          * */
+
         if (MyApplication.getInstance().getPrefManager().getUser() != null) {
             toUserHomePageActivity();
         }
 
         setContentView(R.layout.activity_login);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -174,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                         //id, name, email, created_at
 
                         JSONObject userObj = obj.getJSONObject("user");
-                        Log.d(userObj.toString(),"userJson");
+                        Log.d("login", userObj.toString());
                         User user = new User(userObj);
 
                         // storing user in shared preferences

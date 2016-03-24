@@ -4,34 +4,90 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class User implements Serializable {
-    String id, name, email, fname, lname, dob, lat, lon, avatar, edu_level;
+    private String id;
+    private String name;
+    private String email;
+    private String lname;
+    private String gender;
+    private String dob;
+    private String lat;
+    private String lon;
+    private String avatar;
+    private String edu_level;
+    private String interests = "";
 
     public User() {
     }
 
-    public User(JSONObject jsonIn){
+    public User(JSONObject jsonIn) {
         try {
             this.id = jsonIn.getString("id");
             this.email = jsonIn.getString("email");
-            this.fname = jsonIn.getString("fname");
+            this.name = jsonIn.getString("fname");
             this.lname = jsonIn.getString("lname");
             this.dob = jsonIn.getString("dob");
             this.lat = jsonIn.getString("lat");
             this.lon = jsonIn.getString("lon");
             this.avatar = jsonIn.getString("avatar");
             this.edu_level = jsonIn.getString("edu_level");
+            this.gender = jsonIn.getString("gender");
         } catch (JSONException e) {
             e.printStackTrace();
-
         }
+    }
+
+    public User(String id, String name, String email, String lname, String dob, String lat, String lon, String gender, String avatar, String edu_level){
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.lname = lname;
+        this.dob = dob;
+        this.lat = lat;
+        this.lon = lon;
+        this.avatar = avatar;
+        this.edu_level = edu_level;
+        this.gender = gender;
     }
 
     public User(String id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
+    }
+
+    public void addInterest(String stringIn){
+        if (interests.equals("")){
+            interests = stringIn;
+        }
+        else{
+            interests += "," + stringIn;
+        }
+    }
+
+    public void delInterest(String stringIn){
+        ArrayList<String> interArr = new ArrayList<>(Arrays.asList(interests.split(",")));
+        interests = "";
+
+        for (int i = 0; i < interArr.size(); i++){
+            if(interArr.get(i).equals(stringIn)){
+                interArr.remove(i);
+            }
+            else{
+                addInterest(interArr.get(i));
+            }
+        }
+    }
+
+    public void clearInterests(){
+        interests = "";
+    }
+
+    public String getInterests(){
+        return interests;
     }
 
     public String getId() {
@@ -56,14 +112,6 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public void setFname(String fname) {
-        this.fname = fname;
     }
 
     public String getLname() {
@@ -112,5 +160,13 @@ public class User implements Serializable {
 
     public void setEdu_level(String edu_level) {
         this.edu_level = edu_level;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

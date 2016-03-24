@@ -21,6 +21,7 @@ import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.Validation;
 import lightning.cyborg.avator.Avator_Logo;
+import lightning.cyborg.model.User;
 
 
 import android.app.AlertDialog;
@@ -69,8 +70,7 @@ public class UserProfileFragment extends Fragment {
     private Button delInterestButt;
     private Bitmap [] images;
     private String[] menuItems;
-
-
+    private User localUser;
 
 
     public UserProfileFragment() {
@@ -89,7 +89,8 @@ public class UserProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         final View viewroot = inflater.inflate(R.layout.user_profile_fragment, container, false);
 
-        //avatar Changing
+        localUser = MyApplication.getInstance().getPrefManager().getUser();
+        Log.d("SharedPrefTest", localUser.getInterests());
 
         menuItems = getResources().getStringArray(R.array.education_array);
 
@@ -102,55 +103,36 @@ public class UserProfileFragment extends Fragment {
         imageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
-
                 alertDialogBuilder.setPositiveButton("Change Avatar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-
-                        Intent intent =  new Intent(getActivity(), Avator_Logo.class);
+                        Intent intent = new Intent(getActivity(), Avator_Logo.class);
                         startActivityForResult(intent, 1);
-
                     }
                 });
 
                 alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
                 alertDialogBuilder.show();
             }
         });
 
-        // creating lists and arrayadapter
-
-
         /**
          * Add item into arraylist
          */
-
-        adapter = new ArrayAdapter<String>(this.getActivity().getApplicationContext(),R.layout.list_black , R.id.list_content, items);
-
-
+        adapter = new ArrayAdapter<String>(this.getActivity().getApplicationContext(), R.layout.list_black, R.id.list_content, items);
         listview = (ListView) viewroot.findViewById(R.id.listInterest);
-
         listview.setAdapter(adapter);
 
-
-
         //location, user profile name and last and bio
-
         tvFirstandLast = (TextView) viewroot.findViewById(R.id.tvfirstandLast);
-
         tvlocation = (TextView) viewroot.findViewById(R.id.tvLocation);
         tvEdu = (TextView) viewroot.findViewById(R.id.tvEdu);
         tvDob = (TextView) viewroot.findViewById(R.id.tvDob);
-
 
         //creating function to add more items into the interest
 
@@ -164,16 +146,14 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String temp = new Validation().getValidInterest(etInterest.getText().toString());
-                if(temp.length() > 0){
+                if (temp.length() > 0) {
                     try {
                         addInterestButt.setEnabled(false);
                         addInterest(temp);
-                    }
-                    catch (JSONException e) {
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(getActivity(), "Interest cannot be blank", Toast.LENGTH_LONG).show();
                 }
             }
@@ -183,36 +163,20 @@ public class UserProfileFragment extends Fragment {
         delInterestButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String temp = etInterest.getText().toString().replaceAll("\\s","").toLowerCase();
-
-                if(temp.length() > 0){
+                String temp = etInterest.getText().toString().replaceAll("\\s", "").toLowerCase();
+                if (temp.length() > 0) {
                     try {
                         delInterestButt.setEnabled(false);
                         deleteInterests(temp);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(getActivity(), "Interest cannot be blank", Toast.LENGTH_LONG).show();
                 }
             }
         });
-
-        try {
-            loadProfile();
-        } catch (JSONException e) {
-            Toast.makeText(getActivity(), "Error loading profile", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-
-        try {
-            loadInterests();
-        } catch (JSONException e) {
-            Toast.makeText(getActivity(), "Error loading interests", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-
+        loadProfile();
         return viewroot;
     }
 
@@ -259,11 +223,13 @@ public class UserProfileFragment extends Fragment {
             }
         }
     }
-
-    private void loadProfile() throws JSONException {
-        //parameters to post to php file
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
+    
+    private void loadProfile(){
+        String name = localUser.getName()+ " " + localUser.getLname();
+        tvFirstandLast.setText(name);
+        imageview.setImageBitmap(images[Integer.parseInt(localUser.getAvatar())]);
+        adapter.notifyDataSetChanged();
+        Log.d("interLoad1", localUser.getInterests()+"");
 
 
 
@@ -307,21 +273,27 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error){
                 Log.d("VolleyError at url ", EndPoints.USERS_GET);
+        items.clear();
+        if(localUser.getInterests().length() > 0){
+            String[] interests = localUser.getInterests().split(",");
+            for (int i = 0; i < interests.length; i++) {
+                items.add(interests[i]);
+            }
+            adapter.notifyDataSetChanged();
+        }
+        else {
+            try {
+                loadInterests();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("loadProfile", "Error loading interests from server");
+                Toast.makeText(getActivity(), "Error loading interests", Toast.LENGTH_SHORT).show();
             }
         }
-        ){
-            //Parameters inserted
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return params;
-            }
-        };
-        //put the request in the static queue
-        MyApplication.getInstance().addToRequestQueue(request);
     }
 
     private void addInterest(final String interests) throws JSONException {
+        Log.d("interAdd1", localUser.getInterests());
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -338,37 +310,38 @@ public class UserProfileFragment extends Fragment {
                             boolean success = jsonResponse.getString("success").equals("1");
                             String message = jsonResponse.getString("message");
 
-                            if(success){
-                                for(String s : interests.split(",")){
+                            if (success) {
+                                for (String s : interests.split(",")) {
                                     if (!items.contains(s)) {
                                         items.add(new Validation().getValidInterest(s));
+                                        localUser.addInterest(new Validation().getValidInterest(s));
                                     }
                                 }
+                                MyApplication.getInstance().getPrefManager().storeUser(localUser);
                             }
 
                             etInterest.setText("");
                             adapter.notifyDataSetChanged();
                             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        Log.d("interAdd2", localUser.getInterests());
                         addInterestButt.setEnabled(true);
                     }
-                }, new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error){
+            public void onErrorResponse(VolleyError error) {
                 Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
                 addInterestButt.setEnabled(true);
             }
         }
-        ){
+        ) {
             //Parameters inserted
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
@@ -378,6 +351,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void loadInterests() throws JSONException {
+        Log.d("interLoad1", localUser.getInterests()+"");
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -388,42 +362,44 @@ public class UserProfileFragment extends Fragment {
 
                     @Override
                     public void onResponse(String response) {
+                        Log.d("loadInterests", "posting to "+ EndPoints.GET_INTERESTS);
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getString("success").equals("1");
                             String message = jsonResponse.getString("message");
                             JSONArray interests = jsonResponse.getJSONArray("interests");
 
-                            if(success){
-                                for (int i = 0; i < interests.length(); i++){
+                            localUser.clearInterests();
+                            if (success) {
+                                for (int i = 0; i < interests.length(); i++) {
                                     if (!items.contains(interests.getString(i))) {
                                         items.add(interests.getString(i));
+                                        localUser.addInterest(interests.getString(i));
                                     }
                                 }
-                            }
-                            else{
+                            } else {
                                 Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                             }
-
+                            MyApplication.getInstance().getPrefManager().storeUser(localUser);
                             adapter.notifyDataSetChanged();
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        delInterestButt.setEnabled(true);
+                        Log.d("interLoad2", localUser.getInterests());
                     }
-                }, new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error){
+            public void onErrorResponse(VolleyError error) {
                 Log.d("VolleyError at url ", EndPoints.GET_INTERESTS);
             }
         }
-        ){
+        ) {
             //Parameters inserted
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
@@ -432,6 +408,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void deleteInterests(final String interests) throws JSONException {
+        Log.d("interDel1", localUser.getInterests());
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -448,35 +425,36 @@ public class UserProfileFragment extends Fragment {
                             boolean success = jsonResponse.getString("success").equals("1");
                             String message = jsonResponse.getString("message");
 
-                            if(success){
-                                for(String s : interests.split(",")){
-                                   items.remove(s);
+                            if (success) {
+                                for (String s : interests.split(",")) {
+                                    items.remove(s);
+                                    localUser.delInterest(s);
                                 }
+                                MyApplication.getInstance().getPrefManager().storeUser(localUser);
                             }
 
                             etInterest.setText("");
                             adapter.notifyDataSetChanged();
                             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
                         delInterestButt.setEnabled(true);
+                        Log.d("interDel2", localUser.getInterests());
                     }
-                }, new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error){
-                Log.d("VolleyError at url ", EndPoints.DEL_INTERESTS);
+            public void onErrorResponse(VolleyError error) {
                 delInterestButt.setEnabled(true);
+                Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
             }
         }
-        ){
+        ) {
             //Parameters inserted
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
@@ -485,12 +463,10 @@ public class UserProfileFragment extends Fragment {
 
     }
 
-    //creating avator background when user registers....
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == 1) {
+        if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
                 avator_id = data.getExtras().getInt("imageID");
@@ -503,7 +479,6 @@ public class UserProfileFragment extends Fragment {
                 if (!Integer.toString(avator_id).replaceAll(", ", ",").replaceAll(" ,", ",").equals("")) {
                     params.put("avatar", Integer.toString(avator_id));
                 }
-
 
                 //request to insert the user into the mysql database using php
                 StringRequest request = new StringRequest(Request.Method.POST, EndPoints.UPDATE_USERS,
@@ -537,14 +512,9 @@ public class UserProfileFragment extends Fragment {
                 };
                 //put the request in the static queue
                 MyApplication.getInstance().addToRequestQueue(request);
-
             }
-
         }
 
         }
-
-
-
 
 }

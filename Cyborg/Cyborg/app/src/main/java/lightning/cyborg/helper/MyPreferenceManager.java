@@ -6,10 +6,6 @@ import android.util.Log;
 
 import lightning.cyborg.model.User;
 
-
-/**
- * Created by Lincoln on 07/01/16.
- */
 public class MyPreferenceManager {
 
     private String TAG = MyPreferenceManager.class.getSimpleName();
@@ -27,12 +23,20 @@ public class MyPreferenceManager {
     int PRIVATE_MODE = 0;
 
     // Sharedpref file name
-    private static final String PREF_NAME = "androidhive_gcm";
+    private static final String PREF_NAME = "saveddata";
 
     // All Shared Preferences Keys
     private static final String KEY_USER_ID = "user_id";
-    private static final String KEY_USER_NAME = "user_name";
+    private static final String KEY_USER_FNAME = "user_fname";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_USER_LNAME = "user_lname";
+    private static final String KEY_USER_AVATAR = "user_avatar";
+    private static final String KEY_USER_LON = "user_lon";
+    private static final String KEY_USER_LAT = "user_lat";
+    private static final String KEY_USER_EDU_LEVEL = "user_edu_level";
+    private static final String KEY_USER_GENDER = "user_gender";
+    private static final String KEY_USER_DOB = "user_dob";
+    private static final String KEY_USER_INTERESTS = "user_interests";
     private static final String KEY_NOTIFICATIONS = "notifications";
 
     // Constructor
@@ -45,21 +49,38 @@ public class MyPreferenceManager {
 
     public void storeUser(User user) {
         editor.putString(KEY_USER_ID, user.getId());
-        editor.putString(KEY_USER_NAME, user.getName());
+        editor.putString(KEY_USER_FNAME, user.getName());
         editor.putString(KEY_USER_EMAIL, user.getEmail());
+        editor.putString(KEY_USER_LNAME, user.getLname());
+        editor.putString(KEY_USER_AVATAR, user.getAvatar());
+        editor.putString(KEY_USER_LON, user.getLon());
+        editor.putString(KEY_USER_LAT, user.getLat());
+        editor.putString(KEY_USER_EDU_LEVEL, user.getEdu_level());
+        editor.putString(KEY_USER_GENDER, user.getGender());
+        editor.putString(KEY_USER_DOB, user.getDob());
+        editor.putString(KEY_USER_INTERESTS, user.getInterests());
         editor.commit();
 
-        Log.e(TAG, "User is stored in shared preferences. " + user.getName() + ", " + user.getEmail());
+        Log.d(TAG, "User is stored in shared preferences. " + user.getName() + ", " + user.getEmail());
     }
 
     public User getUser() {
         if (pref.getString(KEY_USER_ID, null) != null) {
-            String id, name, email;
-            id = pref.getString(KEY_USER_ID, null);
-            name = pref.getString(KEY_USER_NAME, null);
-            email = pref.getString(KEY_USER_EMAIL, null);
+            String id, name, email, lname, avatar, lon, lat, edu_level, gender, dob;
 
-            User user = new User(id, name, email);
+            id = pref.getString(KEY_USER_ID, null);
+            name = pref.getString(KEY_USER_FNAME, null);
+            email = pref.getString(KEY_USER_EMAIL, null);
+            lname = pref.getString(KEY_USER_LNAME, null);
+            avatar = pref.getString(KEY_USER_AVATAR, null);
+            lon = pref.getString(KEY_USER_LON, null);
+            lat = pref.getString(KEY_USER_LAT, null);
+            edu_level = pref.getString(KEY_USER_EDU_LEVEL, null);
+            gender = pref.getString(KEY_USER_GENDER, null);
+            dob = pref.getString(KEY_USER_DOB, null);
+
+            User user = new User( id,  name,  email,  lname,  dob,  lat,  lon,  gender,  avatar,  edu_level);
+            user.addInterest(pref.getString(KEY_USER_INTERESTS, null));
             return user;
         }
         return null;
@@ -87,5 +108,45 @@ public class MyPreferenceManager {
     public void clear() {
         editor.clear();
         editor.commit();
+    }
+
+    public String getId() {
+        return pref.getString(KEY_USER_ID, null);
+    }
+
+    public String getFname() {
+        return pref.getString(KEY_USER_FNAME, null);
+    }
+
+    public String getEmail() {
+        return pref.getString(KEY_USER_EMAIL, null);
+    }
+
+    public String getLname() {
+        return pref.getString(KEY_USER_LNAME, null);
+    }
+
+    public String getAvatar() {
+        return pref.getString(KEY_USER_AVATAR, null);
+    }
+
+    public String getLon() {
+        return pref.getString(KEY_USER_LON, null);
+    }
+
+    public String getLat() {
+        return pref.getString(KEY_USER_LAT, null);
+    }
+
+    public String getEduLevel() {
+        return pref.getString(KEY_USER_EDU_LEVEL, null);
+    }
+
+    public String getGender() {
+        return pref.getString(KEY_USER_GENDER, null);
+    }
+
+    public String getDob() {
+        return pref.getString(KEY_USER_DOB, null);
     }
 }
