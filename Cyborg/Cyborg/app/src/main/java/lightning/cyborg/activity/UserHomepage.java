@@ -421,27 +421,6 @@ public class UserHomepage extends AppCompatActivity {
         }
     }
 
-//    // subscribing to global topic
-//    public void subscribeToGlobalTopic() {
-//        Intent intent = new Intent(this, GcmIntentService.class);
-//        intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-//        intent.putExtra(GcmIntentService.TOPIC, Config.TOPIC_GLOBAL);
-//        startService(intent);
-//    }
-
-//    // Subscribing to all chat room topics
-//    // each topic name starts with `topic_` followed by the ID of the chat room
-//    // Ex: topic_1, topic_2
-//    public void subscribeToAllTopics() {
-//        for (ChatRoom cr : normalChatRoomArrayList) {
-//
-//            Intent intent = new Intent(this, GcmIntentService.class);
-//            intent.putExtra(GcmIntentService.KEY, GcmIntentService.SUBSCRIBE);
-//            intent.putExtra(GcmIntentService.TOPIC, "topic_" + cr.getId());
-//            startService(intent);
-//        }
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();

@@ -225,12 +225,7 @@ public class CallActivity extends AppCompatActivity {
     public CallActivity() {
         //
     }
-
-    //@Override
-    //public void onWindowFocusChanged(boolean hasFocus) {
-       // super.onWindowFocusChanged(hasFocus);
-        //initiateCall();
-    //}
+    
 
     @Override
     public void onStart() {
