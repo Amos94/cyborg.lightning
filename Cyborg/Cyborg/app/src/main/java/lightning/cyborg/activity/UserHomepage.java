@@ -178,12 +178,10 @@ public class UserHomepage extends AppCompatActivity {
 
     }
 
-<<<<<<< HEAD
-=======
     /**
      * fetching the chat rooms by making http call
      */
->>>>>>> lastbnc
+
     private void fetchChatRooms(String type) {
         final String TYPE = type;
 
@@ -211,15 +209,12 @@ public class UserHomepage extends AppCompatActivity {
                             cr.setTimestamp(chatRoomsObj.getString("created_at"));
                             cr.setVisibility(chatRoomsObj.getString("visibility"));
                             Log.d("FAFFa", cr.getPermission());
-<<<<<<< HEAD
-=======
                             cr.setAvatar(chatRoomsObj.getString("avatar"));
                             Log.d("FAFFa", cr.getPermission() + "avtarar" + cr.getAvatar());
                             if(chatRoomsObj.getString("last_message") ==null){}
                             else{
                                 cr.setLastMessage(chatRoomsObj.getString("last_message"));
                             }
->>>>>>> lastbnc
                             if (cr.getPermission().equals("n") || cr.getVisibility().equals("n")) {
 
                             } else {
@@ -310,14 +305,11 @@ public class UserHomepage extends AppCompatActivity {
                 }
             }
 
-<<<<<<< HEAD
-=======
         }
         else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
             normalChatRoomArrayList.clear();
             fetchChatRooms("n");
->>>>>>> lastbnc
         }
 
     }
@@ -354,20 +346,14 @@ public class UserHomepage extends AppCompatActivity {
      * @param chatRoomName the name of the chat room
      * @param type         the type of chatroom e.g freinds or normal
      */
-<<<<<<< HEAD
-    public void chatRoomActivityIntent(String chatRoomid, String chatRoomName, String type, String permission) {
-=======
+
     public void chatRoomActivityIntent(String chatRoomid, String chatRoomName, String type, String permission, String avatar) {
->>>>>>> lastbnc
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);
         intent.putExtra("name", chatRoomName);
         intent.putExtra("type", type);
         intent.putExtra("permission", permission);
-<<<<<<< HEAD
-=======
         intent.putExtra("avatar", avatar);
->>>>>>> lastbnc
         for (ChatRoom cr : normalChatRoomArrayList) {
             if (cr.getId().equals(chatRoomid)) {
                 cr.setUnreadCount(0);
@@ -508,16 +494,13 @@ public class UserHomepage extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(menuItem);
     }
-
-<<<<<<< HEAD
-=======
+    
     public void goToBlocked(){
         Intent intent = new Intent(UserHomepage.this, ViewBlockedUsers.class);
         startActivity(intent);
     }
 
 
->>>>>>> lastbnc
     //navigating to settings...
     public void clickSetting(View view) {
 
@@ -575,10 +558,6 @@ public class UserHomepage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-<<<<<<< HEAD
-=======
     }
-
->>>>>>> lastbnc
 
 }
