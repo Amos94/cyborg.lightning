@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
-import lightning.cyborg.app.Validation;
 import lightning.cyborg.avator.Avator_Logo;
+import lightning.cyborg.helper.InputVerification;
 import lightning.cyborg.model.User;
 
 
@@ -143,7 +143,7 @@ public class UserProfileFragment extends Fragment {
         addInterestButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String temp = new Validation().getValidInterest(etInterest.getText().toString());
+                String temp = InputVerification.getValidInterest(etInterest.getText().toString());
                 if (temp.length() > 0) {
                     try {
                         addInterestButt.setEnabled(false);
@@ -271,8 +271,8 @@ public class UserProfileFragment extends Fragment {
                             if (success) {
                                 for (String s : interests.split(",")) {
                                     if (!items.contains(s)) {
-                                        items.add(new Validation().getValidInterest(s));
-                                        localUser.addInterest(new Validation().getValidInterest(s));
+                                        items.add(InputVerification.getValidInterest(s));
+                                        localUser.addInterest(InputVerification.getValidInterest(s));
                                     }
                                 }
                                 MyApplication.getInstance().getPrefManager().storeUser(localUser);

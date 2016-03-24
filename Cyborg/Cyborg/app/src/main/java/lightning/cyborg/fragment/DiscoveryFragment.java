@@ -43,7 +43,7 @@ import lightning.cyborg.R;
 import lightning.cyborg.adapter.CustomListAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
-import lightning.cyborg.app.Validation;
+import lightning.cyborg.helper.InputVerification;
 
 public class DiscoveryFragment extends Fragment {
     private View inflatedview;
@@ -174,7 +174,7 @@ public class DiscoveryFragment extends Fragment {
     }
 
     private void discover(View v) {
-        final String filtered = new Validation().getValidInterest(search.getText().toString());
+        final String filtered = InputVerification.getValidInterest(search.getText().toString());
         String ownID = MyApplication.getInstance().getPrefManager().getUser().getId();
         int radius = seekDist.getProgress() + 5;
         matchedUserJson = new ArrayList<JSONObject>();
