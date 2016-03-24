@@ -34,15 +34,7 @@
             android:paddingRight="10dp"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_action_back"
-                android:id="@+id/webviewbackBtn"
-                android:layout_centerInParent="true"
-                android:nestedScrollingEnabled="false"
-                android:layout_alignParentStart="true"
-                android:onClick="backToEditSip" />
+
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -55,14 +47,7 @@
                 android:layout_alignParentEnd="true"
                 android:nestedScrollingEnabled="false" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Skip"
-                android:id="@+id/Skip"
-                android:layout_centerInParent="true"
-                android:layout_toLeftOf="@id/webviewdoneBtn"
-                android:onClick="skipSIPRegistration" />
+
 
         </RelativeLayout>
 

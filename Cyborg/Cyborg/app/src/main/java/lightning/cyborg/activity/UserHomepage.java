@@ -61,6 +61,8 @@ import lightning.cyborg.model.Message;
 import lightning.cyborg.setting.AboutUs;
 import lightning.cyborg.setting.Communication;
 import lightning.cyborg.setting.MenuEditSip;
+import lightning.cyborg.setting.SetingsRegisterSipAccount;
+import lightning.cyborg.setting.SettingsEditSipUserInfo;
 import lightning.cyborg.setting.UserDetails;
 
 public class UserHomepage extends AppCompatActivity {
@@ -535,7 +537,7 @@ public class UserHomepage extends AppCompatActivity {
     //voice calling registration...
     public void sipRegis(View view) {
 
-        Intent intent = new Intent(UserHomepage.this, MenuEditSip.class);
+        Intent intent = new Intent(UserHomepage.this, SettingsEditSipUserInfo.class);
         startActivity(intent);
     }
 

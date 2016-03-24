@@ -52,24 +52,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:id="@+id/testlayout">
 
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/settings_gil"
-                        android:textColor="@android:color/white"
-                        android:gravity="center"
-                        android:onClick="editCommunication"
-                        android:background="@android:color/transparent"
-                        android:text="\u2022 Edit Communication"/>
-
-                </LinearLayout>
 
 
             </LinearLayout>

@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
-import lightning.cyborg.voip.SipAccountRegistration;
+import lightning.cyborg.activity.SetSipUserInfo;
 import lightning.cyborg.activity.UserHomepage;
 import lightning.cyborg.activity.interestsRegistration;
 import lightning.cyborg.app.EndPoints;
@@ -39,7 +39,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
     private TextView passwordTV;
     private ImageButton doneBtn;
     private Button registerBtn;
-    private ImageButton homeBtn;
+    private ImageButton backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,14 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
         doneBtn = (ImageButton) findViewById(R.id.doneBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
-        homeBtn = (ImageButton) findViewById(R.id.backToUserHomepageBtn);
+        backBtn = (ImageButton) findViewById(R.id.backButtonSip);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UserHomepage.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -110,7 +117,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
 
     //Intent for going to a new Activity
     public void goToRegisterSipAccount(View view){
-        Intent intent = new Intent(this, SipAccountRegistration.class);
+        Intent intent = new Intent(this, SetingsRegisterSipAccount.class);
         startActivity(intent);
     }
 

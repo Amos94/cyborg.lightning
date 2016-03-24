@@ -121,6 +121,7 @@
         <activity android:name=".voip.SipAccountRegistration"></activity>
         <activity android:name=".voip.SipSettings"></activity>
         <activity android:name=".voip.IncomingGui"></activity>
+        <activity android:name=".activity.SetSipUserInfo"></activity>
 
 
 
