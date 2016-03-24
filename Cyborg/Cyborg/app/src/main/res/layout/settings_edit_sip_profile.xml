@@ -1,55 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="#01579b"
+        app:contentInsetStart="0dp"
+        style="@style/Toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/backToUserHomepageBtn"
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/ic_home_white_36dp"
+                android:onClick="goToUserHomepage" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:id="@+id/backButton"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_action_back"
+                android:layout_toRightOf="@+id/backToUserHomepageBtn"
+                android:onClick="backToEditSip" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Done"
+                android:id="@+id/doneBtn"
+                android:layout_centerInParent="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/ic_action_forward"
+                android:onClick="goToUserHomepage" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/usernameTextField"
-        android:hint="SIP username"
-        android:textAlignment="center" />
+        android:layout_height="match_parent"
+        android:padding="20dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/passwordTextField"
-        android:layout_gravity="center_horizontal"
-        android:hint="SIP password"
-        android:textAlignment="center" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/settingspasswordTextField"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:hint="SIP password"
+            android:textAlignment="center" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Done"
-        android:id="@+id/doneBtn"
-        android:layout_gravity="center_horizontal"
-        android:onClick="goToUserHomepage" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/settingsusernameTextField"
+            android:layout_above="@id/settingspasswordTextField"
+            android:layout_centerInParent="true"
+            android:hint="SIP username"
+            android:textAlignment="center" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register?"
-        android:id="@+id/registerBtn"
-        android:layout_gravity="center_horizontal"
-        android:onClick="goToRegisterSipAccount" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/registerTV"
+            android:text="If you already have an account, enter your details below. Otherwise click the register button."/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home"
-        android:id="@+id/backToUserHomepageBtn"
-        android:layout_gravity="center_horizontal"
-        android:onClick="goToUserHomepage" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:id="@+id/registerBtn"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@id/registerTV"
+            android:onClick="goToRegisterSipAccount" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:id="@+id/backButton"
-        android:layout_gravity="center_horizontal"
-        android:onClick="backToEditSip" />
+    </RelativeLayout>
 
 </LinearLayout>
