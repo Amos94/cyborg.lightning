@@ -55,14 +55,6 @@
                 android:layout_alignParentEnd="true"
                 android:nestedScrollingEnabled="false" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Skip"
-                android:id="@+id/Skip"
-                android:layout_centerInParent="true"
-                android:layout_toLeftOf="@id/webviewdoneBtn"
-                android:onClick="skipSIPRegistration" />
 
         </RelativeLayout>
 

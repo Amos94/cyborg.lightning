@@ -1,6 +1,9 @@
 package lightning.cyborg.adapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -85,9 +88,14 @@ public class BlockedListAdapter extends RecyclerView.Adapter<BlockedListAdapter.
         holder.removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                blockedUser(user.getId(),position);
+                blockedUser(user.getId(), position);
             }
         });
+
+        TypedArray imgs = mContext.getResources().obtainTypedArray(R.array.image_ids);
+
+        Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(user.getAvatar()), 0));
+        holder.avater.setImageBitmap(image);
     }
 
     @Override

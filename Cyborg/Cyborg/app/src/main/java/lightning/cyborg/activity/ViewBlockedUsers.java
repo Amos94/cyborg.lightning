@@ -103,6 +103,8 @@ public class ViewBlockedUsers extends AppCompatActivity {
                             User user = new User();
                             user.setId(userObj.getString("user_id"));
                             user.setName(userObj.getString("fname"));
+                            user.setAvatar(userObj.getString("avatar"));
+
 
                             blockedUserArrayList.add(user);
                             Log.d("list info", blockedUserArrayList.get(i).getId()+"id"+blockedUserArrayList.get(i).getName()+"is name");
