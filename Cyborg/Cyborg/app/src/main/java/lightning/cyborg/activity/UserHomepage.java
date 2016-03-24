@@ -183,7 +183,10 @@ public class UserHomepage extends AppCompatActivity {
      * fetching the chat rooms by making http call
      */
 
-    private void fetchChatRooms(String type) {
+    /**
+     * fetching the chat rooms by making http call
+     */
+    private void fetchChatRooms(final String type) {
         final String TYPE = type;
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -248,7 +251,7 @@ public class UserHomepage extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
-                    ;
+
                 }
 
 
@@ -282,54 +285,6 @@ public class UserHomepage extends AppCompatActivity {
 
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
-    }
-
-
-    /**
-     * Handles new push notification
-     */
-    private void handlePushNotification(Intent intent) {
-        int type = intent.getIntExtra("type", -1);
-
-        // if the push is of chat room message
-        // simply update the UI unread messages count
-        if (type == Config.PUSH_TYPE_CHATROOM) {
-            Message message = (Message) intent.getSerializableExtra("message");
-            String chatRoomId = intent.getStringExtra("chat_room_id");
-            String chatType = intent.getStringExtra("chat_type");
-            String visibilityChange = intent.getStringExtra("visibilityChange");
-
-            Log.d("ffsaf", "insdie handle");
-            if (message != null && chatRoomId != null) {
-                if (chatType.equals("n")) {
-                    if (visibilityChange.equals("true")) {
-                        normalChatRoomArrayList.clear();
-                        fetchChatRooms("n");
-                    } else {
-                        updateRow(chatRoomId, message, normalChatRoomArrayList, normalChatAdapter);
-                    }
-                } else if (chatType.equals("f")) {
-                    if (visibilityChange.equals("true")) {
-                        freindsChatRoomArrayList.clear();
-                        fetchChatRooms("f");
-                    } else {
-                        updateRow(chatRoomId, message, freindsChatRoomArrayList, freindChatAdapter);
-                    }
-
-                }
-            }
-
-        }
-        else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
-            Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
-            requestBoth=true;
-            normalChatRoomArrayList.clear();
-            fetchChatRooms("n");
-            freindsChatRoomArrayList.clear();
-            fetchChatRooms("f");
-
-        }
-
     }
 
     /**
