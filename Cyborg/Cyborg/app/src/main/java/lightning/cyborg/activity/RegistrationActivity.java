@@ -49,8 +49,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button chooseAvatar;
     private Spinner eduSpin;
     private RadioButton maleRadioRegister;
-    private RadioButton femaleRadioRegister;
-    private RadioGroup radioGroup;
     private ImageView backButton, forwardButton;
 
     @Override
@@ -80,13 +78,10 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordConfirmET = (EditText) findViewById(R.id.txtConfirmPass);
         passwordET = (EditText) findViewById(R.id.txtPassword);
         dobET = (EditText) findViewById(R.id.etDob);
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroupRegister);
         maleRadioRegister = (RadioButton) findViewById(R.id.rbMale);
         avatorIcon = (ImageView) findViewById(R.id.avatorIcon);
 
         lastNameET = (EditText) findViewById(R.id.txtLastName);
-
-        femaleRadioRegister = (RadioButton) findViewById(R.id.rbFemal);
         maleRadioRegister.setChecked(true);
 
 

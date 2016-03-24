@@ -1,12 +1,10 @@
 package lightning.cyborg.app;
 
 /**
- * Created by Lincoln on 06/01/16.
+ * Created by Team Cyborg Lightning
  */
 public class EndPoints {
-
     public static final String base = "http://nashdomain.esy.es";
-
     public static final String SEND_PASS = base +"/sendPassword.php";
     public static final String LOGIN = base + "/users_login.php";
     public static final String USERr = base +"/updateGcmID.php";

@@ -63,8 +63,11 @@ import lightning.cyborg.setting.AboutUs;
 import lightning.cyborg.setting.SettingsEditSipUserInfo;
 import lightning.cyborg.setting.UserDetails;
 
+/**
+ * This class allows blocked users to be viewed
+ * Created by Team Cyborg Lightning
+ */
 public class UserHomepage extends AppCompatActivity {
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private String TAG = UserHomepage.class.getSimpleName();
@@ -77,8 +80,6 @@ public class UserHomepage extends AppCompatActivity {
     private int onChatFragment = 0;
     private boolean requestBoth;
 
-
-
     private static final long RIPPLE_DURATION = 500;
 
     @InjectView(R.id.toolbar)
@@ -88,6 +89,10 @@ public class UserHomepage extends AppCompatActivity {
     @InjectView(R.id.content_hamburger)
     View contentHamburger;
 
+    /**
+     * Default method that is ran by app
+     * @param savedInstanceState  where user previously left off
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,11 +104,7 @@ public class UserHomepage extends AppCompatActivity {
             getSupportActionBar().setTitle(null);
         }
 
-
-        /**
-         * Check for login session. If not logged in launch
-         * login activity
-         * */
+        //Auto-login feature if user has logged in  before
         if (MyApplication.getInstance().getPrefManager().getUser() == null) {
             launchLoginActivity();
         }
@@ -121,7 +122,6 @@ public class UserHomepage extends AppCompatActivity {
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
                 // checking for type intent filter
                 if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
                     // gcm successfully registered
@@ -165,43 +165,31 @@ public class UserHomepage extends AppCompatActivity {
             Bundle b = getIntent().getExtras();
             String key = b.getString("FragmentNum");
             viewPager.setCurrentItem(Integer.parseInt(key));
-
-
         } catch (Exception e) {
             Log.d(TAG, "no bundle was attached");
         }
-
         normalChatRoomArrayList.clear();
         freindsChatRoomArrayList.clear();
         fetchChatRooms("n");
         fetchChatRooms("f");
-
-
     }
 
     /**
-     * fetching the chat rooms by making http call
-     */
-
-    /**
-     * fetching the chat rooms by making http call
+     * Method that fetches chatrooms of the user
+     * @param type the type of chatroom, normal or friend
      */
     private void fetchChatRooms(final String type) {
         final String TYPE = type;
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.CHAT_ROOMS, new Response.Listener<String>() {
-
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "response: " + response);
-
                 try {
                     JSONObject obj = new JSONObject(response);
-
                     // check for error flag
                     if (obj.getBoolean("error") == false) {
-
                         if(type.equals("n")){
                             normalChatRoomArrayList.clear();
                         }
@@ -235,7 +223,6 @@ public class UserHomepage extends AppCompatActivity {
                                     freindsChatRoomArrayList.add(cr);
                                 }
                             }
-
                         }
 
                         if(TYPE.equals("n")){
@@ -248,19 +235,12 @@ public class UserHomepage extends AppCompatActivity {
                         // error in fetching chat rooms
                         Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_SHORT).show();
                     }
-
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
 
                 }
-
-
-
-                // subscribing to all chat room topics
-                // subscribeToAllTopics();
             }
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse networkResponse = error.networkResponse;
@@ -268,7 +248,6 @@ public class UserHomepage extends AppCompatActivity {
 
             }
         }) {
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -288,7 +267,8 @@ public class UserHomepage extends AppCompatActivity {
     }
 
     /**
-     * Handles new push notification
+     * This method handles new push notification
+     * @param intent the variable that will receive the notifications
      */
     private void handlePushNotification(Intent intent) {
         int type = intent.getIntExtra("type", -1);
@@ -317,10 +297,8 @@ public class UserHomepage extends AppCompatActivity {
                     } else {
                         updateRow(chatRoomId, message, freindsChatRoomArrayList, freindChatAdapter);
                     }
-
                 }
             }
-
         }
         else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
@@ -336,6 +314,10 @@ public class UserHomepage extends AppCompatActivity {
 
     /**
      * Updates the chat list unread count and the last message
+     * @param chatRoomId id of the chatroom
+     * @param message the message to be sent
+     * @param normalChatAdapter adaptor for the normal chatroom
+     * @param normalChatRoomArrayList ArrayList for normal chatroom
      */
     private void updateRow(String chatRoomId, Message message, ArrayList<ChatRoom> normalChatRoomArrayList, ChatRoomsAdapter normalChatAdapter) {
         for (ChatRoom cr : normalChatRoomArrayList) {
@@ -351,7 +333,9 @@ public class UserHomepage extends AppCompatActivity {
         normalChatAdapter.notifyDataSetChanged();
     }
 
-
+    /**
+     * This method launches the LogInActivity for the user
+     */
     private void launchLoginActivity() {
         Intent intent = new Intent(UserHomepage.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -361,19 +345,21 @@ public class UserHomepage extends AppCompatActivity {
 
     /**
      * Go to the chat room
-     * @param chatRoomid   the id of the chat room
+     * @param chatRoomId   the id of the chat room
      * @param chatRoomName the name of the chat room
-     * @param type         the type of chatroom e.g freinds or normal
+     * @param type         the type of chatroom e.g friends or normal
+     * @param permission the permission to be sent to the chatroom activity
+     * @param avatar the avatar of the user
      */
-    public void chatRoomActivityIntent(String chatRoomid, String chatRoomName, String type, String permission, String avatar) {
+    public void chatRoomActivityIntent(String chatRoomId, String chatRoomName, String type, String permission, String avatar) {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
-        intent.putExtra("chat_room_id", chatRoomid);
+        intent.putExtra("chat_room_id", chatRoomId);
         intent.putExtra("name", chatRoomName);
         intent.putExtra("type", type);
         intent.putExtra("permission", permission);
         intent.putExtra("avatar", avatar);
         for (ChatRoom cr : normalChatRoomArrayList) {
-            if (cr.getId().equals(chatRoomid)) {
+            if (cr.getId().equals(chatRoomId)) {
                 cr.setUnreadCount(0);
                 break;
             }
@@ -382,7 +368,10 @@ public class UserHomepage extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    /**
+     * This method sets up fragments
+     * @param viewPager is the ViewPager to be added
+     */
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter PageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         PageAdapter.addFragment(new UserProfileFragment(), "Profile");
@@ -392,14 +381,15 @@ public class UserHomepage extends AppCompatActivity {
         viewPager.setAdapter(PageAdapter);
     }
 
+    /**
+     * This method allows fragments to be used
+     */
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> FragmentList = new ArrayList<>();
         private final List<String> FragmentTitleList = new ArrayList<>();
-
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
-
         @Override
         public Fragment getItem(int position) {
             if (position == 3) {
@@ -444,7 +434,9 @@ public class UserHomepage extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * This method handles actions to be done when the app goes into onResume()
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -462,19 +454,28 @@ public class UserHomepage extends AppCompatActivity {
         NotificationUtils.clearNotifications();
     }
 
+    /**
+     * This method handles actions to be done when the app goes into onPause()
+     */
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
     }
 
-    // starting the service to register with GCM
+    /**
+     * This method registersGCM for the user so that messaging can be done
+     */
     public void registerGCM() {
         Intent intent = new Intent(this, GcmIntentService.class);
         intent.putExtra("key", "register");
         startService(intent);
     }
 
+    /**
+     * This method checks whether the phone is compatible with messaging API used
+     * @return true or false for the compatibility check
+     */
     public boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
@@ -492,44 +493,57 @@ public class UserHomepage extends AppCompatActivity {
         return true;
     }
 
-    //navigating to Editing Profile...
+    /**
+     * Navigates user to UserDetails
+     * @param view the container that calls this method
+     */
     public void clickUserProfile(View view) {
         Intent intent = new Intent(UserHomepage.this, UserDetails.class);
         startActivity(intent);
     }
 
-    //the about us page...
-
+    /**
+     * Navigates user to aboutUS
+     * @param view the container that calls this method
+     */
     public void aboutUS(View view) {
-
         Intent intent = new Intent(UserHomepage.this, AboutUs.class);
         startActivity(intent);
-
     }
 
-    //voice calling registration...
+    /**
+     * Method allows user to enter SIP registration page
+     * @param view the container that calls this method
+     */
     public void sipRegis(View view) {
 
         Intent intent = new Intent(UserHomepage.this, SettingsEditSipUserInfo.class);
         startActivity(intent);
     }
 
+    /**
+     * Method allows user to log out
+     * @param view the container that calls this method
+     */
     public void logout(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         MyApplication.getInstance().logout();
         startActivity(intent);
     }
 
+    /**
+     * Navigates user to ViewBlockedUsers
+     * @param view the container that calls this method
+     */
     public void blockedUser(View view) {
-
         Intent intent = new Intent(this, ViewBlockedUsers.class);
         startActivity(intent);
-
-
     }
+
+    /**
+     * Method that handles what is done when the back-button is pressed on the phone
+     */
     @Override
     public void onBackPressed() {
-
     }
-
 }

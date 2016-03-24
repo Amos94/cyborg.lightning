@@ -21,9 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
-import lightning.cyborg.activity.SetSipUserInfo;
 import lightning.cyborg.activity.UserHomepage;
-import lightning.cyborg.activity.interestsRegistration;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;

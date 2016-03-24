@@ -148,10 +148,6 @@
             </intent-filter>
         </service>
         <!-- END Added for GCM -->
-        <activity
-            android:name=".activity.interestsRegistration"
-            android:label="@string/title_activity_interests_registration"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

@@ -31,13 +31,20 @@ import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.helper.SimpleDividerItemDecoration;
 import lightning.cyborg.model.User;
 
+/**
+ * This class allows blocked users to be viewed
+ * Created by Team Cyborg Lightning
+ */
 public class ViewBlockedUsers extends AppCompatActivity {
-
     private String TAG = ViewBlockedUsers.class.getSimpleName();
     private ArrayList<User> blockedUserArrayList;
-   private BlockedListAdapter blockedListAdapter;
+    private BlockedListAdapter blockedListAdapter;
     private RecyclerView recyclerView;
 
+    /**
+     * Default method that is ran by app
+     * @param savedInstanceState  where user previously left off
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,31 +75,23 @@ public class ViewBlockedUsers extends AppCompatActivity {
             getBlockedList();
         }
 
+    /**
+     * This method allows us to retrieve the user's blocked list from the database
+     */
     public void getBlockedList(){
-
         final Map<String, String> params = new HashMap<>();
         params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
 
-
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                EndPoints.BLOCK_LIST, new Response.Listener<String>() {
-
-
+        StringRequest strReq = new StringRequest(Request.Method.POST, EndPoints.BLOCK_LIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e(TAG, "response: " + response);
-
                 try {
                     JSONObject obj = new JSONObject(response);
-
                     // check for error
                     if (obj.getBoolean("error") == false) {
-
                         blockedUserArrayList.clear();
-
                         JSONArray userArray = obj.getJSONArray("users");
-
                         for (int i = 0; i < userArray.length(); i++) {
                             JSONObject userObj = (JSONObject) userArray.get(i);
                             User user = new User();
@@ -102,18 +101,13 @@ public class ViewBlockedUsers extends AppCompatActivity {
                             blockedUserArrayList.add(user);
                             Log.d("list info", blockedUserArrayList.get(i).getId()+"id"+blockedUserArrayList.get(i).getName()+"is name");
                         }
-
                         blockedListAdapter.notifyDataSetChanged();
                     }
-
-
                 } catch (JSONException e1) {
                     e1.printStackTrace();
                 }
             }
-
     }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse networkResponse = error.networkResponse;
@@ -128,53 +122,40 @@ public class ViewBlockedUsers extends AppCompatActivity {
                 return params;
             }
         };
-
-
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
 
+    /**
+     * This method gets the user id of people blocked by the user
+     * @param userID the userID of the user
+     */
     public void getUser(String userID){
-
         final Map<String, String> params = new HashMap<>();
         params.put("user_id", userID);
-
-
-
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 EndPoints.BLOCK_LIST, new Response.Listener<String>() {
-
 
             @Override
             public void onResponse(String response) {
                 Log.e(TAG, "response: " + response);
-
                 try {
                     JSONObject obj = new JSONObject(response);
-
                     // check for error
                     if (obj.getBoolean("error") == false) {
-
                         JSONArray userArray = obj.getJSONArray("users");
-
                         for (int i = 0; i < userArray.length(); i++) {
                             JSONObject userObj = (JSONObject) userArray.get(i);
                             User user = new User();
                             user.setId(userObj.getString("user_id"));
                             user.setName(userObj.getString("fname"));
-
                         }
-
                     }
-
-
                 } catch (JSONException e1) {
                     e1.printStackTrace();
                 }
             }
-
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse networkResponse = error.networkResponse;
@@ -189,15 +170,7 @@ public class ViewBlockedUsers extends AppCompatActivity {
                 return params;
             }
         };
-
-
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
-
-
-
-
-
-
 }

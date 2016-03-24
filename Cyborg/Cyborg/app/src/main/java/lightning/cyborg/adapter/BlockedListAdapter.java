@@ -42,19 +42,15 @@ import lightning.cyborg.model.User;
  * Created by nashwan on 20/03/2016.
  */
 public class BlockedListAdapter extends RecyclerView.Adapter<BlockedListAdapter.ViewHolder>{
-
-
     private Context mContext;
     private ArrayList<User> userArrayList;
     private static String today;
     public static String TAG = "BlockedListAdapter";
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name;//
         private ImageView avater;
         private Button removeBtn;
-
 
         public ViewHolder(View view) {
             super(view);
@@ -63,7 +59,6 @@ public class BlockedListAdapter extends RecyclerView.Adapter<BlockedListAdapter.
             removeBtn =(Button) view.findViewById(R.id.bulrRemoveBlockedBtn);
         }
     }
-
 
     public BlockedListAdapter(Context mContext, ArrayList<User> userArrayList) {
         this.mContext = mContext;
