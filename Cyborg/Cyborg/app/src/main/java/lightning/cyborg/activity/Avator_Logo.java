@@ -1,7 +1,10 @@
 package lightning.cyborg.activity;
 
 /**
- * Created by Ahadxo on 3/12/16.
+ * This class creates a grid which displays all of the avatars for the users to pick
+ * once clicked it will change the profile avatar.
+ *
+ * Created by Team Cyborg Lightning
  */
 import android.app.Activity;
 import android.content.res.TypedArray;
@@ -24,6 +27,10 @@ public class Avator_Logo extends Activity {
     private GridViewAdapter gridAdapter;
 
 
+    /**
+     * Default method that is ran by app
+     * @param savedInstanceState  where user previously left off
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +51,7 @@ public class Avator_Logo extends Activity {
     }
 
     /**
-     * Prepare some dummy data for gridview
+     * Preparing the data for gridview
      */
     private ArrayList<Bitmap> getData() {
         final ArrayList<Bitmap> imageItems = new ArrayList<>();

@@ -49,10 +49,9 @@ import lightning.cyborg.voip.IncomingCallReceiver;
 import lightning.cyborg.voip.UserInformation;
 import lightning.cyborg.voip.SipSettings;
 import lightning.cyborg.app.MyApplication;
-
 /**
- * Created by Amos Madalin Neculau on 25/02/2016.
- *
+ * This class is used for the call creating and managing from user to user.
+ * Created by Team Cyborg Lightning
  */
 
 public class CallActivity extends AppCompatActivity {
@@ -66,15 +65,10 @@ public class CallActivity extends AppCompatActivity {
     public IncomingCallReceiver callReceiver;
     public Chronometer chronometer;
 
-    private static final int CALL_ADDRESS = 1;
-    private static final int SET_AUTH_INFO = 2;
-    private static final int UPDATE_SETTINGS_DIALOG = 3;
-    private static final int HANG_UP = 4;
     private ImageButton hangUp;
     private ImageButton muteMic;
     private ImageButton speaker;
     private ImageView avatarImage;
-    private Button makeNewCall;
 
     private UserInformation caller;
     private String callee;
@@ -93,7 +87,6 @@ public class CallActivity extends AppCompatActivity {
 
     private Boolean isMuted;
     private Boolean isSpeaker;
-    private Boolean inCall;
 
     private String permission;
     private String type;
@@ -101,31 +94,21 @@ public class CallActivity extends AppCompatActivity {
     private String title;
     private String chatRoomId;
 
-    public CallActivity(String callerUn, String callerPw, String calleeUn){
 
-        caller = new UserInformation(callerUn, callerPw, SIP_SERVER);
-        callee = PREFIX_CALLEE + calleeUn + POSTFIX_CALLEE;
-
-    }
-
+    /**
+     * Default method that is ran by app for the layout
+     * @param savedInstanceState where user previously left off
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.call);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setTitle("Call");
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.bottomcalltoolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
-        //getSupportActionBar().setCustomView(R.layout.custom_toolbar_call);
 
 
         isMuted = false;
         isSpeaker = false;
-        inCall = false;
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -151,24 +134,20 @@ public class CallActivity extends AppCompatActivity {
 
 
 
-        //this.caller = caller;
-        caller = new UserInformation(intentCallerUsername, intentCallerPassword, SIP_SERVER);
-        //this.callee = callee;
+        caller = new UserInformation(intentCallerUsername, intentCallerPassword, SIP_SERVER);//this.callee = callee;
         callee = PREFIX_CALLEE + intentCalleeUsername + POSTFIX_CALLEE;
 
         hangUp = (ImageButton) findViewById(R.id.HangUpBtn);
         speaker = (ImageButton) findViewById(R.id.speakerBtn);
         muteMic = (ImageButton) findViewById(R.id.muteMicBtn);
-        //makeNewCall = (Button) findViewById(R.id.initiateCall);
 
 
-        // ToggleButton pushToTalkButton = (ToggleButton) findViewById(R.id.pushToTalk);
-        //pushToTalkButton.setOnTouchListener(this);
 
 
-        // Set up the intent filter.  This will be used to fire an
-        // IncomingCallReceiver when someone calls the SIP address used by this
-        // application.
+
+        /** Set up the intent filter.  This will be used to fire an
+        * IncomingCallReceiver when someone calls the SIP address used by this
+        * application.*/
         IntentFilter filter = new IntentFilter();
 
         filter.addAction("android.SipDemo.INCOMING_CALL");
@@ -181,9 +160,6 @@ public class CallActivity extends AppCompatActivity {
         speakerListener();
         muteListener();
 
-        // "Push to talk" can be a serious pain when the screen keeps turning off.
-        // Let's prevent that.
-        /*getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);*/
 
         initializeManager();
         initializeLocalProfile();
@@ -356,7 +332,6 @@ public class CallActivity extends AppCompatActivity {
                 public void onCallEstablished(SipAudioCall call) {
                     Log.d("AAAAAAA", "Beginning of call established");
                     call.startAudio();
-                    inCall = true;
                     updateStatus(call);
                     chronometer.start();
                     Log.d("AAAAAAA", "End of call established");
@@ -474,10 +449,6 @@ public class CallActivity extends AppCompatActivity {
 
     }
 
-    public void makeCall(View view){
-        initiateCall();
-    }
-
     /**
      * Updates the status box at the top of the UI with a messege of your choice.
      * @param status The String to display in the status box.
@@ -504,21 +475,6 @@ public class CallActivity extends AppCompatActivity {
         updateStatus(useName + "@" + call.getPeerProfile().getSipDomain());
     }
 
-    public void updatePreferences() {
-        Intent settingsActivity = new Intent(getBaseContext(),
-                SipSettings.class);
-        startActivity(settingsActivity);
-    }
 
-    public boolean onTouch(View v, MotionEvent event) {
-        if (call == null) {
-            return false;
-        } else if (event.getAction() == MotionEvent.ACTION_DOWN && call != null && call.isMuted()) {
-            call.toggleMute();
-        } else if (event.getAction() == MotionEvent.ACTION_UP && !call.isMuted()) {
-            call.toggleMute();
-        }
-        return false;
-    }
 
 }
