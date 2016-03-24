@@ -60,9 +60,6 @@ import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.setting.AboutUs;
-import lightning.cyborg.setting.Communication;
-import lightning.cyborg.setting.MenuEditSip;
-import lightning.cyborg.setting.SetingsRegisterSipAccount;
 import lightning.cyborg.setting.SettingsEditSipUserInfo;
 import lightning.cyborg.setting.UserDetails;
 
