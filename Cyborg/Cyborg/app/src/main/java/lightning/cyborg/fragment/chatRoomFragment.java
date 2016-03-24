@@ -51,7 +51,8 @@ import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
 
 /**
- * Created by Lewis on 21/02/2016.
+ * This class represents the chatroom fragment in the app
+ * Created by Team Cyborg Lightning
  */
 public class chatRoomFragment extends Fragment{
     private View inflatedview;
@@ -62,15 +63,29 @@ public class chatRoomFragment extends Fragment{
     private ChatRoomsAdapter mAdapter;
     private RecyclerView recyclerView;
 
+    /**
+     * Default constructor for this class
+     */
     public chatRoomFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Default method that is ran by app
+     * @param savedInstanceState  where user previously left off
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Default method that is ran by app for the layout
+     * @param inflater allows xml files to work with source code
+     * @param container special view that allows content to be displayed
+     * @param savedInstanceState where user previously left off
+     * @return View to be returned
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,8 +99,6 @@ public class chatRoomFragment extends Fragment{
         chatRoomArrayList = (ArrayList<ChatRoom>) b.getSerializable("data");
 
         Log.d("chatRoomArrayList", chatRoomArrayList.toString());
-//
-
         mAdapter= b.getParcelable("adapter");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflatedview.getContext());
@@ -123,12 +136,5 @@ public class chatRoomFragment extends Fragment{
         }));
         // Inflate the layout for this fragment
         return inflatedview;
-
     }
-
-
-
 }
-
-
-

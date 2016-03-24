@@ -168,7 +168,6 @@ public class RegistrationActivity extends AppCompatActivity {
             params.put("fname", fname);
         } else {
             validInput = false;
-
             nameET.setError("Please enter a valid name");
         }
 
