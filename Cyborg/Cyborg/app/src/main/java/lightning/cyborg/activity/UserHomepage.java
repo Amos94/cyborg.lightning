@@ -309,6 +309,8 @@ public class UserHomepage extends AppCompatActivity {
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
             normalChatRoomArrayList.clear();
             fetchChatRooms("n");
+            freindsChatRoomArrayList.clear();
+            fetchChatRooms("f");
         }
 
     }
@@ -360,7 +362,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         }
         normalChatAdapter.notifyDataSetChanged();
-
         startActivity(intent);
     }
 
