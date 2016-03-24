@@ -9,12 +9,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipRegistrationListener;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -32,6 +36,7 @@ import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.DialerFilter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,6 +59,7 @@ public class CallActivity extends AppCompatActivity {
 
     public String sipAddress = null;
 
+    private String TAG= CallActivity.class.getSimpleName();
     public SipManager manager = null;
     public SipProfile me = null;
     public SipAudioCall call = null;
@@ -67,6 +73,7 @@ public class CallActivity extends AppCompatActivity {
     private ImageButton hangUp;
     private ImageButton muteMic;
     private ImageButton speaker;
+    private ImageView avatarImage;
     private Button makeNewCall;
 
     private UserInformation caller;
@@ -87,6 +94,12 @@ public class CallActivity extends AppCompatActivity {
     private Boolean isMuted;
     private Boolean isSpeaker;
     private Boolean callEnd;
+
+    private String permission;
+    private String type;
+    private String avatar;
+    private String title;
+    private String chatRoomId;
 
     public CallActivity(String callerUn, String callerPw, String calleeUn){
 
@@ -116,12 +129,23 @@ public class CallActivity extends AppCompatActivity {
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        avatarImage = (ImageView) findViewById(R.id.callAvatar);
+        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
+
+        Bitmap image = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(Integer.parseInt(avatar), -1));
+        avatarImage.setImageBitmap(image);
+        Log.d(TAG,image.toString());
+
         Intent intent = getIntent();
 
         intentCallerUsername = intent.getStringExtra("callerUsername");
         intentCallerPassword = intent.getStringExtra("callerPassword");
         intentCalleeUsername = intent.getStringExtra("calleeUsername");
-        message = intent.getStringExtra("type");
+        chatRoomId = intent.getStringExtra("chat_room_id");
+        title = intent.getStringExtra("name");
+        type =intent.getStringExtra("type");
+        avatar =intent.getStringExtra("avatar");
+        permission = intent.getStringExtra("permission");        message = intent.getStringExtra("type");
 
 
         //this.caller = caller;

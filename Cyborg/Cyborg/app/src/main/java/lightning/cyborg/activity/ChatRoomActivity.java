@@ -65,10 +65,12 @@ public class ChatRoomActivity extends AppCompatActivity {
     private Button btnSend;
     private String permission;
     private String type;
-
+    private String avatar;
+    private String title;
     private String sipUsername;
     private String sipPassword;
     private String sipCaleeUsername;
+
 
     private MenuItem callButton;
     private MenuItem addFriend;
@@ -85,9 +87,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         chatRoomId = intent.getStringExtra("chat_room_id");
-        String title = intent.getStringExtra("name");
+        title = intent.getStringExtra("name");
         type =intent.getStringExtra("type");
-
+        avatar =intent.getStringExtra("avatar");
         permission = intent.getStringExtra("permission");
 
 
@@ -234,8 +236,12 @@ public class ChatRoomActivity extends AppCompatActivity {
                             intent1.putExtra("callerUsername",sipUsername);
                             intent1.putExtra("callerPassword",sipPassword);
                             intent1.putExtra("calleeUsername",sipCaleeUsername);
-
-                            IncomingCall(context,"callAccepted");
+                            intent1.putExtra("chatRoomId",chatRoomId);
+                            intent1.putExtra("nsme",title);
+                            intent1.putExtra("type",type);
+                            intent1.putExtra("avatar",avatar);
+                            intent1.putExtra("permission",permission);
+                            IncomingCall(context, "callAccepted");
 
                             startActivity(intent1);
                             finish();
