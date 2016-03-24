@@ -360,8 +360,9 @@
                         android:layout_height="match_parent"
                         android:inputType="date"
                         android:textColor="@android:color/white"
-                        android:id="@+id/txtdob"
-                        android:hint="YYYY-MM-DD" />
+                        android:id="@+id/etDob"
+                        android:hint="YYYY-MM-DD"
+                        android:text="Pick a Date..." />
 
                 </LinearLayout>
 
