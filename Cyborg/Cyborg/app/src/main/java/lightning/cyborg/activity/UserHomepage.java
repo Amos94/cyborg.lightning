@@ -198,6 +198,7 @@ public class UserHomepage extends AppCompatActivity {
 
                     // check for error flag
                     if (obj.getBoolean("error") == false) {
+
                         JSONArray chatRoomsArray = obj.getJSONArray("chat_rooms");
                         for (int i = 0; i < chatRoomsArray.length(); i++) {
                             JSONObject chatRoomsObj = (JSONObject) chatRoomsArray.get(i);
