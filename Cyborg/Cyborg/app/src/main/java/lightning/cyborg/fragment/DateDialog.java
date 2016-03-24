@@ -32,8 +32,9 @@ public class DateDialog extends DialogFragment
 
 
     @Override
-    public void onDateSet(DatePicker view, int year, int month, int day) {
+    public void onDateSet(DatePicker view, int year, int monthIn, int day) {
 
+        int month = monthIn+1;
         String date;
         String daySingle;
         String monthSingle;
