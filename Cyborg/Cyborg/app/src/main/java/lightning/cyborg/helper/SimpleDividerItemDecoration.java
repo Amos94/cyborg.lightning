@@ -9,9 +9,8 @@ import android.view.View;
 
 import lightning.cyborg.R;
 
-
 /**
- * Created by Lincoln on 30/10/15.
+ * Created by Team Cyborg Lightning
  */
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;

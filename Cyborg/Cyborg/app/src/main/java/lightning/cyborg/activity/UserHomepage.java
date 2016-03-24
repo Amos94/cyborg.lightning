@@ -16,8 +16,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -178,10 +183,7 @@ public class UserHomepage extends AppCompatActivity {
      * fetching the chat rooms by making http call
      */
 
-    /**
-     * fetching the chat rooms by making http call
-     */
-    private void fetchChatRooms(final String type) {
+    private void fetchChatRooms(String type) {
         final String TYPE = type;
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -246,7 +248,7 @@ public class UserHomepage extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
-
+                    ;
                 }
 
 
@@ -281,6 +283,7 @@ public class UserHomepage extends AppCompatActivity {
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
+
 
     /**
      * Handles new push notification

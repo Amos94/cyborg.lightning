@@ -28,7 +28,8 @@ import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.model.User;
 
 /**
- * Created by nashwan on 21/03/2016.
+ * This class represents the fragment responsible for viewing profiles
+ * Created by Team Cyborg Lightning
  */
 public class ViewProfileDialog extends Dialog {
 
@@ -46,8 +47,6 @@ public class ViewProfileDialog extends Dialog {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

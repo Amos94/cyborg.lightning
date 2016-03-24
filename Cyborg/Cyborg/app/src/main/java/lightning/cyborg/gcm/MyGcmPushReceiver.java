@@ -29,19 +29,19 @@ public class MyGcmPushReceiver extends GcmListenerService {
 
     /**
      * Called when message is received.
-     *
      * @param from   SenderID of the sender.
      * @param bundle Data bundle containing message data as key/value pairs.
      *               For Set of keys use data.keySet().
      */
-
     @Override
     public void onMessageReceived(String from, Bundle bundle) {
-        Log.d("AAAAAA","AAAAAAAAAAAAAAAAAAAAA");
+        Log.d(TAG,"messageReceived");
+
         String title = bundle.getString("title");
         Boolean isBackground = Boolean.valueOf(bundle.getString("is_background"));
         String flag = bundle.getString("flag");
         String data = bundle.getString("data");
+
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "title: " + title);
         Log.d(TAG, "isBackground: " + isBackground);

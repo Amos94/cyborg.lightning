@@ -213,8 +213,8 @@ public class ChatRoomActivity extends AppCompatActivity {
           alertDialog =  new AlertDialog.Builder(context)
                     .setTitle("Waiting For Response")
                     .setIcon(android.R.drawable.sym_call_incoming)
-                    .setMessage("User [username] calls you")
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setMessage("waiting for  " + title+" to respond")
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             IncomingCall(context, "requestCanceled");
                             //TODO more php
