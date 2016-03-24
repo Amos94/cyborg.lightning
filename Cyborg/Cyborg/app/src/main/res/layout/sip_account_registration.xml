@@ -1,53 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <WebView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/webView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/doneBtn" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Done"
-            android:id="@+id/doneBtn"
-            android:layout_gravity="center_horizontal"
-            android:onClick="doneRegistration"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:nestedScrollingEnabled="false" />
+    </LinearLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Skip"
-            android:id="@+id/Skip"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/doneBtn"
-            android:layout_toEndOf="@+id/doneBtn"
-            android:onClick="skipSIPRegistration" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="#01579b"
+        app:contentInsetStart="0dp"
+        style="@style/Toolbar">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:id="@+id/backBtn"
-            android:layout_below="@+id/webView"
-            android:layout_toLeftOf="@+id/doneBtn"
-            android:layout_toStartOf="@+id/doneBtn"
-            android:nestedScrollingEnabled="false"
-            android:onClick="backToEditSip" />
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_action_back"
+                android:id="@+id/webviewbackBtn"
+                android:layout_centerInParent="true"
+                android:nestedScrollingEnabled="false"
+                android:layout_alignParentStart="true"
+                android:onClick="backToEditSip" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/webviewdoneBtn"
+                android:onClick="doneRegistration"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_action_forward"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentEnd="true"
+                android:nestedScrollingEnabled="false" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skip"
+                android:id="@+id/Skip"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/webviewdoneBtn"
+                android:onClick="skipSIPRegistration" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
 
 </LinearLayout>

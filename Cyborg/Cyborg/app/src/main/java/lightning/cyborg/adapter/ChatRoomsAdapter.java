@@ -1,6 +1,9 @@
 package lightning.cyborg.adapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +79,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     //
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
+        public ImageView avatar;
         public Button accept, decline;
 
         public ViewHolder(View view) {
@@ -83,6 +88,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             message = (TextView) view.findViewById(R.id.message);
             timestamp = (TextView) view.findViewById(R.id.timestamp);
             count = (TextView) view.findViewById(R.id.count);
+            avatar = (ImageView) view.findViewById(R.id.showAvatar);
 
             accept = (Button) view.findViewById(R.id.acceptbutton);
             decline = (Button) view.findViewById(R.id.rejectbutton);
@@ -112,6 +118,16 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         final ChatRoom chatRoom = chatRoomArrayList.get(position);
         holder.name.setText(chatRoom.getName());
 
+
+        TypedArray imgs = mContext.getResources().obtainTypedArray(R.array.image_ids);
+
+        Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), -1));
+        holder.avatar.setImageBitmap(image);
+        Log.d(TAG,image.toString());
+
+
+
+
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
 
@@ -137,7 +153,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
                     //if users accepts
                     serverHandler("accept", chatRoom.getId());
-                    ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type,chatRoom.getPermission());
+                    ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type,chatRoom.getPermission(), chatRoom.getAvatar());
                     //notifyDataSetChanged();
 
                 }
@@ -155,6 +171,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             });
 
         }
+
         //if user hid chat and new message arrived
         else if(chatRoom.getPermission().equals("rmsg")){
 
@@ -167,9 +184,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 @Override
                 public void onClick(View v) {
 
+                    Log.d(TAG, "onClick: before accept");
                     serverHandler("accept", chatRoom.getId());
-                    ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type,chatRoom.getPermission());
-
+                    Log.d(TAG, "onClick: after accept");
+                    ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type, chatRoom.getPermission(), chatRoom.getAvatar());
 
                 }
             });
@@ -185,6 +203,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                 }
             });
         }
+
         else{
 
             holder.message.setText(chatRoom.getLastMessage());
@@ -193,6 +212,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             holder.accept.setOnClickListener(null);
             holder.decline.setVisibility(View.GONE);
             holder.decline.setOnClickListener(null);
+            holder.timestamp.setVisibility(View.VISIBLE);
 
             //if there are notifications
             if (chatRoom.getUnreadCount() > 0) {
@@ -309,7 +329,9 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
                     // check for error flag
                     if (obj.getBoolean("error") == false) {
+                        Log.d(TAG, "inServer: before");
                             notifyDataSetChanged();
+                        Log.d(TAG, "inServer: after");
 
 
                         // error in fetching chat rooms
