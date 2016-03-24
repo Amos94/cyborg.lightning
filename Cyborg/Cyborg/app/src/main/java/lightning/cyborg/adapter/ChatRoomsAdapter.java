@@ -137,7 +137,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             holder.cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(canRemove) {
+                    if (canRemove) {
                         serverHandler("decline", chatRoom.getId());
                         chatRoom.setChatRoomExists(false);
                         chatRoomArrayList.remove(chatRoom);
@@ -153,6 +153,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
+            holder.cancel.setVisibility(View.GONE);
 
             holder.accept.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -187,6 +188,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
+            holder.cancel.setVisibility(View.GONE);
 
             //if user accepts
             holder.accept.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +222,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             holder.accept.setOnClickListener(null);
             holder.decline.setVisibility(View.GONE);
             holder.decline.setOnClickListener(null);
+            holder.cancel.setVisibility(View.GONE);
             holder.timestamp.setVisibility(View.VISIBLE);
 
             //if there are notifications
