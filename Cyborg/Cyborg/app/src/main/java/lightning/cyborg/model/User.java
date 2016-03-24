@@ -4,9 +4,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class User implements Serializable {
-    String id, name, email, fname, lname, dob, lat, lon, avatar, edu_level;
+    String id, name, email, fname, lname, dob, lat, lon, avatar, edu_level, interests;
 
     public User() {
     }
@@ -22,6 +24,7 @@ public class User implements Serializable {
             this.lon = jsonIn.getString("lon");
             this.avatar = jsonIn.getString("avatar");
             this.edu_level = jsonIn.getString("edu_level");
+            interests = "";
         } catch (JSONException e) {
             e.printStackTrace();
 
@@ -32,6 +35,35 @@ public class User implements Serializable {
         this.id = id;
         this.name = name;
         this.email = email;
+    }
+
+    public void addInterest(String stringIn){
+        if (interests.equals("")){
+            interests = stringIn;
+        }
+        else{
+            interests += "," + stringIn;
+        }
+    }
+
+    public void delInterest(String stringIn){
+        ArrayList<String> interArr = new ArrayList<>(Arrays.asList(interests.split(",")));
+
+        for (int i = 0; i < interArr.size(); i++){
+            if(interArr.get(i).equals(stringIn)){
+                interArr.remove(i);
+            }
+        }
+
+        interests = interArr.toString().substring(1, interArr.size() - 1).replace(", ",",");
+    }
+
+    public void clearInterests(){
+        interests = "";
+    }
+
+    public String[] getInterests(){
+        return interests.split(",");
     }
 
     public String getId() {
