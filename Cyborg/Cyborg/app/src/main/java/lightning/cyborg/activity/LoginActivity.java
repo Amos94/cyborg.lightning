@@ -118,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("Success", String.valueOf(success));
                             String message = jsonResponse.getString("message");
                             Log.d("Message is", message);
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
@@ -128,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("VolleyError at url ", url);
+                Toast.makeText(getApplicationContext(), "Server timed out, please try again.", Toast.LENGTH_SHORT).show();
             }
         }
         ) {
@@ -189,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else {
                         // login error - simply toast the message
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "" + obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
