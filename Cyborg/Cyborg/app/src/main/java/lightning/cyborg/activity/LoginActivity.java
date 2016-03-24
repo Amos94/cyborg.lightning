@@ -165,11 +165,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         JSONObject userObj = obj.getJSONObject("user");
                         Log.d(userObj.toString(),"userJson");
-                        User user = new User(userObj.getString("id"),
-
-
-                                userObj.getString("fname"),
-                                userObj.getString("email"));
+                        User user = new User(userObj);
 
                         // storing user in shared preferences
                         MyApplication.getInstance().getPrefManager().storeUser(user);
