@@ -1,5 +1,6 @@
 package lightning.cyborg.fragment;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -76,10 +77,9 @@ public class DiscoveryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         // Inflate the layout for this fragment
         this.inflatedview = inflater.inflate(R.layout.discovery_fragment, container, false);
-
-        //int [] image= {R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1,R.drawable.men1};
 
         slideTV = (TextView) inflatedview.findViewById(R.id.sliderTV);
         educationArr = getResources().getStringArray(R.array.education_array);
@@ -132,6 +132,9 @@ public class DiscoveryFragment extends Fragment {
         lowAge.setAdapter(ageAdapter);
         highAge.setAdapter(ageAdapter);
         highAge.setSelection(age.length - 1);
+
+
+
 
         seekDist.setMax(95);
         seekDist.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
