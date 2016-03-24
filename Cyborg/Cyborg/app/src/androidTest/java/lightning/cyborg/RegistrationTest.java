@@ -13,27 +13,28 @@ import lightning.cyborg.activity.RegistrationActivity;
  * Team CyborgLightning 2016 - King's College London - Project Run
  * RegistrationTest implements the Instrumental testing for the Registration Activity
  * Tests focus and input
- * @author Simeon
  */
 public class RegistrationTest extends ActivityInstrumentationTestCase2<RegistrationActivity> {
 
 
 RegistrationActivity registrationActivity;//tested Activity
 
-    //constructor for the test class
+    /*Test class constructor*/
     public RegistrationTest(){
-
         super(RegistrationActivity.class);
     }
 
-    //Test Not Null Check
+    /*Test LoginActivity Activity Exists - Test Passed*/
     public void testActivityExists(){
       RegistrationActivity registrationActivity = getActivity();
         assertNotNull(registrationActivity);
     }
 
-    //Request focus on Email Txt Field
-    public void testEmailEditText1(){
+    /**
+     * testEmailEditText1 tests the Input Email Edit Text Field
+     * All Instrumental Tests Passed
+     */
+    public void testEmailEditText(){
 
         registrationActivity = getActivity();
         final EditText emailET = (EditText)registrationActivity.findViewById(R.id.txtEmail);
@@ -50,7 +51,10 @@ RegistrationActivity registrationActivity;//tested Activity
         getInstrumentation().sendStringSync("100");
     }
 
-    //Request focus on Next Button
+    /**
+     * testNextButton tests the Next Button
+     * All Instrumental Tests Passed
+     */
     public void testNextButton() {
 
         registrationActivity = getActivity();
@@ -66,8 +70,11 @@ RegistrationActivity registrationActivity;//tested Activity
 
     }
 
-    //Request focus on ConfirmEmail
-    public void testConfirmEmailEditText2() {
+    /**
+     * testConfirmEmailEditText2 tests the Input Confirm Email Edit Text Field
+     * All Instrumental Tests Passed
+     */
+    public void testConfirmEmailEditText() {
 
         registrationActivity = getActivity();
         final EditText emailConfirmET = (EditText) registrationActivity.findViewById(R.id.txtConfirmEmail);
@@ -85,8 +92,11 @@ RegistrationActivity registrationActivity;//tested Activity
         getInstrumentation().sendStringSync("100");
     }
 
-    //Request focus on Login Button
-    public void testloginPageButton() {
+    /**
+     * testLoginPageButton tests the Logon Button
+     * All Instrumental Tests Passed
+     */
+    public void testLoginPageButton() {
 
         registrationActivity = getActivity();
         final Button loginPage = (Button) registrationActivity.findViewById(R.id.btnLoginPage);
@@ -101,8 +111,11 @@ RegistrationActivity registrationActivity;//tested Activity
 
     }
 
-    //Request focus on Edit Name
-    public void testEditTextName1() {
+    /**
+     * testEditTextName1 tests the Name Edit Text
+     * All Instrumental Tests Passed
+     */
+    public void testEditTextName() {
 
         registrationActivity = getActivity();
         final EditText nameET = (EditText) registrationActivity.findViewById(R.id.txtName);
@@ -122,8 +135,11 @@ RegistrationActivity registrationActivity;//tested Activity
 
 
 
-    //Request focus on Edit Password
-    public void testEditTextPassword1() {
+    /**
+     * testEditTextPassword1 tests the Password Edit Text
+     * All Instrumental Tests Passed
+     */
+    public void testEditTextPassword() {
 
         registrationActivity = getActivity();
         final EditText passwordET = (EditText) registrationActivity.findViewById(R.id.txtPassword);
@@ -142,8 +158,11 @@ RegistrationActivity registrationActivity;//tested Activity
     }
 
 
-    //Request focus on Confirm Password
-    public void testEditTextConfirmPassword2() {
+    /**
+     * testEditTextConfirmPassword2 tests the Confirm Password Edit Text
+     * All Instrumental Tests Passed
+     */
+    public void testEditTextConfirmPassword() {
 
         registrationActivity = getActivity();
         final EditText ConfirmpasswordET = (EditText) registrationActivity.findViewById(R.id.txtConfirmPassword);
@@ -162,7 +181,10 @@ RegistrationActivity registrationActivity;//tested Activity
     }
 
 
-    //Request focus on Edit Text Date of Birth
+    /**
+     * testEditTextDateOfBirth tests the DateOfBirth Edit Text
+     * All Instrumental Tests Passed
+     */
     public void testEditTextDateOfBirth() {
 
         registrationActivity = getActivity();

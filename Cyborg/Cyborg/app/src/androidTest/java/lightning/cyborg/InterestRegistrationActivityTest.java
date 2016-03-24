@@ -14,27 +14,29 @@ import lightning.cyborg.activity.interestsRegistration;
 /**
  * Team CyborgLightning 2016 - King's College London - Project Run
  * InterestRegistrationActivityTest implements the Instrumental testing for the Interest Activity UI Components.
- * Test Focus
- * @author Simeon
+ * Test Focus and input
  */
 
 public class InterestRegistrationActivityTest extends ActivityInstrumentationTestCase2<interestsRegistration> {
 
     interestsRegistration interestsRegistrationObject; //tests Activity
 
-    //constructor - test file
+    /*Test class constructor*/
     public InterestRegistrationActivityTest(){
         super(interestsRegistration.class);
     }
 
-    //not null test
+    /*Test interestRegistration Activity Exists - Test Passed*/
     public void testActivityExists(){
         interestsRegistrationObject = getActivity();
         assertNotNull(interestsRegistrationObject);
     }
 
-    //Request focus on Input Password TextField
-    public void testEditText_inputPassword(){
+   /**
+    * testEditText_inputPassword tests the search interests Edit Text Field
+    * All Instrumental Tests Passed
+    */
+    public void testEditTextPassword(){
 
         interestsRegistrationObject = getActivity();
         final EditText searchInterests = (EditText)interestsRegistrationObject.findViewById(R.id.searchInterests);

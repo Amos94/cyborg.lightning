@@ -11,28 +11,28 @@ import lightning.cyborg.activity.RegistrationActivity;
  * Team CyborgLightning 2016 - King's College London - Project Run
  * LoginActivityTest implements the Instrumental testing for the Login Activity UI Components
  * Tests focus and input
- * @author Simeon
  */
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     LoginActivity loginActivity;//tested Activity
 
-    //test class constructor
+    /*Test class constructor*/
     public LoginActivityTest(){
-
         super(LoginActivity.class);
     }
 
 
-    //Not Null Check
+    /*Test LoginActivity Activity Exists - Test Passed*/
     public void testActivityExists(){
         LoginActivity registrationActivity = getActivity();
         assertNotNull(registrationActivity);
     }
 
-
-    //Request focus on Input Email Text Field
-    public void testEditText_inputEmail(){
+    /**
+     * testEditText_inputEmail tests the Input Email Edit Text Field
+     * All Instrumental Tests Passed
+     */
+    public void testEditTextiEmail(){
 
         loginActivity = getActivity();
         final EditText _inputEmail = (EditText)loginActivity.findViewById(R.id.txtEmailLogin);
@@ -49,9 +49,11 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         getInstrumentation().sendStringSync("100");
     }
 
-
-    //Request focus on Input Password Text Field
-    public void testEditText_inputPassword(){
+    /**
+     * testEditText_inputPassword tests the Input Password Edit Text Field
+     * All Instrumental Tests Passed
+     */
+    public void testEditTextPassword(){
 
         loginActivity = getActivity();
         final EditText _inputPassword = (EditText)loginActivity.findViewById(R.id.txtPasswordLogin);
@@ -68,7 +70,11 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         getInstrumentation().sendStringSync("100");
     }
 
-    //Request focus on Enter Button
+
+    /**
+     * testButtonEnter tests the Enter Button
+     * All Instrumental Tests Passed
+     */
     public void testButtonEnter(){
 
         loginActivity = getActivity();

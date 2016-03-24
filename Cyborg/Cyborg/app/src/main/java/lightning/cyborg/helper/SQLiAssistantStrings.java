@@ -1,7 +1,8 @@
-package lightning.cyborg.testassistants;
+package lightning.cyborg.helper;
 
 /**
- * Created by Name on 19/03/2016.
+ * Team CyborgLightning 2016 - King's College London - Project Run
+ * SQLiAssistantStrings stores the SQLinjection database
  */
 public class SQLiAssistantStrings {
 
@@ -26,6 +27,12 @@ public class SQLiAssistantStrings {
         strings[9] = "1=1#"; strings[19] = "'or-'"; strings[29] = "\"or 'a'='a'";
 
     }
+
+    /**
+     * getSQLibyID - returns string by id (Integer)
+     * @param id - in
+     * @return String SQLi
+     */
     public String getSQLibyID(int id){
         if(id>=0 && id<=33){
             return strings[id];

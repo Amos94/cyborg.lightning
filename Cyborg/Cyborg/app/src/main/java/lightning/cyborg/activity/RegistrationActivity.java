@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 import lightning.cyborg.R;
 import lightning.cyborg.app.MyApplication;
-import lightning.cyborg.testassistants.SQLiStringChecker;
+import lightning.cyborg.helper.SQLiStringChecker;
 
 public class RegistrationActivity extends AppCompatActivity {
 
