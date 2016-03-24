@@ -183,7 +183,7 @@
                     android:orientation="vertical"
                     android:layout_weight="1">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingTop="15dp"
@@ -192,14 +192,28 @@
                         android:paddingLeft="15dp">
 
                         <Button
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:id="@+id/btnLogin"
                             android:text="Login"
                             android:onClick="checkLogin"
-                            />
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
 
-                    </LinearLayout>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/buttonForgot"
+                            android:text="Forgot Password?"
+                            android:onClick="checkLogin"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_toRightOf="@+id/btnLogin"
+                            android:layout_toEndOf="@+id/btnLogin"
+                            android:textSize="12dp" />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
 

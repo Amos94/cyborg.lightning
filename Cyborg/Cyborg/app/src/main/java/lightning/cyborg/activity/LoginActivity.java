@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText _inputEmail, _inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutEmail;
     private Button loginBtn;
+    private Button forgotBtn;
     private static int request;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,15 @@ public class LoginActivity extends AppCompatActivity {
         _inputEmail = (EditText) findViewById(R.id.txtEmailLogin);
         _inputPassword = (EditText) findViewById(R.id.txtPasswordLogin);
         loginBtn = (Button) findViewById(R.id.btnLogin);
+        forgotBtn = (Button) findViewById(R.id.buttonForgot);
+        forgotBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sendPassword(v);
+
+            }
+        });
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //TODO Make a button for this
     private void sendPassword(View view) {
-        final String url = "http://nashdomain.esy.es/get_user.php";
+        final String url = EndPoints.SEND_PASS;
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<>();

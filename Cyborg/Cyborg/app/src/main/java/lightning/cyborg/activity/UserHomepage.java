@@ -228,12 +228,11 @@ public class UserHomepage extends AppCompatActivity {
 
                     } else {
                         // error in fetching chat rooms
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Log.d("Error", "No Chat Rooms Found");
                     }
 
                 } catch (JSONException e) {
-                    Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "json parsing error: " + e.getMessage());
                 }
 
 
