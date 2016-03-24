@@ -97,10 +97,6 @@ public class RegistrationActivity extends AppCompatActivity {
         eduSpin = (Spinner) findViewById(R.id.eduSpin);
         eduSpin.setAdapter(eduAdapter);
 
-
-
-
-
         dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View view, boolean hasfocus) {
                 if (hasfocus) {
@@ -137,8 +133,6 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-
-    //TODO Make a button to connect this
     public void insertUser(View view) {
         String fname = nameET.getText().toString();
         String lname = lastnameET.getText().toString();
