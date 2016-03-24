@@ -3,6 +3,7 @@ package lightning.cyborg.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -40,6 +41,9 @@ import lightning.cyborg.model.User;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String Data = "SAVED_DATA";
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
     private String TAG = LoginActivity.class.getSimpleName();
     private EditText _inputEmail, _inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutEmail;
@@ -56,7 +60,11 @@ public class LoginActivity extends AppCompatActivity {
             toUserHomePageActivity();
         }
 
+
         setContentView(R.layout.activity_login);
+
+        sharedPref = getSharedPreferences(Data, 0);
+        editor = sharedPref.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

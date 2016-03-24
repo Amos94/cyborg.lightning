@@ -85,6 +85,7 @@ public class UserProfileFragment extends Fragment {
         final View viewroot = inflater.inflate(R.layout.user_profile_fragment, container, false);
 
         localUser = MyApplication.getInstance().getPrefManager().getUser();
+        Log.d("SharedPrefTest", localUser.getInterests());
 
         //avatar Changing
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
@@ -96,56 +97,37 @@ public class UserProfileFragment extends Fragment {
         imageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
-
                 alertDialogBuilder.setPositiveButton("Change Avatar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-
                         Intent intent = new Intent(getActivity(), Avator_Logo.class);
                         startActivityForResult(intent, 1);
-
                     }
                 });
 
                 alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
                 alertDialogBuilder.show();
             }
         });
 
-        // creating lists and arrayadapter
-
-
         /**
          * Add item into arraylist
          */
-
         adapter = new ArrayAdapter<String>(this.getActivity().getApplicationContext(), R.layout.list_black, R.id.list_content, items);
-
-
         listview = (ListView) viewroot.findViewById(R.id.listInterest);
-
         listview.setAdapter(adapter);
 
-
         //location, user profile name and last and bio
-
         tvFirstandLast = (TextView) viewroot.findViewById(R.id.tvfirstandLast);
-
         tvlocation = (TextView) viewroot.findViewById(R.id.tvLocation);
         tvbio = (TextView) viewroot.findViewById(R.id.bioUser);
 
-
         //creating function to add more items into the interest
-
         etInterest = (EditText) viewroot.findViewById(R.id.etAddText);
         addInterestButt = (Button) viewroot.findViewById(R.id.addInterestB);
 
@@ -172,7 +154,6 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String temp = etInterest.getText().toString().replaceAll("\\s", "").toLowerCase();
-
                 if (temp.length() > 0) {
                     try {
                         delInterestButt.setEnabled(false);
@@ -185,9 +166,7 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
-
         loadProfile();
-
         return viewroot;
     }
 
@@ -195,13 +174,13 @@ public class UserProfileFragment extends Fragment {
         String name = localUser.getName()+ " " + localUser.getLname();
         Log.d("loadProf", name);
         tvFirstandLast.setText(name);
-        Log.d("loadProf", localUser.getAvatar()+" ");
+        Log.d("loadProf", localUser.getAvatar() + " ");
         imageview.setImageBitmap(images[Integer.parseInt(localUser.getAvatar())]);
         adapter.notifyDataSetChanged();
 
+        Log.d("SharedPrefTest", localUser.getInterests());
         if(localUser.getInterests().length() > 0){
             String[] interests = localUser.getInterests().split(",");
-
             for (int i = 0; i < interests.length; i++) {
                 items.add(interests[i]);
             }
@@ -293,19 +272,18 @@ public class UserProfileFragment extends Fragment {
                             String message = jsonResponse.getString("message");
                             JSONArray interests = jsonResponse.getJSONArray("interests");
 
+                            localUser.clearInterests();
                             if (success) {
                                 for (int i = 0; i < interests.length(); i++) {
                                     if (!items.contains(interests.getString(i))) {
                                         items.add(interests.getString(i));
-                                        localUser.clearInterests();
                                         localUser.addInterest(interests.getString(i));
-                                        MyApplication.getInstance().getPrefManager().storeUser(localUser);
                                     }
                                 }
                             } else {
                                 Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                             }
-
+                            MyApplication.getInstance().getPrefManager().storeUser(localUser);
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
