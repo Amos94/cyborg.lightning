@@ -1,6 +1,7 @@
 package lightning.cyborg.activity;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,38 +28,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.avator.Avator_Logo;
+import lightning.cyborg.fragment.DateDialog;
 import lightning.cyborg.helper.InputVerification;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     //Info for register
-    EditText emailET;
-    ImageView avatorIcon;
-    int avator_id;
-
-    EditText emailConfirmET;
-    Button chooseAvator;
-    EditText nameET;
-    EditText lastnameET;
-    EditText passwordET;
-    EditText dobET;
-    Spinner eduSpin;
-    RadioButton maleRadioRegister;
-    RadioButton femaleRadioRegister;
-    RadioGroup radioGroup;
-    ImageView backButton, forwardButton;
-
+   private EditText emailET;
+    private ImageView avatorIcon;
+    private int avator_id;
+    private EditText emailConfirmET;
+    private Button chooseAvatar;
+    private EditText nameET;
+    private EditText lastnameET;
+    private EditText passwordET;
+    private EditText dobET;
+    private Spinner eduSpin;
+    private RadioButton maleRadioRegister;
+    private RadioButton femaleRadioRegister;
+    private RadioGroup radioGroup;
+    private ImageView backButton, forwardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +73,7 @@ public class RegistrationActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(R.layout.custom_register_main_menu);
 
         //USER INPUT
+
         backButton = (ImageView) findViewById(R.id.registerBackButton);
         forwardButton = (ImageView) findViewById(R.id.nextPageButton);
         emailET = (EditText) findViewById(R.id.txtEmail);
@@ -84,7 +81,7 @@ public class RegistrationActivity extends AppCompatActivity {
         nameET = (EditText) findViewById(R.id.txtName);
 
         passwordET = (EditText) findViewById(R.id.txtPassword);
-        dobET = (EditText) findViewById(R.id.txtdob);
+        dobET = (EditText) findViewById(R.id.etDob);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupRegister);
         maleRadioRegister = (RadioButton) findViewById(R.id.rbMale);
         avatorIcon = (ImageView) findViewById(R.id.avatorIcon);
@@ -98,6 +95,22 @@ public class RegistrationActivity extends AppCompatActivity {
         eduAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eduSpin = (Spinner) findViewById(R.id.eduSpin);
         eduSpin.setAdapter(eduAdapter);
+
+
+
+
+
+        dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View view, boolean hasfocus) {
+                if (hasfocus) {
+                    DateDialog dialog = new DateDialog(view);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft, "DatePicker");
+
+                }
+            }
+
+        });
 
         forwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +184,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         try {
             if (InputVerification.DoBVerification(dobET.getText().toString())) {
-                params.put("dob", dobET.getText().toString().replaceAll("-", ""));
+                params.put("dob", dobET.getText().toString());
             } else {
                 validInput = false;
                 dobET.setError("Please a valid date yyyy-mm-dd");
@@ -249,7 +262,7 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == 1){
+        if(requestCode == 0){
             if(resultCode == Activity.RESULT_OK){
                 Bitmap b = BitmapFactory.decodeByteArray(data.getByteArrayExtra("Bitmap"), 0, data.getByteArrayExtra("Bitmap").length);
                 avator_id = data.getExtras().getInt("imageID");
@@ -260,15 +273,17 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void chooseAvator(View view){
-        chooseAvator = (Button) findViewById(R.id.btnSelectAvator);
-        chooseAvator.setOnClickListener(new View.OnClickListener() {
+        chooseAvatar = (Button) findViewById(R.id.btnSelectAvator);
+        chooseAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =  new Intent(RegistrationActivity.this, Avator_Logo.class);
-                startActivityForResult(intent,1);
+                Toast.makeText(getApplicationContext(), "Loading Avatars..." , Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(RegistrationActivity.this, Avator_Logo.class);
+                startActivityForResult(intent, 0);
             }
 
         });
 
     }
 }
+

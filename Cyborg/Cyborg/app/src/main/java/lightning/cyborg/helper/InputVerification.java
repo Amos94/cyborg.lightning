@@ -23,7 +23,7 @@ public class InputVerification {
      */
     public static boolean DoBVerification(String date) throws ParseException {
         int age;
-        DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         Date dateofBirth;
        try {
             dateofBirth = df.parse(date.toString());

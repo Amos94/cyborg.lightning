@@ -67,7 +67,6 @@ public class UserHomepage extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private LinearLayout testerLayout;
     private String TAG = UserHomepage.class.getSimpleName();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -75,10 +74,8 @@ public class UserHomepage extends AppCompatActivity {
     private ArrayList<ChatRoom> freindsChatRoomArrayList;
     private ChatRoomsAdapter normalChatAdapter;
     private ChatRoomsAdapter freindChatAdapter;
-    private RecyclerView recyclerView;
     private int onChatFragment = 0;
 
-    private Button settingsButton;
 
 
     private static final long RIPPLE_DURATION = 500;
@@ -228,12 +225,12 @@ public class UserHomepage extends AppCompatActivity {
 
                     } else {
                         // error in fetching chat rooms
-                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
                     Log.e(TAG, "json parsing error: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Json parse error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    ;
                 }
 
 
@@ -250,7 +247,7 @@ public class UserHomepage extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse networkResponse = error.networkResponse;
                 Log.e(TAG, "Volley error: " + error.getMessage() + ", code: " + networkResponse);
-                Toast.makeText(getApplicationContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         }) {
 
