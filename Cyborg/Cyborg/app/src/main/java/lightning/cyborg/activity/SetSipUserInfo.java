@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -21,13 +22,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import lightning.cyborg.R;
-import lightning.cyborg.voip.SipAccountRegistration;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;
 import lightning.cyborg.enums.InterestTypes;
+import lightning.cyborg.setting.SetingsRegisterSipAccount;
 
 /*
 This class make the connection between the databases and the app regarding the SIP account info of the user.
@@ -37,18 +37,18 @@ public class SetSipUserInfo extends AppCompatActivity {
     //UI ELEMENTS
     private TextView userTV;
     private TextView passwordTV;
-    private Button  doneBtn;
+    private ImageButton  doneBtn;
     private Button registerBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_sip_user_info);
+        setContentView(R.layout.settings_edit_sip_profile);
 
         //INITIALIZATION OF UI ELEMENTS
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
-        doneBtn = (Button) findViewById(R.id.doneBtn);
+        doneBtn = (ImageButton) findViewById(R.id.doneBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
 
     }
@@ -108,7 +108,7 @@ public class SetSipUserInfo extends AppCompatActivity {
 
     //Intent for going to a new Activity
     public void goToRegisterSipAccount(View view){
-        Intent intent = new Intent(this, SipAccountRegistration.class);
+        Intent intent = new Intent(this, SetingsRegisterSipAccount.class);
         startActivity(intent);
     }
 

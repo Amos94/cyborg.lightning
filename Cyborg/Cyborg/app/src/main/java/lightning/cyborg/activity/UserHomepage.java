@@ -61,6 +61,8 @@ import lightning.cyborg.model.Message;
 import lightning.cyborg.setting.AboutUs;
 import lightning.cyborg.setting.Communication;
 import lightning.cyborg.setting.MenuEditSip;
+import lightning.cyborg.setting.SetingsRegisterSipAccount;
+import lightning.cyborg.setting.SettingsEditSipUserInfo;
 import lightning.cyborg.setting.UserDetails;
 
 public class UserHomepage extends AppCompatActivity {
@@ -307,6 +309,8 @@ public class UserHomepage extends AppCompatActivity {
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
             normalChatRoomArrayList.clear();
             fetchChatRooms("n");
+            freindsChatRoomArrayList.clear();
+            fetchChatRooms("f");
         }
 
     }
@@ -358,7 +362,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         }
         normalChatAdapter.notifyDataSetChanged();
-
         startActivity(intent);
     }
 
@@ -472,6 +475,7 @@ public class UserHomepage extends AppCompatActivity {
         return true;
     }
 
+<<<<<<< HEAD
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -506,6 +510,8 @@ public class UserHomepage extends AppCompatActivity {
 
 
     }
+=======
+>>>>>>> sipcontentFix
 
     //navigating to Editing Profile...
     public void clickUserProfile(View view) {
@@ -514,14 +520,6 @@ public class UserHomepage extends AppCompatActivity {
 
     }
 
-    //edit communication ex; location or voice call
-    public void editCommunication(View view) {
-
-        Intent intent = new Intent(UserHomepage.this, Communication.class);
-        startActivity(intent);
-
-
-    }
 
     //the about us page...
 
@@ -535,7 +533,7 @@ public class UserHomepage extends AppCompatActivity {
     //voice calling registration...
     public void sipRegis(View view) {
 
-        Intent intent = new Intent(UserHomepage.this, MenuEditSip.class);
+        Intent intent = new Intent(UserHomepage.this, SettingsEditSipUserInfo.class);
         startActivity(intent);
     }
 

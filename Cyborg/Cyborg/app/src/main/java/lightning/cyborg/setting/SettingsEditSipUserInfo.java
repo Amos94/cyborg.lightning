@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
-import lightning.cyborg.voip.SipAccountRegistration;
+import lightning.cyborg.activity.SetSipUserInfo;
 import lightning.cyborg.activity.UserHomepage;
 import lightning.cyborg.activity.interestsRegistration;
 import lightning.cyborg.app.EndPoints;
@@ -37,9 +37,9 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
     //UI ELEMENTS
     private TextView userTV;
     private TextView passwordTV;
-    private ImageButton doneBtn;
+    private Button doneBtn;
     private Button registerBtn;
-    private ImageButton homeBtn;
+    private ImageButton backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +49,30 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         //INITIALIZATION OF UI ELEMENTS
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
-        doneBtn = (ImageButton) findViewById(R.id.doneBtn);
+        doneBtn = (Button) findViewById(R.id.doneBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
-        homeBtn = (ImageButton) findViewById(R.id.backToUserHomepageBtn);
+        backBtn = (ImageButton) findViewById(R.id.backButtonSip);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UserHomepage.class);
+                startActivity(intent);
+            }
+        });
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insertSipUserInfo(v);
+
+            }
+        });
+
 
     }
 
 
     //Updates the database entries
-    public void insertSipUserInfo(View view){
+    public void insertSipUserInfo(final View view){
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
@@ -77,6 +92,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
                             // check for error flag
                             if (obj.getBoolean("error") == false) {
                                 Log.d("Message is", "no error");
+                                goToUserHomepage(view);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -110,7 +126,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
 
     //Intent for going to a new Activity
     public void goToRegisterSipAccount(View view){
-        Intent intent = new Intent(this, SipAccountRegistration.class);
+        Intent intent = new Intent(this, SetingsRegisterSipAccount.class);
         startActivity(intent);
     }
 
@@ -120,9 +136,5 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //Simple back button
-    public void backToEditSip(View view){
-        Intent intent = new Intent(this, MenuEditSip.class);
-        startActivity(intent);
-    }
+
 }

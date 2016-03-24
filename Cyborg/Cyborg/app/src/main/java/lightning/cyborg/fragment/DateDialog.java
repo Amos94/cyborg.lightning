@@ -53,10 +53,18 @@ public class DateDialog extends DialogFragment
         }else
             //show to the selected date in the text box
             date = String.format("%d-%d-%d", year, month, day);
+<<<<<<< HEAD
         ;
         etDate.setText(date);
 
 
     }
+=======
+            ;
+            etDate.setText(date);
+
+
+        }
+>>>>>>> sipcontentFix
 
 }

@@ -9,7 +9,11 @@ public class SQLiAssistantStrings {
     public String[] strings;
 
     public SQLiAssistantStrings(){
+<<<<<<< HEAD
         setArray();
+=======
+    setArray();
+>>>>>>> sipcontentFix
 
     }
 
