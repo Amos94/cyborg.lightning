@@ -463,6 +463,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             message.setCreatedAt(createdAt);
                             message.setUser(user);
 
+
                             messageArrayList.add(message);
                         }
 
