@@ -6,6 +6,10 @@ import android.util.Log;
 
 import lightning.cyborg.model.User;
 
+/**
+ * This class  manages the SharedPreferences for saving and loading off the cache
+ * Created by team Cyborg Lightning
+ */
 public class MyPreferenceManager {
 
     private String TAG = MyPreferenceManager.class.getSimpleName();
@@ -39,7 +43,10 @@ public class MyPreferenceManager {
     private static final String KEY_USER_INTERESTS = "user_interests";
     private static final String KEY_NOTIFICATIONS = "notifications";
 
-    // Constructor
+    /**
+     * Default constructor for the class
+     * @param context
+     */
     public MyPreferenceManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -47,6 +54,10 @@ public class MyPreferenceManager {
     }
 
 
+    /**
+     * Method that allows us to save User type data into the SharedPreferences
+     * @param user the variable that will be stored
+     */
     public void storeUser(User user) {
         editor.putString(KEY_USER_ID, user.getId());
         editor.putString(KEY_USER_FNAME, user.getName());
@@ -64,6 +75,10 @@ public class MyPreferenceManager {
         Log.d(TAG, "User is stored in shared preferences. " + user.getName() + ", " + user.getEmail());
     }
 
+    /**
+     * Returns a User type variable from the SharedPreference
+     * @return user type variable from the SharedPreference
+     */
     public User getUser() {
         if (pref.getString(KEY_USER_ID, null) != null) {
             String id, name, email, lname, avatar, lon, lat, edu_level, gender, dob;
@@ -86,66 +101,115 @@ public class MyPreferenceManager {
         return null;
     }
 
-    public void addNotification(String notification) {
-
+    /**
+     * This method allows notifications to work for the app
+     * @param oldNotifs the variable that will be received by the user
+     */
+    public void addNotification(String oldNotifs) {
         // get old notifications
         String oldNotifications = getNotifications();
 
         if (oldNotifications != null) {
-            oldNotifications += "|" + notification;
+            oldNotifications += "|" + oldNotifs;
         } else {
-            oldNotifications = notification;
+            oldNotifications = oldNotifs;
         }
-
         editor.putString(KEY_NOTIFICATIONS, oldNotifications);
         editor.commit();
     }
 
+    /**
+     * Getter for the notifications
+     * @return
+     */
     public String getNotifications() {
         return pref.getString(KEY_NOTIFICATIONS, null);
     }
 
+    /**
+     * This method clears the SharedPreferences
+     */
     public void clear() {
         editor.clear();
         editor.commit();
     }
 
+    /**
+     * Getter for the userID
+     * @return the userID
+     */
     public String getId() {
         return pref.getString(KEY_USER_ID, null);
     }
 
+    /**
+     * Getter for the first name of the user
+     * @return the first name of the user
+     */
     public String getFname() {
         return pref.getString(KEY_USER_FNAME, null);
     }
 
+    /**
+     * Getter for the email of the user
+     * @return the email of the user
+     */
     public String getEmail() {
         return pref.getString(KEY_USER_EMAIL, null);
     }
 
+    /**
+     * Getter for the last name of the user
+     * @return the last name of the user
+     */
     public String getLname() {
         return pref.getString(KEY_USER_LNAME, null);
     }
 
+    /**
+     * Getter for the avatar id of the user
+     * @return the avatar id of the user
+     */
     public String getAvatar() {
         return pref.getString(KEY_USER_AVATAR, null);
     }
 
+    /**
+     * Getter for the longitude of the user
+     * @return the longitude of the user
+     */
     public String getLon() {
         return pref.getString(KEY_USER_LON, null);
     }
 
+    /**
+     * Getter for the latitude of the user
+     * @return the latitude of the user
+     */
     public String getLat() {
         return pref.getString(KEY_USER_LAT, null);
     }
 
+    /**
+     * Getter for the educational level of the user
+     * @return the educational level of the user
+     */
     public String getEduLevel() {
         return pref.getString(KEY_USER_EDU_LEVEL, null);
     }
 
+    /**
+     * Getter for the gender of the user
+     * @return the gender of the user
+     */
     public String getGender() {
         return pref.getString(KEY_USER_GENDER, null);
     }
 
+    /**
+     * Getter for the date of birth of the user
+     * @return the date of birthof the user
+     */
     public String getDob() {
         return pref.getString(KEY_USER_DOB, null);
     }

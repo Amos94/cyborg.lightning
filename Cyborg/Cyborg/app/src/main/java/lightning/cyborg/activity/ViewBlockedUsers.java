@@ -1,7 +1,5 @@
 package lightning.cyborg.activity;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -31,7 +29,6 @@ import lightning.cyborg.adapter.BlockedListAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.helper.SimpleDividerItemDecoration;
-import lightning.cyborg.helper.ViewProfileDialog;
 import lightning.cyborg.model.User;
 
 public class ViewBlockedUsers extends AppCompatActivity {
@@ -66,8 +63,6 @@ public class ViewBlockedUsers extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                ViewProfileDialog dialog = new ViewProfileDialog(ViewBlockedUsers.this,blockedUserArrayList.get(position));
-                dialog.show();
             }
         }));
             getBlockedList();
