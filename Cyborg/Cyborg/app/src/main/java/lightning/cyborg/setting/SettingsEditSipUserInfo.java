@@ -37,7 +37,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
     //UI ELEMENTS
     private TextView userTV;
     private TextView passwordTV;
-    private ImageButton doneBtn;
+    private Button doneBtn;
     private Button registerBtn;
     private ImageButton backBtn;
 
@@ -49,7 +49,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         //INITIALIZATION OF UI ELEMENTS
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
-        doneBtn = (ImageButton) findViewById(R.id.doneBtn);
+        doneBtn = (Button) findViewById(R.id.doneBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
         backBtn = (ImageButton) findViewById(R.id.backButtonSip);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -59,12 +59,20 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insertSipUserInfo(v);
+
+            }
+        });
+
 
     }
 
 
     //Updates the database entries
-    public void insertSipUserInfo(View view){
+    public void insertSipUserInfo(final View view){
 
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
@@ -84,6 +92,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
                             // check for error flag
                             if (obj.getBoolean("error") == false) {
                                 Log.d("Message is", "no error");
+                                goToUserHomepage(view);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -127,9 +136,5 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //Simple back button
-    public void backToEditSip(View view){
-        Intent intent = new Intent(this, MenuEditSip.class);
-        startActivity(intent);
-    }
+
 }
