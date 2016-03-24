@@ -172,8 +172,11 @@ public class UserHomepage extends AppCompatActivity {
             Log.d(TAG, "no bundle was attached");
         }
 
+        normalChatRoomArrayList.clear();
+        freindsChatRoomArrayList.clear();
         fetchChatRooms("n");
         fetchChatRooms("f");
+
 
     }
 
@@ -268,7 +271,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         };
 
-        // subscribeToAllTopics();
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
