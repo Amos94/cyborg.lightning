@@ -172,8 +172,11 @@ public class UserHomepage extends AppCompatActivity {
             Log.d(TAG, "no bundle was attached");
         }
 
+        normalChatRoomArrayList.clear();
+        freindsChatRoomArrayList.clear();
         fetchChatRooms("n");
         fetchChatRooms("f");
+
 
     }
 
@@ -210,7 +213,7 @@ public class UserHomepage extends AppCompatActivity {
                             Log.d("FAFFa", cr.getPermission());
                             cr.setAvatar(chatRoomsObj.getString("avatar"));
                             Log.d("FAFFa", cr.getPermission() + "avtarar" + cr.getAvatar());
-                            if(chatRoomsObj.getString("last_message") ==null){}
+                            if(chatRoomsObj.getString("last_message").equals("null")){}
                             else{
                                 cr.setLastMessage(chatRoomsObj.getString("last_message"));
                             }
@@ -223,8 +226,15 @@ public class UserHomepage extends AppCompatActivity {
                                     freindsChatRoomArrayList.add(cr);
                                 }
                             }
+
                         }
 
+                        if(TYPE.equals("n")){
+                            normalChatAdapter.notifyDataSetChanged();
+                        }else{
+
+                            freindChatAdapter.notifyDataSetChanged();
+                        }
                     } else {
                         // error in fetching chat rooms
                         Toast.makeText(getApplicationContext(), "" + obj.getJSONObject("error").getString("message"), Toast.LENGTH_SHORT).show();
@@ -236,9 +246,6 @@ public class UserHomepage extends AppCompatActivity {
                 }
 
 
-                normalChatAdapter.notifyDataSetChanged();
-
-                freindChatAdapter.notifyDataSetChanged();
 
                 // subscribing to all chat room topics
                 // subscribeToAllTopics();
@@ -264,7 +271,6 @@ public class UserHomepage extends AppCompatActivity {
             }
         };
 
-        // subscribeToAllTopics();
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
@@ -309,8 +315,7 @@ public class UserHomepage extends AppCompatActivity {
             Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
             normalChatRoomArrayList.clear();
             fetchChatRooms("n");
-            freindsChatRoomArrayList.clear();
-            fetchChatRooms("f");
+
         }
 
     }
@@ -342,12 +347,10 @@ public class UserHomepage extends AppCompatActivity {
 
     /**
      * Go to the chat room
-     *
      * @param chatRoomid   the id of the chat room
      * @param chatRoomName the name of the chat room
      * @param type         the type of chatroom e.g freinds or normal
      */
-
     public void chatRoomActivityIntent(String chatRoomid, String chatRoomName, String type, String permission, String avatar) {
         Intent intent = new Intent(UserHomepage.this, ChatRoomActivity.class);
         intent.putExtra("chat_room_id", chatRoomid);

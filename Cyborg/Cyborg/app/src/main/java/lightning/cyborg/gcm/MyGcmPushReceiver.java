@@ -160,8 +160,9 @@ public class MyGcmPushReceiver extends GcmListenerService {
 
                     Log.d(TAG,"application is in background");
                     // app is in background. show the message in notification try
-                    Intent resultIntent = new Intent(getApplicationContext(), ChatRoomActivity.class);
+                    Intent resultIntent = new Intent(getApplicationContext(), UserHomepage.class);
                     resultIntent.putExtra("chat_room_id", chatRoomId);
+
                     showNotificationMessage(getApplicationContext(), title, user.getName() + " : " + message.getMessage(), message.getCreatedAt(), resultIntent);
                 }
             } catch (JSONException e) {

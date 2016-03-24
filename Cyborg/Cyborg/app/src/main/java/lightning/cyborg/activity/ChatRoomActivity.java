@@ -71,6 +71,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String sipPassword;
     private String sipCaleeUsername;
 
+    private AlertDialog alertDialog;
 
     private MenuItem callButton;
     private MenuItem addFriend;
@@ -91,7 +92,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         type =intent.getStringExtra("type");
         avatar =intent.getStringExtra("avatar");
         permission = intent.getStringExtra("permission");
-
 
 
 
@@ -133,7 +133,6 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
         fetchChatThread();
-        fetchSip();
     }
 
 
@@ -180,7 +179,10 @@ public class ChatRoomActivity extends AppCompatActivity {
                 finish();
             }
             else if(message.equals("requestCanceled")){
-                new AlertDialog.Builder(getApplicationContext())
+                if(alertDialog!=null){
+                    alertDialog.cancel();
+                }
+              alertDialog = new AlertDialog.Builder(ChatRoomActivity.this)
                         .setTitle("call canceled")
                         .setMessage("call has been canceled")
                         .setNegativeButton("ok", new DialogInterface.OnClickListener() {
@@ -208,7 +210,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     public void dialogCallReceiver(final Context context, final boolean typeOfgcm){
         if (typeOfgcm) {
-            new AlertDialog.Builder(context)
+          alertDialog =  new AlertDialog.Builder(context)
                     .setTitle("Waiting For Response")
                     .setIcon(android.R.drawable.sym_call_incoming)
                     .setMessage("User [username] calls you")
@@ -221,7 +223,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .show();
         }
         else {
-            new AlertDialog.Builder(context)
+           alertDialog = new AlertDialog.Builder(context)
                     .setTitle("Incoming call")
                     .setIcon(android.R.drawable.sym_call_incoming)
                     .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
@@ -590,8 +592,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 //CALLEE USERNAME
                                 sipCaleeUsername = obj.getString("calling_sip_username");
 
-                                if(!sipUsername.equals("null") && sipPassword.equals("null") && sipCaleeUsername.equals("null")){
+                                if(!(sipUsername.equals("null") || sipPassword.equals("null") || sipCaleeUsername.equals("null"))){
                                     callButton.setEnabled(true);
+                                    callButton.setVisible(true);
                                 }
                             }
                         } catch (JSONException e) {
@@ -695,7 +698,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             addFriend.setIcon(R.drawable.ic_person_add_white_24dp);
         }
         callButton = menu.findItem(R.id.action_calluser);
-        //callButton.setVisible(false);
+        callButton.setVisible(false);
+        fetchSip();
         //fetchSip;
         return true;
     }
@@ -767,6 +771,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
 

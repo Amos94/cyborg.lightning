@@ -79,7 +79,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
         public ImageView avatar;
-        public Button accept, decline;
+        public Button accept, decline, cancel;
 
         public ViewHolder(View view) {
             super(view);
@@ -90,6 +90,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             avatar = (ImageView) view.findViewById(R.id.showAvatar);
             accept = (Button) view.findViewById(R.id.acceptbutton);
             decline = (Button) view.findViewById(R.id.rejectbutton);
+            cancel =(Button) view.findViewById(R.id.cancelbutton);
         }
     }
 
@@ -117,7 +118,12 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
         Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
         holder.avatar.setImageBitmap(image);
+<<<<<<< HEAD
         Log.d(TAG,image.toString());
+=======
+      Log.d(TAG,image.toString());
+
+>>>>>>> tempBranch
 
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
@@ -126,13 +132,14 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
-            holder.accept.setText("Cancel request");
-            holder.decline.setVisibility(View.VISIBLE);
+            holder.decline.setVisibility(View.GONE);
+            holder.decline.setOnClickListener(null);
+            holder.cancel.setVisibility(View.VISIBLE);
             //if user declines
-            holder.decline.setOnClickListener(new View.OnClickListener() {
+            holder.cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(canRemove) {
+                    if (canRemove) {
                         serverHandler("decline", chatRoom.getId());
                         chatRoom.setChatRoomExists(false);
                         chatRoomArrayList.remove(chatRoom);
@@ -147,6 +154,11 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
+<<<<<<< HEAD
+=======
+            holder.cancel.setVisibility(View.GONE);
+
+>>>>>>> tempBranch
             holder.accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -176,6 +188,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
+            holder.cancel.setVisibility(View.GONE);
 
             //if user accepts
             holder.accept.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +221,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             holder.accept.setOnClickListener(null);
             holder.decline.setVisibility(View.GONE);
             holder.decline.setOnClickListener(null);
+            holder.cancel.setVisibility(View.GONE);
             holder.timestamp.setVisibility(View.VISIBLE);
 
             //if there are notifications
@@ -362,4 +376,8 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         chatRoomArrayList = newArraylist;
         notifyDataSetChanged();
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> tempBranch
