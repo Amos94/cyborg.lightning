@@ -116,9 +116,9 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         holder.name.setText(chatRoom.getName());
         TypedArray imgs = mContext.getResources().obtainTypedArray(R.array.image_ids);
 
-        Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
-        holder.avatar.setImageBitmap(image);
-        Log.d(TAG,image.toString());
+//        Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
+  //      holder.avatar.setImageBitmap(image);
+    //    Log.d(TAG,image.toString());
 
 
         //if user sent the request
@@ -129,7 +129,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
-            holder.accept.setText("Cancel request");
+            holder.decline.setText("Cancel request");
             holder.decline.setVisibility(View.VISIBLE);
             //if user declines
             holder.decline.setOnClickListener(new View.OnClickListener() {
