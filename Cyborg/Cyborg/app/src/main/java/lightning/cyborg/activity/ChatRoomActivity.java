@@ -232,13 +232,13 @@ public class ChatRoomActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
 
                             Intent intent1 = new Intent(context,CallActivity.class);
-                            intent1.putExtra("type","waitCall");
+                            intent1.putExtra("Calltype","waitCall");
                             intent1.putExtra("callerUsername",sipUsername);
                             intent1.putExtra("callerPassword",sipPassword);
                             intent1.putExtra("calleeUsername",sipCaleeUsername);
                             intent1.putExtra("chatRoomId",chatRoomId);
-                            intent1.putExtra("nsme",title);
-                            intent1.putExtra("type",type);
+                            intent1.putExtra("name",title);
+                            intent1.putExtra("chat",type);
                             intent1.putExtra("avatar",avatar);
                             intent1.putExtra("permission",permission);
                             IncomingCall(context, "callAccepted");

@@ -145,7 +145,8 @@ public class CallActivity extends AppCompatActivity {
         title = intent.getStringExtra("name");
         type =intent.getStringExtra("type");
         avatar =intent.getStringExtra("avatar");
-        permission = intent.getStringExtra("permission");        message = intent.getStringExtra("type");
+        permission = intent.getStringExtra("permission");
+        message = intent.getStringExtra("Calltype");
 
 
         //this.caller = caller;
@@ -426,6 +427,11 @@ public class CallActivity extends AppCompatActivity {
 
     public void endCallIntent() {
         Intent intent = new Intent(this, UserHomepage.class);
+        intent.putExtra("chatRoomId",chatRoomId);
+        intent.putExtra("name",title);
+        intent.putExtra("type",type);
+        intent.putExtra("avatar",avatar);
+        intent.putExtra("permission",permission);
         startActivity(intent);
     }
 
