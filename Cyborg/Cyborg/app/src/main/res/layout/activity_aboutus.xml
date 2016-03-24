@@ -44,25 +44,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Companion 4 Me is a social app that allows lonely people to interact with each other"
+            android:text="Companion4MEInc. is an early stage technology startup founded in the heart of London.  What does the name mean you ask? \n  Well, Companion4ME is for people looking for likeminded individuals aka Companions.\n\n Why? \n \n Because we want to build an alternative and freindly platform for people to communicate with others who share similar interests .\n\n Who? \n\n Companion4ME was founded by eights guys who spent combined 2 years doing geeky stuff at KCL before starting Companion4ME as a University Project.\n\n"
             android:id="@+id/textView"
             android:textAlignment="center"
             android:textColor="#01579b"
             android:textSize="16dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/textView2" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Developed in 8 weeks by team Cyborg Lightning:\n Nashwan, Lewis, Amos, Simeon,\n Austin, Nishant, Karim and Ahad"
+            android:text="Developed by Team Cyborg Lightning:\n Nashwan, Lewis, Amos, Simeon,\n Austin, Nishant, Karim and Ahad"
             android:id="@+id/textView2"
             android:textAlignment="center"
             android:textColor="#01579b"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="64dp" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
 

@@ -157,7 +157,8 @@
                             android:text="Login"
                             android:onClick="checkLogin"
                             android:layout_weight="1"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"
+                            android:layout_gravity="center" />
 
                         <Button
                             android:layout_width="wrap_content"
@@ -166,7 +167,8 @@
                             android:text="Forgot Password?"
                             android:onClick="checkLogin"
                             android:layout_weight="1"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"
+                            android:layout_gravity="center" />
 
                 </LinearLayout>
 
