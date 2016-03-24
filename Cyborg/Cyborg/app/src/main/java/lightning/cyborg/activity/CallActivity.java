@@ -93,7 +93,7 @@ public class CallActivity extends AppCompatActivity {
 
     private Boolean isMuted;
     private Boolean isSpeaker;
-    private Boolean callEnd;
+    private Boolean inCall;
 
     private String permission;
     private String type;
@@ -125,7 +125,7 @@ public class CallActivity extends AppCompatActivity {
 
         isMuted = false;
         isSpeaker = false;
-        callEnd = false;
+        inCall = false;
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -162,7 +162,7 @@ public class CallActivity extends AppCompatActivity {
         //makeNewCall = (Button) findViewById(R.id.initiateCall);
 
 
-       // ToggleButton pushToTalkButton = (ToggleButton) findViewById(R.id.pushToTalk);
+        // ToggleButton pushToTalkButton = (ToggleButton) findViewById(R.id.pushToTalk);
         //pushToTalkButton.setOnTouchListener(this);
 
 
@@ -217,6 +217,7 @@ public class CallActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 endCall();
+                endCallIntent();
             }
         });
 
@@ -225,7 +226,7 @@ public class CallActivity extends AppCompatActivity {
     public CallActivity() {
         //
     }
-    
+
 
     @Override
     public void onStart() {
@@ -355,9 +356,8 @@ public class CallActivity extends AppCompatActivity {
                 public void onCallEstablished(SipAudioCall call) {
                     Log.d("AAAAAAA", "Beginning of call established");
                     call.startAudio();
-
+                    inCall = true;
                     updateStatus(call);
-
                     chronometer.start();
                     Log.d("AAAAAAA", "End of call established");
                 }
@@ -398,12 +398,15 @@ public class CallActivity extends AppCompatActivity {
         }
         catch (Exception e) {
             Log.i("InitiateCall", "Error when trying to close manager.", e);
+            Toast.makeText(CallActivity.this, "Error connecting to call", Toast.LENGTH_SHORT).show();
+            endCallIntent();
+
             if (me != null) {
                 try {
                     manager.close(me.getUriString());
                 } catch (Exception ee) {
                     Log.i("InitiateCall",
-                            "Error when trying to close manager.", ee);
+                            "Error when trying to close manager 2", ee);
                     ee.printStackTrace();
                 }
             }
@@ -416,8 +419,7 @@ public class CallActivity extends AppCompatActivity {
     public void endCall(){
         try {
             call.endCall();
-          //  endCallIntent();
-            callEnd = true;
+            //  endCallIntent();
         } catch (SipException e) {
             e.printStackTrace();
         }
@@ -442,7 +444,7 @@ public class CallActivity extends AppCompatActivity {
                     call.toggleMute();
                     isMuted = true;
                     muteMic.setImageResource(R.drawable.ic_mic_off_white_36dp);
-            } else {
+                } else {
                     call.toggleMute();
                     isMuted = false;
                     muteMic.setImageResource(R.drawable.ic_mic_white_36dp);
