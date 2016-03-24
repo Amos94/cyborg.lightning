@@ -63,14 +63,13 @@ public class UserProfileFragment extends Fragment {
     private ArrayAdapter adapter;
     private ListView listview;
     private int avator_id;
-    private TextView tvFirstandLast;
-    private TextView tvlocation;
-    private TextView tvbio;
+    private TextView tvFirstandLast, tvlocation, tvEdu, tvDob;
     private int image_id;
     private EditText etInterest;
     private Button addInterestButt;
     private Button delInterestButt;
     private Bitmap [] images;
+    private String[] menuItems;
 
 
 
@@ -92,6 +91,8 @@ public class UserProfileFragment extends Fragment {
         final View viewroot = inflater.inflate(R.layout.user_profile_fragment, container, false);
 
         //avatar Changing
+
+        menuItems = getResources().getStringArray(R.array.education_array);
 
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         images = new Bitmap[imgs.length()];
@@ -148,7 +149,8 @@ public class UserProfileFragment extends Fragment {
         tvFirstandLast = (TextView) viewroot.findViewById(R.id.tvfirstandLast);
 
         tvlocation = (TextView) viewroot.findViewById(R.id.tvLocation);
-        tvbio = (TextView) viewroot.findViewById(R.id.bioUser);
+        tvEdu = (TextView) viewroot.findViewById(R.id.tvEdu);
+        tvDob = (TextView) viewroot.findViewById(R.id.tvDob);
 
 
         //creating function to add more items into the interest
@@ -264,6 +266,9 @@ public class UserProfileFragment extends Fragment {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
 
+
+
+
         //request to insert the user into the mysql database using php
         StringRequest request = new StringRequest(Request.Method.POST, EndPoints.USERS_GET,
                 new Response.Listener<String>() {
@@ -279,6 +284,10 @@ public class UserProfileFragment extends Fragment {
                                 JSONObject user = jsonResponse.getJSONObject("user");
                                 tvFirstandLast.setText(user.getString("fname") + " " + user.getString("lname"));
                                 tvlocation.setText("Lat:" + user.getString("lat") + " Lon:" + user.getString("lon"));
+                                tvDob.setText("DOB:" + user.getString("dob"));
+                                Log.d("Education L", menuItems[user.getInt("edu_level")]);
+
+                                tvEdu.setText("Education LVL: " + menuItems[user.getInt("edu_level")]);
 
                                 imageview.setImageBitmap(images[user.getInt("avatar")]);
 
