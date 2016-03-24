@@ -111,6 +111,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+
         final ChatRoom chatRoom = chatRoomArrayList.get(position);
         holder.name.setText(chatRoom.getName());
         TypedArray imgs = mContext.getResources().obtainTypedArray(R.array.image_ids);
@@ -138,6 +139,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                         chatRoomArrayList.remove(chatRoom);
                         notifyDataSetChanged();
                     }
+
                 }
             });
         }
@@ -147,13 +149,16 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
+
             holder.accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     //if users accepts
                     serverHandler("accept", chatRoom.getId());
                     ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type,chatRoom.getPermission(), chatRoom.getAvatar());
                     //notifyDataSetChanged();
+
                 }
             });
 
@@ -167,12 +172,14 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                         chatRoomArrayList.remove(chatRoom);
                         notifyDataSetChanged();
                     }
+
                 }
             });
         }
 
         //if user hid chat and new message arrived
         else if(chatRoom.getPermission().equals("rmsg")){
+
             //buttons are shown
             holder.accept.setVisibility(View.VISIBLE);
             holder.decline.setVisibility(View.VISIBLE);
@@ -186,6 +193,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
                     serverHandler("accept", chatRoom.getId());
                     Log.d(TAG, "onClick: after accept");
                     ((UserHomepage) mContext).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), type, chatRoom.getPermission(), chatRoom.getAvatar());
+
                 }
             });
 

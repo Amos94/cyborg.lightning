@@ -393,7 +393,6 @@ public class DiscoveryFragment extends Fragment {
             try {
                 JSONObject user = matchedUserJson.get(i);
                 int age = (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date())) / 10000) - (Integer.parseInt(user.getString("dob")) / 10000);
-
                 users[i] = " " + user.getString("fname") + " - " + user.getString("gender")
                         + " - " + age + " - " + educationArr[Integer.parseInt(user.getString("edu_level"))];
                 avatars[i] = Integer.valueOf(user.getString("avatar"));
