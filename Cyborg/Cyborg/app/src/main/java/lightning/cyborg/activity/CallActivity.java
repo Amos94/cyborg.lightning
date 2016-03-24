@@ -9,12 +9,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipRegistrationListener;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -32,6 +36,7 @@ import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.DialerFilter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,6 +59,7 @@ public class CallActivity extends AppCompatActivity {
 
     public String sipAddress = null;
 
+    private String TAG= CallActivity.class.getSimpleName();
     public SipManager manager = null;
     public SipProfile me = null;
     public SipAudioCall call = null;
@@ -67,6 +73,7 @@ public class CallActivity extends AppCompatActivity {
     private ImageButton hangUp;
     private ImageButton muteMic;
     private ImageButton speaker;
+    private ImageView avatarImage;
     private Button makeNewCall;
 
     private UserInformation caller;
@@ -87,6 +94,12 @@ public class CallActivity extends AppCompatActivity {
     private Boolean isMuted;
     private Boolean isSpeaker;
     private Boolean callEnd;
+
+    private String permission;
+    private String type;
+    private String avatar;
+    private String title;
+    private String chatRoomId;
 
     public CallActivity(String callerUn, String callerPw, String calleeUn){
 
@@ -116,12 +129,26 @@ public class CallActivity extends AppCompatActivity {
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        avatarImage = (ImageView) findViewById(R.id.callAvatar);
+
         Intent intent = getIntent();
 
         intentCallerUsername = intent.getStringExtra("callerUsername");
         intentCallerPassword = intent.getStringExtra("callerPassword");
         intentCalleeUsername = intent.getStringExtra("calleeUsername");
-        message = intent.getStringExtra("type");
+        chatRoomId = intent.getStringExtra("chat_room_id");
+        title = intent.getStringExtra("name");
+        type =intent.getStringExtra("type");
+        avatar =intent.getStringExtra("avatar");
+        permission = intent.getStringExtra("permission");
+        message = intent.getStringExtra("Calltype");
+
+        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
+
+        Bitmap image = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(Integer.parseInt(avatar), 0));
+        avatarImage.setImageBitmap(image);
+        Log.d(TAG,image.toString());
+
 
 
         //this.caller = caller;
@@ -198,12 +225,7 @@ public class CallActivity extends AppCompatActivity {
     public CallActivity() {
         //
     }
-
-    //@Override
-    //public void onWindowFocusChanged(boolean hasFocus) {
-       // super.onWindowFocusChanged(hasFocus);
-        //initiateCall();
-    //}
+    
 
     @Override
     public void onStart() {
@@ -345,6 +367,7 @@ public class CallActivity extends AppCompatActivity {
                     Log.d("AAAAAAA", "Beginning of call ended");
                     updateStatus("Ready.");
                     chronometer.stop();
+                    endCallIntent();
                     Log.d("AAAAAAA", "End of call");
                 }
 
@@ -393,7 +416,7 @@ public class CallActivity extends AppCompatActivity {
     public void endCall(){
         try {
             call.endCall();
-            endCallIntent();
+          //  endCallIntent();
             callEnd = true;
         } catch (SipException e) {
             e.printStackTrace();
@@ -402,6 +425,11 @@ public class CallActivity extends AppCompatActivity {
 
     public void endCallIntent() {
         Intent intent = new Intent(this, UserHomepage.class);
+        intent.putExtra("chatRoomId",chatRoomId);
+        intent.putExtra("name",title);
+        intent.putExtra("type",type);
+        intent.putExtra("avatar",avatar);
+        intent.putExtra("permission",permission);
         startActivity(intent);
     }
 
@@ -422,22 +450,6 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
-        //muteMic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            //public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //if (isChecked) {
-                    // The toggle is enabled
-                    //call.toggleMute();
-                //} else {
-                    // The toggle is disabled
-                    //call.toggleMute();
-                //}
-            //}
-        //});
-
-        //if(isMuted == false) {
-
-        //}
-
     }
 
     public void speakerListener(){
@@ -457,17 +469,6 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
-        //speaker.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            //public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //if (isChecked) {
-                    // The toggle is enabled
-                    //call.setSpeakerMode(true);
-                //} else {
-                    // The toggle is disabled
-                    //call.setSpeakerMode(false);
-                //}
-            //}
-        //});
 
     }
 

@@ -234,38 +234,31 @@ public class DiscoveryFragment extends Fragment {
                             }
                             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                             Log.d("disMes", message);
-                        }
-                        catch(JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
                         searchButton.setEnabled(true);
                     }
-                },new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
 
-                        @Override
-                        public void onErrorResponse (VolleyError error){
-                        Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
-                        searchButton.setEnabled(true);
-                    }
-                    }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError at url ", EndPoints.DISCOVER_USERS);
+                searchButton.setEnabled(true);
+            }
+        }) {
+            //Parameters inserted
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+        //put the request in the static queue
+        MyApplication.getInstance().
 
-                    )
-
-                    {
-                        //Parameters inserted
-                        @Override
-                        protected Map<String, String> getParams () {
-                        return params;
-                    }
-                    }
-
-                    ;
-                    //put the request in the static queue
-                    MyApplication.getInstance().
-
-                    addToRequestQueue(request);
-                }
+                addToRequestQueue(request);
+    }
 
     private void filterMatchedUsers() {
 //        //request to insert the user into the mysql database using php
@@ -380,8 +373,7 @@ public class DiscoveryFragment extends Fragment {
                 Log.d("VolleyError at url ", url);
                 loadButton.setEnabled(true);
             }
-        }
-        ) {
+        }) {
             //Parameters inserted
             @Override
             protected Map<String, String> getParams() {

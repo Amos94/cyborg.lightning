@@ -39,6 +39,7 @@
             android:paddingLeft="40dp">
 
             <ImageView
+                android:id="@+id/callAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/men1"/>
