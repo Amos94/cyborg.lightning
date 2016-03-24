@@ -199,7 +199,7 @@ public class UserProfileFragment extends Fragment {
         imageview.setImageBitmap(images[Integer.parseInt(localUser.getAvatar())]);
         adapter.notifyDataSetChanged();
 
-        if(!localUser.getInterests().equals("")){
+        if(localUser.getInterests().length() > 0){
             String[] interests = localUser.getInterests().split(",");
 
             for (int i = 0; i < interests.length; i++) {
