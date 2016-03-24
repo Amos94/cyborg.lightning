@@ -48,9 +48,8 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
         //INITIALIZATION OF UI ELEMENTS
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
-        doneBtn = (Button) findViewById(R.id.doneBtn);
+        /*doneBtn = (Button) findViewById(R.id.doneBtn);*/
         registerBtn = (Button) findViewById(R.id.registerBtn);
-        homeBtn = (Button) findViewById(R.id.backToUserHomepageBtn);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override

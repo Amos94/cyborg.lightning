@@ -5,13 +5,6 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-<<<<<<< HEAD
-/**
- * Created by Amos
- */
-
-=======
->>>>>>> origin/visualimporvment
 public class User implements Serializable {
     String id, name, email, fname, lname, dob, lat, lon, avatar, edu_level;
 

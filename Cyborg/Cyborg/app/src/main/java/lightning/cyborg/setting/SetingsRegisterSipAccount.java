@@ -34,7 +34,6 @@ public class SetingsRegisterSipAccount extends Activity{
         // Initializig the UI elements
         wv = (WebView) findViewById(R.id.webView);
         doneBtn = (Button) findViewById(R.id.doneBtn);
-        homeBtn = (Button) findViewById(R.id.backToUserHomepageBtn);
 
         //Allow JavaScript in order to have a very simple Captcha, also meant for improving the User friendliness
         WebSettings webSettings = wv.getSettings();
