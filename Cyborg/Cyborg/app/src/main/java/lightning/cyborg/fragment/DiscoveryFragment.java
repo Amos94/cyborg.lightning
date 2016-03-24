@@ -167,9 +167,6 @@ public class DiscoveryFragment extends Fragment {
                 try {
                     createChatroom((matchedUserJson.get(position)).getString("userID"));
                     Toast.makeText(getContext(), "Chat request sent", Toast.LENGTH_SHORT).show();
-
-                    matchedList.getChildAt(position).setClickable(false);
-
                     matchedUserIDs.remove(position);
                     matchedUserJson.remove(position);
                     populateList();
