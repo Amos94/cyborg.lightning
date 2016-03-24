@@ -54,11 +54,9 @@ import lightning.cyborg.model.Message;
  * This class represents the chatroom fragment in the app
  * Created by Team Cyborg Lightning
  */
+
 public class chatRoomFragment extends Fragment{
     private View inflatedview;
-    private String TAG = "chatRoomFragment";
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
     private ArrayList<ChatRoom> chatRoomArrayList;
     private ChatRoomsAdapter mAdapter;
     private RecyclerView recyclerView;

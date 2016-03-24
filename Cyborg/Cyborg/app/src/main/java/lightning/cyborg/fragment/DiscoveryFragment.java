@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lightning.cyborg.R;
+import lightning.cyborg.activity.UserHomepage;
 import lightning.cyborg.adapter.CustomListAdapter;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
@@ -166,9 +167,13 @@ public class DiscoveryFragment extends Fragment {
                 try {
                     createChatroom((matchedUserJson.get(position)).getString("userID"));
                     Toast.makeText(getContext(), "Chat request sent", Toast.LENGTH_SHORT).show();
+
+                    matchedList.getChildAt(position).setClickable(false);
+
                     matchedUserIDs.remove(position);
                     matchedUserJson.remove(position);
                     populateList();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
