@@ -51,6 +51,13 @@ public class SetSipUserInfo extends AppCompatActivity {
         doneBtn = (ImageButton) findViewById(R.id.doneBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
 
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insertSipUserInfo(v);
+            }
+        });
+
     }
 
 

@@ -50,13 +50,16 @@ import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.model.User;
 
+/**
+ * This class represents the activity responsible for chats
+ * Created by Team Cyborg Lightning
+ */
 
 public class ChatRoomActivity extends AppCompatActivity {
 
     private String TAG = ChatRoomActivity.class.getSimpleName();
 
     private String chatRoomId;
-    //private static String chatRoomId;
     private RecyclerView recyclerView;
     private ChatRoomThreadAdapter mAdapter;
     private ArrayList<Message> messageArrayList;
@@ -76,6 +79,11 @@ public class ChatRoomActivity extends AppCompatActivity {
     private MenuItem callButton;
     private MenuItem addFriend;
 
+
+    /**
+     * Default method that is ran by app
+     * @param savedInstanceState  where user previously left off
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -366,6 +374,13 @@ public class ChatRoomActivity extends AppCompatActivity {
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
+
+
+    /**
+     * Method used to display incoming call and passes the intents
+     * @param context  where user previously left off
+     * @param message  last message sent
+     */
 
     public void IncomingCall(final Context context,String message){
 
