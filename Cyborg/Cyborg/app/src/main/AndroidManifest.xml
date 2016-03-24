@@ -122,8 +122,18 @@
         <activity android:name=".voip.SipSettings"></activity>
         <activity android:name=".voip.IncomingGui"></activity>
 
-        <activity android:name=".activity.ViewBlockedUsers"></activity>
 
+
+
+        <activity
+            android:name=".activity.ViewBlockedUsers"
+            android:label="@string/app_name"
+            android:parentActivityName=".activity.UserHomepage"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.UserHomepage" />
+        </activity>
 
 
         <!-- Avatar Activities: Ahad -->
