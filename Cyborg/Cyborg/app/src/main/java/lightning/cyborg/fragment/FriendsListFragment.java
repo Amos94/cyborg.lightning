@@ -86,16 +86,17 @@ public class FriendsListFragment extends Fragment {
                     chatRoom = chatRoomArrayList.get(position);
                 }
 
-                //if chatroom is not activiated
-                if (!chatRoom.getPermission().equals("n")) {
-                    ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(), "f",chatRoom.getPermission());
-                } else {
-                    if (!chatRoom.isChatRoomExists()) {
+                if(chatRoom.getPermission().equals("y")||chatRoom.getPermission().equals("blocked"))
+                {
+                    ((UserHomepage) getActivity()).chatRoomActivityIntent(chatRoom.getId(), chatRoom.getName(),"f",chatRoom.getPermission(), chatRoom.getAvatar());
+                }
+                else{
+                    if(!chatRoom.isChatRoomExists()){
                         recyclerView.removeView(view);
                         mAdapter.notifyDataSetChanged();
-                    }
+                    } }
 
-                }
+
             }
 
             @Override

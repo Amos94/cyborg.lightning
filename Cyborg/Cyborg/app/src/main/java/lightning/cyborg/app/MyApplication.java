@@ -32,17 +32,6 @@ public class MyApplication extends Application {
 
     private static MyApplication mInstance;
 
-    private static AppLocationListener appLocationListener;
-
-    public static void setAppLocationListener(LocationManager mm){
-        appLocationListener = new AppLocationListener(mm);
-    }
-
-    public static AppLocationListener getappLocationListner(){
-        return appLocationListener;
-    }
-
-
     private MyPreferenceManager pref;
 
     @Override

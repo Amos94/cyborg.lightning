@@ -54,7 +54,32 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></RelativeLayout>
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Companion 4 Us is a social app that allows people to interact with each other almost anonymously "
+            android:id="@+id/textView"
+            android:textAlignment="center"
+            android:textColor="#01579b"
+            android:textSize="16dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Developed By: Nashwan,Lewis ,Amos, Simeon, Austin, Nishat, Kay and Ahad"
+            android:id="@+id/textView2"
+            android:textAlignment="center"
+            android:textColor="#01579b"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="64dp" />
+    </RelativeLayout>
 
 
 

@@ -36,6 +36,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:gravity="center"
                     android:layout_weight="1">
 
@@ -100,10 +101,27 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
+                        android:onClick="blockedUser"
+                        android:background="@android:color/transparent"
+                        android:textColor="@android:color/white"
+                        android:text="\u2022 Block User"/>
+
+
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
                         android:onClick="aboutUS"
                         android:background="@android:color/transparent"
                         android:textColor="@android:color/white"
                         android:text="\u2022 About Us"/>
+
+
+
+
+
 
                 </LinearLayout>
 

@@ -1,6 +1,7 @@
 package lightning.cyborg.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -60,6 +61,7 @@ public class ViewBlockedUsers extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new BlockedListAdapter.RecyclerTouchListener(this, recyclerView, new BlockedListAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+
             }
 
             @Override
@@ -197,6 +199,10 @@ public class ViewBlockedUsers extends AppCompatActivity {
         //Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
     }
+
+
+
+
 
 
 }

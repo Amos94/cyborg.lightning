@@ -53,6 +53,7 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText emailConfirmET;
     Button chooseAvator;
     EditText nameET;
+    EditText lastnameET;
     EditText passwordET;
     EditText dobET;
     Spinner eduSpin;
@@ -90,6 +91,8 @@ public class RegistrationActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupRegister);
         maleRadioRegister = (RadioButton) findViewById(R.id.rbMale);
         avatorIcon = (ImageView) findViewById(R.id.avatorIcon);
+
+        lastnameET = (EditText) findViewById(R.id.txtLastName);
 
         femaleRadioRegister = (RadioButton) findViewById(R.id.rbFemal);
         maleRadioRegister.setChecked(true);
@@ -141,7 +144,7 @@ public class RegistrationActivity extends AppCompatActivity {
     //TODO Make a button to connect this
     public void insertUser(View view){
         String fname = nameET.getText().toString().substring(0,nameET.getText().toString().indexOf(' '));
-        String lname = nameET.getText().toString().substring(fname.length() + 1);
+        String lname = lastnameET.getText().toString().substring(fname.length() + 1);
         Log.d(fname, lname);
 
         //parameters to post to php file
