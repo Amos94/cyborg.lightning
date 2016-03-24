@@ -58,6 +58,32 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Change SIP Info"
+                android:layout_centerInParent="true"
+                android:textSize="20dp"
+                android:id="@+id/sipinfosg"
+                android:clickable="true"
+                android:onClick="sipRegis"
+                android:textColor="@android:color/white"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/sipinfosg"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/ic_dialer_sip_white_36dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="View blocked users"
                 android:layout_centerInParent="true"
                 android:textSize="20dp"
