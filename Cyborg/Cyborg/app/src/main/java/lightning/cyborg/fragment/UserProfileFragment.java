@@ -188,17 +188,11 @@ public class UserProfileFragment extends Fragment {
 
         loadProfile();
 
-        try {
-            loadInterests();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         return viewroot;
     }
 
     private void loadProfile(){
-        String name = localUser.getFname()+ " " + localUser.getLname();
+        String name = localUser.getName()+ " " + localUser.getLname();
         Log.d("loadProf", name);
         tvFirstandLast.setText(name);
         Log.d("loadProf", localUser.getAvatar()+" ");
@@ -206,7 +200,7 @@ public class UserProfileFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         if(!localUser.getInterests().equals("")){
-            String[] interests = localUser.getInterests();
+            String[] interests = localUser.getInterests().split(",");
 
             for (int i = 0; i < interests.length; i++) {
                 items.add(interests[i]);
@@ -248,6 +242,8 @@ public class UserProfileFragment extends Fragment {
                                         localUser.addInterest(new Validation().getValidInterest(s));
                                     }
                                 }
+                                MyApplication.getInstance().getPrefManager().storeUser(localUser);
+                                Log.d("addinterest",MyApplication.getInstance().getPrefManager().getUser().getInterests());
                             }
 
                             etInterest.setText("");
@@ -290,6 +286,7 @@ public class UserProfileFragment extends Fragment {
 
                     @Override
                     public void onResponse(String response) {
+                        Log.d("loadInterests", "posting to "+ EndPoints.GET_INTERESTS);
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getString("success").equals("1");
@@ -297,13 +294,12 @@ public class UserProfileFragment extends Fragment {
                             JSONArray interests = jsonResponse.getJSONArray("interests");
 
                             if (success) {
-                                User storedUser = MyApplication.getInstance().getPrefManager().getUser();
-
                                 for (int i = 0; i < interests.length(); i++) {
                                     if (!items.contains(interests.getString(i))) {
                                         items.add(interests.getString(i));
-                                        storedUser.clearInterests();
-                                        storedUser.addInterest(interests.getString(i));
+                                        localUser.clearInterests();
+                                        localUser.addInterest(interests.getString(i));
+                                        MyApplication.getInstance().getPrefManager().storeUser(localUser);
                                     }
                                 }
                             } else {
@@ -358,6 +354,7 @@ public class UserProfileFragment extends Fragment {
                                     items.remove(s);
                                     localUser.delInterest(s);
                                 }
+                                MyApplication.getInstance().getPrefManager().storeUser(localUser);
                             }
 
                             etInterest.setText("");

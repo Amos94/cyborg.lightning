@@ -52,9 +52,9 @@ public class LoginActivity extends AppCompatActivity {
          * Check for login session. It user is already logged in
          * redirect him to main activity
          * */
-//        if (MyApplication.getInstance().getPrefManager().getUser() != null) {
-//            toUserHomePageActivity();
-//        }
+        if (MyApplication.getInstance().getPrefManager().getUser() != null) {
+            toUserHomePageActivity();
+        }
 
         setContentView(R.layout.activity_login);
 
