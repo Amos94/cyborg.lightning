@@ -1,4 +1,4 @@
-# cyborg.lightning
+# Cyborg.Lightning Companion4ME
 Team: Karim, Austin, Nishant, Nashwan, Amos, Lewis ,Ahad & Simeon.
 This is the repository for Cyborg Lightning team. PROJECT RUN/ KCL.
 ProjectRun was the task set to us by a client to create and social messaging application
