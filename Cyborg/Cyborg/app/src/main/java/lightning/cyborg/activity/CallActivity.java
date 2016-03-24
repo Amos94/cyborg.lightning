@@ -370,6 +370,7 @@ public class CallActivity extends AppCompatActivity {
                     Log.d("AAAAAAA", "Beginning of call ended");
                     updateStatus("Ready.");
                     chronometer.stop();
+                    endCallIntent();
                     Log.d("AAAAAAA", "End of call");
                 }
 
@@ -418,7 +419,7 @@ public class CallActivity extends AppCompatActivity {
     public void endCall(){
         try {
             call.endCall();
-            endCallIntent();
+          //  endCallIntent();
             callEnd = true;
         } catch (SipException e) {
             e.printStackTrace();
