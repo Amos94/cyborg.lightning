@@ -79,7 +79,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name, message, timestamp, count;
         public ImageView avatar;
-        public Button accept, decline;
+        public Button accept, decline, cancel;
 
         public ViewHolder(View view) {
             super(view);
@@ -90,6 +90,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             avatar = (ImageView) view.findViewById(R.id.showAvatar);
             accept = (Button) view.findViewById(R.id.acceptbutton);
             decline = (Button) view.findViewById(R.id.rejectbutton);
+            cancel =(Button) view.findViewById(R.id.cancelbutton);
         }
     }
 
@@ -116,9 +117,9 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         holder.name.setText(chatRoom.getName());
         TypedArray imgs = mContext.getResources().obtainTypedArray(R.array.image_ids);
 
-//        Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
-  //      holder.avatar.setImageBitmap(image);
-    //    Log.d(TAG,image.toString());
+        Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), imgs.getResourceId(Integer.parseInt(chatRoom.getAvatar()), 0));
+        holder.avatar.setImageBitmap(image);
+      Log.d(TAG,image.toString());
 
 
         //if user sent the request
@@ -129,10 +130,11 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
-            holder.decline.setText("Cancel request");
-            holder.decline.setVisibility(View.VISIBLE);
+            holder.decline.setVisibility(View.GONE);
+            holder.decline.setOnClickListener(null);
+            holder.cancel.setVisibility(View.VISIBLE);
             //if user declines
-            holder.decline.setOnClickListener(new View.OnClickListener() {
+            holder.cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(canRemove) {
