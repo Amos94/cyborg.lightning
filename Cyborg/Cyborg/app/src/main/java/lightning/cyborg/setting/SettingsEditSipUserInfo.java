@@ -25,6 +25,7 @@ import lightning.cyborg.activity.UserHomepage;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;
+import lightning.cyborg.fragment.UserProfileFragment;
 
 /**
  * Created by Amos Madalin Neculau on 22/03/2016.
@@ -118,7 +119,7 @@ public class SettingsEditSipUserInfo extends AppCompatActivity {
 
     //Intent for going to a new Activity
     public void goToInterests(View view){
-        Intent intent = new Intent(this, interestsRegistration.class);
+        Intent intent = new Intent(this, UserProfileFragment.class);
         startActivity(intent);
     }
 
