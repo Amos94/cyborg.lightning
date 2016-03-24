@@ -172,13 +172,12 @@ public class UserProfileFragment extends Fragment {
 
     private void loadProfile(){
         String name = localUser.getName()+ " " + localUser.getLname();
-        Log.d("loadProf", name);
         tvFirstandLast.setText(name);
-        Log.d("loadProf", localUser.getAvatar() + " ");
         imageview.setImageBitmap(images[Integer.parseInt(localUser.getAvatar())]);
         adapter.notifyDataSetChanged();
+        Log.d("interLoad1", localUser.getInterests()+"");
 
-        Log.d("SharedPrefTest", localUser.getInterests());
+        items.clear();
         if(localUser.getInterests().length() > 0){
             String[] interests = localUser.getInterests().split(",");
             for (int i = 0; i < interests.length; i++) {
@@ -198,6 +197,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void addInterest(final String interests) throws JSONException {
+        Log.d("interAdd1", localUser.getInterests());
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -222,7 +222,6 @@ public class UserProfileFragment extends Fragment {
                                     }
                                 }
                                 MyApplication.getInstance().getPrefManager().storeUser(localUser);
-                                Log.d("addinterest",MyApplication.getInstance().getPrefManager().getUser().getInterests());
                             }
 
                             etInterest.setText("");
@@ -232,6 +231,7 @@ public class UserProfileFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        Log.d("interAdd2", localUser.getInterests());
                         addInterestButt.setEnabled(true);
                     }
                 }, new Response.ErrorListener() {
@@ -255,6 +255,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void loadInterests() throws JSONException {
+        Log.d("interLoad1", localUser.getInterests()+"");
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -290,6 +291,7 @@ public class UserProfileFragment extends Fragment {
                             Log.d("JSON failed to parse: ", response);
                         }
                         delInterestButt.setEnabled(true);
+                        Log.d("interLoad2", localUser.getInterests());
                     }
                 }, new Response.ErrorListener() {
 
@@ -311,6 +313,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void deleteInterests(final String interests) throws JSONException {
+        Log.d("interDel1", localUser.getInterests());
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("userID", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -342,11 +345,14 @@ public class UserProfileFragment extends Fragment {
                             e.printStackTrace();
                             Log.d("JSON failed to parse: ", response);
                         }
+                        delInterestButt.setEnabled(true);
+                        Log.d("interDel2", localUser.getInterests());
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                delInterestButt.setEnabled(true);
                 Log.d("VolleyError at url ", EndPoints.ADD_INTERESTS);
             }
         }
@@ -361,8 +367,6 @@ public class UserProfileFragment extends Fragment {
         MyApplication.getInstance().addToRequestQueue(request);
 
     }
-
-    //creating avator background when user registers....
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
