@@ -131,12 +131,12 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.View
         //if user sent the request
         if(chatRoom.getPermission().equals("s")){
 
-            holder.message.setText("pending request");
+            holder.message.setText("Pending request");
 
             //Buttons are removed
             holder.accept.setVisibility(View.GONE);
             holder.accept.setOnClickListener(null);
-            holder.accept.setText("cancel request");
+            holder.accept.setText("Cancel request");
             holder.decline.setVisibility(View.VISIBLE);
             //if user declines
             holder.decline.setOnClickListener(new View.OnClickListener() {

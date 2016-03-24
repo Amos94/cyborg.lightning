@@ -482,7 +482,7 @@ public class UserHomepage extends AppCompatActivity {
         startActivity(intent);
 
     }
-    
+
 
     //the about us page...
 
