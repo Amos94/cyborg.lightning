@@ -49,7 +49,14 @@
         <item>F</item>
     </string-array>
 
-    <string-array name="education_array">
+    <string-array name ="interest_menu">
+    <item>Delete</item>
+    <item>Search</item>
+    </string-array>
+
+
+
+<string-array name="education_array">
         <item>Entry level</item>
         <item>GCSE (D-G)</item>
         <item>GCSE (A*-C)</item>
