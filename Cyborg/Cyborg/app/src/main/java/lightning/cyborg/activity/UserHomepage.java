@@ -288,6 +288,53 @@ public class UserHomepage extends AppCompatActivity {
     }
 
     /**
+     * Handles new push notification
+     */
+    private void handlePushNotification(Intent intent) {
+        int type = intent.getIntExtra("type", -1);
+
+        // if the push is of chat room message
+        // simply update the UI unread messages count
+        if (type == Config.PUSH_TYPE_CHATROOM) {
+            Message message = (Message) intent.getSerializableExtra("message");
+            String chatRoomId = intent.getStringExtra("chat_room_id");
+            String chatType = intent.getStringExtra("chat_type");
+            String visibilityChange = intent.getStringExtra("visibilityChange");
+
+            Log.d("ffsaf", "insdie handle");
+            if (message != null && chatRoomId != null) {
+                if (chatType.equals("n")) {
+                    if (visibilityChange.equals("true")) {
+                        normalChatRoomArrayList.clear();
+                        fetchChatRooms("n");
+                    } else {
+                        updateRow(chatRoomId, message, normalChatRoomArrayList, normalChatAdapter);
+                    }
+                } else if (chatType.equals("f")) {
+                    if (visibilityChange.equals("true")) {
+                        freindsChatRoomArrayList.clear();
+                        fetchChatRooms("f");
+                    } else {
+                        updateRow(chatRoomId, message, freindsChatRoomArrayList, freindChatAdapter);
+                    }
+
+                }
+            }
+
+        }
+        else if(type == Config.PUSH_TYPE_CHAT_REQUEST){
+            Log.d("AAAAAPUSH_TYPE_CHAT", "recieved it");
+            requestBoth=true;
+            normalChatRoomArrayList.clear();
+            fetchChatRooms("n");
+            freindsChatRoomArrayList.clear();
+            fetchChatRooms("f");
+
+        }
+
+    }
+
+    /**
      * Updates the chat list unread count and the last message
      */
     private void updateRow(String chatRoomId, Message message, ArrayList<ChatRoom> normalChatRoomArrayList, ChatRoomsAdapter normalChatAdapter) {
