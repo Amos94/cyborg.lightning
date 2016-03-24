@@ -159,8 +159,8 @@ public class ChatRoomActivity extends AppCompatActivity {
      * recycler view and scroll it to bottom
      * */
     private void handlePushNotification(Intent intent) {
-        int type = intent.getIntExtra("type", -1);
-        if(type == Config.PUSH_TYPE_CALL_USER) {
+        int type1 = intent.getIntExtra("type", -1);
+        if(type1 == Config.PUSH_TYPE_CALL_USER) {
             String message = intent.getStringExtra("message");
             if(message.equals("callRequest")) {
                 dialogCallReceiver(this,false);
@@ -179,7 +179,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 startActivity(intent1);
                 finish();
             }
-            if(message.equals("requestCanceled")){
+            else if(message.equals("requestCanceled")){
                 new AlertDialog.Builder(getApplicationContext())
                         .setTitle("call canceled")
                         .setMessage("call has been canceled")
