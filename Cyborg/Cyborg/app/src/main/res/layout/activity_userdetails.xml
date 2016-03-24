@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD
     android:background="#FFF"
     >
     <RelativeLayout
@@ -39,12 +41,62 @@
             android:orientation="vertical" >
 
             <!-- FLAT BUTTON -->
+=======
+    android:background="#FFF">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="#01579b"
+        app:contentInsetStart="0dp"
+        style="@style/Toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="backToSetting"
+                android:background="@drawable/ic_action_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Credentials"
+                android:textColor="#FFF"
+                android:textSize="25dp"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <com.gc.materialdesign.views.ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <!-- FLAT BUTTON -->
+
+>>>>>>> origin/LewisLast
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:id="@+id/relativeChangeNameText"
                 android:layout_alignParentRight="true"
+<<<<<<< HEAD
                 android:layout_alignParentEnd="true">
+=======
+                android:layout_alignParentEnd="true"
+                >
+>>>>>>> origin/LewisLast
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -264,6 +316,7 @@
                     android:layout_above="@+id/radioGroup"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
+<<<<<<< HEAD
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -280,17 +333,48 @@
                         android:background="#1E88E5" />
                 </RelativeLayout>
 
+=======
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#01579b"
+
+                        android:layout_centerVertical="true"
+                        android:text="Change Gender" />
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#1E88E5" />
+                </RelativeLayout>
+>>>>>>> origin/LewisLast
 
             </RelativeLayout>
 
+<<<<<<< HEAD
+            <!-- FLOAT BUTTON -->
+=======
+            </RelativeLayout>
+>>>>>>> origin/LewisLast
+
             <!-- FLOAT BUTTON -->
 
+<<<<<<< HEAD
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="72dp" >
+
+
+=======
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="72dp" >
 
 
+>>>>>>> origin/LewisLast
             </RelativeLayout>
 
             <!-- FLOAT BUTTON -->

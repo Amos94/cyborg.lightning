@@ -12,17 +12,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -59,9 +53,7 @@ import lightning.cyborg.gcm.NotificationUtils;
 import lightning.cyborg.model.ChatRoom;
 import lightning.cyborg.model.Message;
 import lightning.cyborg.setting.AboutUs;
-import lightning.cyborg.setting.Communication;
 import lightning.cyborg.setting.MenuEditSip;
-import lightning.cyborg.setting.SetingsRegisterSipAccount;
 import lightning.cyborg.setting.SettingsEditSipUserInfo;
 import lightning.cyborg.setting.UserDetails;
 
@@ -475,11 +467,33 @@ public class UserHomepage extends AppCompatActivity {
         }
         return true;
     }
+<<<<<<< HEAD
+=======
+    
+    public void goToBlocked(){
+        Intent intent = new Intent(UserHomepage.this, ViewBlockedUsers.class);
+        startActivity(intent);
+    }
+
+
+    //navigating to settings...
+    public void clickSetting(View view) {
+
+        Intent intent = new Intent(UserHomepage.this, MenuEditSip.class);
+        startActivity(intent);
+
+
+    }
+>>>>>>> origin/LewisLast
 
     //navigating to Editing Profile...
     public void clickUserProfile(View view) {
         Intent intent = new Intent(UserHomepage.this, UserDetails.class);
         startActivity(intent);
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/LewisLast
     }
 
     //the about us page...

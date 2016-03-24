@@ -94,7 +94,6 @@
         <!-- Setting Activities: Ahad -->
 
         <activity android:name=".setting.AboutUs"></activity>
-        <activity android:name=".setting.Communication"></activity>
         <activity android:name=".setting.MenuEditSip"></activity>
         <activity android:name=".setting.UserDetails"></activity>
         <activity android:name=".setting.SettingsEditSipUserInfo"></activity>
