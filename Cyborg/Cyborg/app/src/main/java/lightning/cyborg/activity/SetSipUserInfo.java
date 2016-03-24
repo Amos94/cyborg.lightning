@@ -2,10 +2,9 @@ package lightning.cyborg.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,14 +25,15 @@ import lightning.cyborg.R;
 import lightning.cyborg.app.EndPoints;
 import lightning.cyborg.app.MyApplication;
 import lightning.cyborg.app.VolleyQueue;
-import lightning.cyborg.enums.InterestTypes;
+
+import lightning.cyborg.fragment.UserProfileFragment;
 import lightning.cyborg.setting.SetingsRegisterSipAccount;
 
-/*
-This class make the connection between the databases and the app regarding the SIP account info of the user.
+/**
+ *This class make the connection between the databases and the app regarding the SIP account info of the user.
+ * Created by Team Cyborg Lightning
  */
 public class SetSipUserInfo extends AppCompatActivity {
-
     //UI ELEMENTS
     private TextView userTV;
     private TextView passwordTV;
@@ -44,13 +44,11 @@ public class SetSipUserInfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_edit_sip_profile);
-
         //INITIALIZATION OF UI ELEMENTS
         userTV = (TextView) findViewById(R.id.usernameTextField);
         passwordTV = (TextView) findViewById(R.id.passwordTextField);
         doneBtn = (ImageButton) findViewById(R.id.doneBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
-
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +58,8 @@ public class SetSipUserInfo extends AppCompatActivity {
 
     }
 
-
     //Updates the database entries
     public void insertSipUserInfo(View view){
-
         //parameters to post to php file
         final Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", MyApplication.getInstance().getPrefManager().getUser().getId());
@@ -105,11 +101,13 @@ public class SetSipUserInfo extends AppCompatActivity {
         };
         //put the request in the static queue
         VolleyQueue.getInstance(this).addToRequestQueue(request);
+        Intent intent = new Intent(this, UserProfileFragment.class);
+        startActivity(intent);
     }
 
     //Intent for going to a new Activity
     public void goToInterests(View view){
-        Intent intent = new Intent(this, interestsRegistration.class);
+        Intent intent = new Intent(this, UserProfileFragment.class);
         startActivity(intent);
     }
 
@@ -118,5 +116,4 @@ public class SetSipUserInfo extends AppCompatActivity {
         Intent intent = new Intent(this, SetingsRegisterSipAccount.class);
         startActivity(intent);
     }
-
 }
