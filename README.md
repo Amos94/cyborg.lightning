@@ -7,7 +7,7 @@ which search's for users with similar interest and allows communication between 
 Google Cloud Messaging was used to handle push notifications can be found at:
 https://developers.google.com/cloud-messaging/
 We chose to use GCM because this was a free alternative compared to other services
-out there on the market and its the eastiest to maintain. 
+out there on the market and its the easiest to maintain. 
 
 Yalantis was used to create the Guillotine Navigation draw:
 https://github.com/Yalantis/GuillotineMenu-Android.git
@@ -15,7 +15,7 @@ https://github.com/Yalantis/GuillotineMenu-Android.git
 Webhost for SQL/PHP can be found at: 
 Hostinger.co.uk
 Hostinger had all the functions we need for this application to work 
-costing us nothing and was also the easiest to manage and maintain. 
+costing us nothing and was also simple to manage and maintain. 
 
 Login:nashwan93@live.co.uk
 Pass: run123
