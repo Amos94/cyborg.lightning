@@ -62,6 +62,7 @@ public class UserProfileFragment extends Fragment {
     private EditText etInterest;
     private Button addInterestButt;
     private Button delInterestButt;
+    private String year,month,day;
     private Bitmap [] images;
     private String[] menuItems;
     private User localUser;
@@ -220,7 +221,8 @@ public class UserProfileFragment extends Fragment {
         String name = localUser.getName()+ " " + localUser.getLname();
         tvFirstandLast.setText(name);
         tvlocation.setText("Lat:" + localUser.getLat() + " Lon:" + localUser.getLon());
-        tvDob.setText("DOB:" + localUser.getDob());
+        year = localUser.getDob().substring(0,3); month= localUser.getDob().substring(4,5); day = localUser.getDob().substring(6,7);
+        tvDob.setText("DOB:" + day+"-"+month+""+year);
         imageview.setImageBitmap(images[Integer.parseInt(localUser.getAvatar())]);
         adapter.notifyDataSetChanged();
         Log.d("Education L", menuItems[Integer.parseInt(localUser.getEdu_level())]);
